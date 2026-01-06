@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ลงทะเบียนสมาชิกใหม่ | Medical Queue</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Sarabun', sans-serif; }
+  </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+      >
+        <a
+          href="home.html"
+          class="flex items-center gap-3 hover:opacity-80 transition-opacity"
+        >
+          <div
+            class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center"
+          >
+            <svg
+              class="w-5 h-5 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M3 12h4l3-6 4 12 3-6h4" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
+            <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
+          </div>
+        </a>
+
+        <ul class="hidden md:flex gap-10 text-gray-700 font-medium">
+          <li>
+            <a
+              href="home.html"
+              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
+              >หน้าหลัก</a
+            >
+          </li>
+          <li>
+            <a
+              href="booking.html"
+              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
+              >จองคิวตรวจ</a
+            >
+          </li>
+          <li>
+            <a
+              href="myticket.html"
+              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
+              >ตัวของฉัน</a
+            >
+          </li>
+
+          <li>
+            <a
+              href="history.html"
+              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
+              >ประวัติ</a
+            >
+          </li>
+
+          <li>
+            <a
+              href="#"
+              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
+              >แจ้งเตือน</a
+            >
+          </li>
+        </ul>
+
+        <div class="flex items-center gap-4">
+          <a
+            href="index.html"
+            class="text-blue-600 font-medium hover:underline text-sm md:text-base"
+            >ลงทะเบียน / เข้าสู่ระบบ</a
+          >
+          <div
+            class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white"
+          >
+            <svg
+              class="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+<!-- ----------------------------------------------------------------- -->
+
+<main class="flex-grow flex flex-col md:flex-row">
+    
+    <div class="w-full md:w-1/2 lg:w-5/12 xl:w-1/3 flex items-center justify-center p-6 md:p-12 bg-white">
+        <div class="w-full max-w-md">
+            
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">สร้างบัญชีผู้ใช้งาน</h1>
+                <p class="text-gray-500 text-sm">กรอกข้อมูลส่วนตัวเพื่อเริ่มต้นใช้งานระบบจองคิว</p>
+            </div>
+
+            <form action="index.html" method="GET" class="space-y-4">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อจริง</label>
+                        <input type="text" class="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition" placeholder="สมชาย">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">นามสกุล</label>
+                        <input type="text" class="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition" placeholder="ใจดี">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="text" maxlength="13" class="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition" placeholder="Email">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">วันเดือนปีเกิด</label>
+                        <input type="date" class="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition text-gray-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์</label>
+                        <input type="tel" class="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition" placeholder="081xxxxxxx">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
+                    <input type="password" class="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition" placeholder="กำหนดรหัสผ่าน 8 ตัวขึ้นไป">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ยืนยันรหัสผ่าน</label>
+                    <input type="password" class="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition" placeholder="กรอกรหัสผ่านอีกครั้ง">
+                </div>
+
+                <div class="flex items-center">
+                    <input id="terms" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="terms" class="ml-2 block text-sm text-gray-500">
+                        ฉันยอมรับ <a href="#" class="text-blue-600 hover:underline">เงื่อนไขการให้บริการ</a> และ <a href="#" class="text-blue-600 hover:underline">นโยบายความเป็นส่วนตัว</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-lg shadow-blue-500/30 transition duration-300 transform hover:-translate-y-0.5 mt-2">
+                    ยืนยันการลงทะเบียน
+                </button>
+
+            </form>
+
+            <div class="mt-6 text-center border-t border-gray-100 pt-4">
+                <p class="text-gray-600 text-sm">มีบัญชีผู้ใช้งานอยู่แล้ว?</p>
+                <a href="index.html" class="inline-block mt-2 text-blue-600 font-semibold hover:text-blue-800 hover:underline transition">
+                    เข้าสู่ระบบ
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="hidden md:flex md:w-1/2 lg:w-7/12 xl:w-2/3 bg-blue-600 relative overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1538108149393-fbbd8189718c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+             alt="Doctors Team" 
+             class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40">
+        
+        <div class="absolute inset-0 bg-gradient-to-tr from-blue-700/90 to-cyan-500/80 mix-blend-multiply"></div>
+
+        <div class="absolute top-10 right-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl"></div>
+        <div class="absolute bottom-20 left-20 w-60 h-60 bg-blue-300 opacity-20 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 flex flex-col justify-center px-12 lg:px-24 h-full text-white">
+            <h2 class="text-3xl md:text-4xl font-bold leading-tight mb-6">เริ่มต้นดูแลสุขภาพ<br>ของคุณตั้งแต่วันนี้</h2>
+            <p class="text-blue-100 text-lg mb-8 font-light max-w-md">
+                สมัครสมาชิกเพื่อเข้าถึงบริการทางการแพทย์ที่สะดวกสบาย จองคิวออนไลน์ และติดตามประวัติการรักษาได้ด้วยตัวเอง
+            </p>
+            
+            <ul class="space-y-4 text-blue-50">
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    ฟรี! ไม่มีค่าใช้จ่ายในการสมัคร
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    ข้อมูลของคุณปลอดภัยด้วยมาตรฐานสูงสุด
+                </li>
+                <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    แจ้งเตือนนัดหมายผ่าน SMS และ Line
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</main>
+
+<!-- ----------------------------------------------------------------- -->
+
+</body>
+</html>
