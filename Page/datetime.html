@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>วันและเวลา | Medical Queue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>body{font-family:"Sarabun",sans-serif}</style>
+  </head>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+    <script>
+      // ตรวจสอบการเข้าสู่ระบบ - ถ้าไม่ได้เข้าสู่ระบบ ให้ไปหน้า login
+      (function(){
+        try {
+          const user = JSON.parse(localStorage.getItem('mq_user'));
+          if(!user || !user.name) {
+            alert('กรุณาเข้าสู่ระบบก่อนเลือกวันและเวลา');
+            window.location.href = 'index.html';
+          }
+        } catch(e) {
+          alert('กรุณาเข้าสู่ระบบก่อนเลือกวันและเวลา');
+          window.location.href = 'index.html';
+        }
+      })();
+    </script>
+
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="home.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <div class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h4l3-6 4 12 3-6h4"/></svg>
+          </div>
+          <div>
+            <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
+            <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-4">
+          <a id="userStatusLink" href="index.html" class="text-blue-600 font-medium hover:underline text-sm md:text-base">ลงทะเบียน / เข้าสู่ระบบ</a>
+          <div id="userMenuBtn" class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full">
+      <div class="mb-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+          จองคิวตรวจรักษา
+        </h1>
+
+        <div
+          class="flex items-center justify-between relative max-w-3xl mx-auto mb-10"
+        >
+          <div
+            class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-200 -z-10"
+          ></div>
+
+          <div class="flex flex-col items-center bg-gray-50 px-2">
+            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white text-blue-600 flex items-center justify-center font-bold mb-2">
+              1
+            </div>
+            <span class="text-xs md:text-sm font-medium text-gray-500">เลือกแผนก/แพทย์</span>
+          </div>
+          <div class="flex flex-col items-center bg-gray-50 px-2">
+            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mb-2 shadow-md">
+              2
+            </div>
+            <span class="text-xs md:text-sm font-medium text-blue-800">วันเวลา</span>
+          </div>
+          <div class="flex flex-col items-center bg-gray-50 px-2">
+            <div
+              class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white border-2 border-gray-300 text-gray-400 flex items-center justify-center font-bold mb-2"
+            >
+              3
+            </div>
+            <span class="text-xs md:text-sm font-medium text-gray-500"
+              >ยืนยัน</span
+            >
+          </div>
+        </div>
+      </div>
+      
+    <main class="flex-grow max-w-3xl mx-auto px-4 sm:px-6 py-8 w-full">
+      <h1 class="text-2xl font-bold text-gray-900 mb-6">เลือกวันที่และเวลา</h1>
+
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+        <label class="block text-sm font-medium text-gray-600 mb-2">วันที่นัดหมาย</label>
+        <input id="date" type="date" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700" />
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+        <label class="block text-sm font-medium text-gray-600 mb-3">เลือกช่วงเวลา</label>
+        <div id="timeGrid" class="grid grid-cols-3 gap-2">
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition">09:00</button>
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded bg-gray-100 text-gray-400 cursor-not-allowed">09:30</button>
+          <button class="py-2 px-1 text-sm bg-blue-600 text-white rounded shadow-md ring-2 ring-blue-300">10:00</button>
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition">10:30</button>
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition">13:00</button>
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition bg-orange-300">13:30</button>
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition">14:00</button>
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded bg-gray-100 text-gray-400 cursor-not-allowed">14:30</button>
+          <button class="py-2 px-1 text-sm bg-red-500 text-white rounded shadow-md ring-2 ring-blue-300">15:00</button>
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition">15:30</button>
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition">16:00</button>
+          <button class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition">16:30</button>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <a href="booking.html" class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">ย้อนกลับ</a>
+        <button id="confirmBtn" class="ml-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">ยืนยันการเลือก</button>
+      </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-6 mt-8">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <p class="text-gray-500 text-sm">&copy; 2024 Medical Queue System. ระบบจองคิวโรงพยาบาลออนไลน์</p>
+      </div>
+    </footer>
+
+    <script>
+      (function(){
+        const dateInput = document.getElementById('date');
+        const timeGrid = document.getElementById('timeGrid');
+        const confirmBtn = document.getElementById('confirmBtn');
+        let selectedTime = '';
+
+        // Prefill date from query param ?date=
+        try{
+          const params = new URLSearchParams(window.location.search);
+          if(params.has('date')){
+            dateInput.value = params.get('date');
+          }
+        }catch(e){/* ignore */}
+
+        function updateConfirmState(){
+          const enabled = dateInput.value && selectedTime;
+          confirmBtn.disabled = !enabled;
+          confirmBtn.classList.toggle('opacity-50', !enabled);
+          confirmBtn.classList.toggle('cursor-not-allowed', !enabled);
+        }
+
+        // initial state
+        updateConfirmState();
+
+        dateInput.addEventListener('input', updateConfirmState);
+
+        // single-select time buttons (ignore disabled ones)
+        timeGrid.addEventListener('click', function(e){
+          const btn = e.target.closest('button');
+          if(!btn) return;
+          if(btn.classList.contains('cursor-not-allowed')) return;
+
+          // deselect others
+          timeGrid.querySelectorAll('button').forEach(b=>{
+            b.classList.remove('ring-2','ring-blue-300','scale-105');
+          });
+
+          // mark selected
+          btn.classList.add('ring-2','ring-blue-300','scale-105');
+          selectedTime = btn.textContent.trim();
+          updateConfirmState();
+        });
+
+        confirmBtn.addEventListener('click', function(){
+          if(!dateInput.value){
+            alert('โปรดเลือกวันที่ก่อน');
+            return;
+          }
+          if(!selectedTime){
+            alert('โปรดเลือกช่วงเวลาก่อน');
+            return;
+          }
+          // save selections to localStorage and go to confirm page
+          try{
+            localStorage.setItem('mq_date', dateInput.value);
+            localStorage.setItem('mq_time', selectedTime);
+          }catch(e){}
+          window.location.href = 'confirm.html';
+        });
+      })();
+      // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
+      (function(){
+        const userStatusLink = document.getElementById('userStatusLink');
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        
+        try {
+          const user = JSON.parse(localStorage.getItem('mq_user'));
+          if(user && user.name) {
+            userStatusLink.textContent = user.name;
+            userStatusLink.href = '#';
+            userStatusLink.style.cursor = 'pointer';
+            userMenuBtn.classList.remove('hidden');
+            
+            userStatusLink.addEventListener('click', function(e){
+              e.preventDefault();
+              if(confirm('ออกจากระบบ?')) {
+                localStorage.removeItem('mq_user');
+                localStorage.removeItem('mq_registeredUser');
+                window.location.reload();
+              }
+            });
+          }
+        } catch(e) {
+          // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
+        }
+      })();
+    </script>
+  </body>
+</html>

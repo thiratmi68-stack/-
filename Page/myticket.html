@@ -1,3 +1,5 @@
+# หน้าตั๋วของฉัน
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -10,9 +12,25 @@
   <style>
     body { font-family: 'Sarabun', sans-serif; }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
+    <script>
+      // ตรวจสอบการเข้าสู่ระบบ - ถ้าไม่ได้เข้าสู่ระบบ ให้ไปหน้า login
+      (function(){
+        try {
+          const user = JSON.parse(localStorage.getItem('mq_user'));
+          if(!user || !user.name) {
+            alert('กรุณาเข้าสู่ระบบเพื่อดูตั๋วของคุณ');
+            window.location.href = 'index.html';
+          }
+        } catch(e) {
+          alert('กรุณาเข้าสู่ระบบเพื่อดูตั๋วของคุณ');
+          window.location.href = 'index.html';
+        }
+      })();
+    </script>
 
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div
@@ -74,7 +92,7 @@
 
           <li>
             <a
-              href="#"
+              href="notification.html"
               class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
               >แจ้งเตือน</a
             >
@@ -83,12 +101,14 @@
 
         <div class="flex items-center gap-4">
           <a
+            id="userStatusLink"
             href="index.html"
             class="text-blue-600 font-medium hover:underline text-sm md:text-base"
             >ลงทะเบียน / เข้าสู่ระบบ</a
           >
           <div
-            class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white"
+            id="userMenuBtn"
+            class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden"
           >
             <svg
               class="w-5 h-5 text-gray-600"
@@ -114,83 +134,8 @@
         บัตรคิวของฉัน (Active Ticket)
     </h1>
 
-    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 relative">
-        
-        <div class="bg-blue-600 px-6 py-3 flex justify-between items-center text-white">
-            <span class="font-medium flex items-center gap-2">
-                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                กำลังรอเรียกคิว (Waiting)
-            </span>
-            <span class="text-sm opacity-90">วันที่: 16 ม.ค. 2567</span>
-        </div>
-
-        <div class="flex flex-col md:flex-row">
-            
-            <div class="w-full md:w-5/12 p-8 bg-blue-50 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-dashed border-gray-300 relative">
-                
-                <div class="absolute -top-3 right-0 md:-right-3 md:top-1/2 w-6 h-6 bg-gray-100 rounded-full z-10"></div>
-                <div class="absolute -bottom-3 right-0 md:-right-3 md:bottom-1/2 w-6 h-6 bg-gray-100 rounded-full z-10"></div>
-
-                <p class="text-gray-500 text-sm font-medium mb-1">หมายเลขคิวของคุณ</p>
-                <h2 class="text-6xl font-bold text-blue-700 mb-6 tracking-tighter">A-024</h2>
-                
-                <div class="bg-white p-2 rounded-lg shadow-sm mb-4">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Queue-A024-User123" alt="QR Code" class="w-32 h-32">
-                </div>
-                <p class="text-xs text-gray-400">สแกนเพื่อยืนยันตัวตนที่จุดคัดกรอง</p>
-            </div>
-
-            <div class="w-full md:w-7/12 p-8 flex flex-col justify-between">
-                
-                <div class="space-y-6">
-                    <div>
-                        <p class="text-xs text-gray-400 uppercase tracking-wide font-bold">แผนก / Department</p>
-                        <p class="text-xl font-bold text-gray-800">อายุรกรรมทั่วไป (Internal Medicine)</p>
-                        <p class="text-gray-500 text-sm mt-1">ชั้น 1 ห้องตรวจเบอร์ 4</p>
-                    </div>
-
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
-                            <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="w-full h-full object-cover">
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase tracking-wide font-bold">แพทย์ / Doctor</p>
-                            <p class="font-medium text-gray-800">นพ. สมชาย ใจดี</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-yellow-50 rounded-xl p-4 border border-yellow-100">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm text-yellow-800 font-bold">สถานะปัจจุบัน</span>
-                            <span class="text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full">Refresh Real-time</span>
-                        </div>
-                        <div class="flex justify-between items-end">
-                            <div>
-                                <p class="text-xs text-gray-500">คิวที่กำลังตรวจ</p>
-                                <p class="text-2xl font-bold text-gray-800">A-019</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xs text-gray-500">รออีก (คิว)</p>
-                                <p class="text-2xl font-bold text-blue-600">4</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xs text-gray-500">ประมาณเวลา</p>
-                                <p class="text-2xl font-bold text-gray-800">~20 <span class="text-sm font-normal">นาที</span></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-8 flex gap-3">
-                    <button class="flex-1 bg-white border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition font-medium text-sm">
-                        บันทึกรูปภาพ
-                    </button>
-                    <button class="flex-1 bg-white border border-red-200 text-red-600 py-2 rounded-lg hover:bg-red-50 transition font-medium text-sm">
-                        ยกเลิกนัดหมาย
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div id="bookingsContainer" class="space-y-6">
+      <!-- bookings will be rendered here -->
     </div>
 
     <div class="mt-6 text-center">
@@ -206,6 +151,134 @@
         <p class="text-gray-500 text-sm">&copy; 2024 Medical Queue System. ระบบจองคิวโรงพยาบาลออนไลน์</p>
     </div>
 </footer>
+
+<script>
+  // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
+  (function(){
+    const userStatusLink = document.getElementById('userStatusLink');
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    
+    try {
+      const user = JSON.parse(localStorage.getItem('mq_user'));
+      if(user && user.name) {
+        userStatusLink.textContent = user.name;
+        userStatusLink.href = '#';
+        userStatusLink.style.cursor = 'pointer';
+        userMenuBtn.classList.remove('hidden');
+        
+        userStatusLink.addEventListener('click', function(e){
+          e.preventDefault();
+          if(confirm('ออกจากระบบ?')) {
+            localStorage.removeItem('mq_user');
+            localStorage.removeItem('mq_registeredUser');
+            window.location.reload();
+          }
+        });
+      }
+    } catch(e) {
+      // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
+    }
+  })();
+  
+  // Format numeric id to alphanumeric booking code, e.g. MQ-00018
+  function formatBookingCode(id){
+    if(id === undefined || id === null) return '-';
+    const n = String(id).padStart(5,'0');
+    return 'MQ-' + n;
+  }
+  
+  // ดึงรายการการจองจาก backend และแสดงเฉพาะของผู้ใช้งาน
+  (function(){
+    const container = document.getElementById('bookingsContainer');
+    const user = JSON.parse(localStorage.getItem('mq_user') || 'null');
+    const patientName = (user && user.name) || localStorage.getItem('mq_patientName') || '';
+
+    if(!patientName){
+      container.innerHTML = '<p class="text-gray-500">ไม่มีข้อมูลการจองสำหรับผู้ใช้ปัจจุบัน</p>';
+      return;
+    }
+
+    const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
+    fetch(API_BASE + '/api/bookings').then(r => r.json()).then(list => {
+      const my = list.filter(b => (b.patient_name || '').trim() === patientName.trim());
+      if(!my.length){
+        container.innerHTML = '<p class="text-gray-500">ยังไม่มีการจองสำหรับบัญชีนี้</p>';
+        return;
+      }
+
+      // render most recent first
+      my.forEach(b => {
+        const el = document.createElement('div');
+        el.className = 'bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 relative';
+        el.innerHTML = `
+          <div class="bg-blue-600 px-6 py-3 flex justify-between items-center text-white">
+            <span class="font-medium flex items-center gap-2">
+              <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+              สถานะการจอง
+            </span>
+            <span class="text-sm opacity-90">วันที่: ${b.date || '-'}</span>
+          </div>
+          <div class="p-6 flex gap-6">
+            <div class="flex-1">
+              <h3 class="text-lg font-bold mb-2">${b.department_name || '-'} ${b.doctor_name ? '- ' + b.doctor_name : ''}</h3>
+                <p class="text-sm text-gray-600 mb-2">${b.symptoms || ''}</p>
+                ${b.rescheduled ? '<div class="inline-block mt-2 px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">เลื่อนการจอง</div>' : ''}
+              <div class="flex gap-3 mt-4">
+                <a class="px-4 py-2 bg-blue-600 text-white rounded-lg" href="details.html?id=${b.id}">รายละเอียด</a>
+                <button class="px-4 py-2 border rounded-lg cancel-btn" data-id="${b.id}">ยกเลิกการจอง</button>
+              </div>
+            </div>
+            <div class="w-40 flex flex-col items-center justify-center">
+              <div class="text-xs text-gray-500 mb-2">ID - การจอง</div>
+              <div class="font-mono font-semibold text-lg mb-2">${formatBookingCode(b.id)}</div>
+              <div id="qr-${b.id}"></div>
+            </div>
+          </div>
+        `;
+        // mark element with booking id for later highlighting
+        el.dataset.bookingId = String(b.id);
+        container.appendChild(el);
+
+        // Generate QR code pointing to the detail page for this booking
+        try {
+          const qrEl = el.querySelector('#qr-' + b.id);
+          const url = (window.location.origin || (location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : ''))) + '/details.html?id=' + b.id;
+          if (typeof QRCode !== 'undefined' && qrEl) {
+            new QRCode(qrEl, { text: url, width: 100, height: 100 });
+          }
+        } catch (e) {
+          // ignore QR failures
+        }
+        // highlight recently created booking if any
+        try{
+          const last = localStorage.getItem('mq_lastBookingId');
+          if(last && String(b.id) === String(last)){
+            el.classList.add('ring-4','ring-green-200');
+            el.scrollIntoView({behavior:'smooth', block:'center'});
+            // remove the marker so it won't highlight again on reload
+            localStorage.removeItem('mq_lastBookingId');
+          }
+        }catch(e){}
+      });
+
+      // attach cancel handlers
+      container.querySelectorAll('.cancel-btn').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const id = this.dataset.id;
+          if(!confirm('ต้องการยกเลิกการจองหรือไม่?')) return;
+          fetch(API_BASE + '/api/bookings/' + id, { method: 'DELETE' }).then(res => {
+            if(res.ok){
+              alert('ยกเลิกเรียบร้อย');
+              window.location.reload();
+            } else alert('ไม่สามารถยกเลิกได้');
+          }).catch(()=> alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์'));
+        });
+      });
+    }).catch(()=>{
+      container.innerHTML = '<p class="text-red-500">ไม่สามารถดึงข้อมูลจากเซิร์ฟเวอร์</p>';
+    });
+  })();
+</script>
 
 </body>
 </html>

@@ -1,3 +1,5 @@
+# หน้าโฮม
+
 <!DOCTYPE html>
 <html lang="th">
   <head>
@@ -78,7 +80,7 @@
 
           <li>
             <a
-              href="#"
+              href="notification.html"
               class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
               >แจ้งเตือน</a
             >
@@ -87,12 +89,14 @@
 
         <div class="flex items-center gap-4">
           <a
+            id="userStatusLink"
             href="index.html"
             class="text-blue-600 font-medium hover:underline text-sm md:text-base"
             >ลงทะเบียน / เข้าสู่ระบบ</a
           >
           <div
-            class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white"
+            id="userMenuBtn"
+            class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden"
           >
             <svg
               class="w-5 h-5 text-gray-600"
@@ -142,7 +146,7 @@
             </div>
             <div class="flex flex-wrap gap-4">
               <a
-                href="#"
+                href="notification.html"
                 class="bg-white text-blue-600 font-bold py-3 px-6 rounded-lg shadow hover:bg-gray-50 transition transform hover:-translate-y-0.5 inline-block text-center"
               >
                 แจ้งเตือน
@@ -307,5 +311,52 @@
         </p>
       </div>
     </footer>
+
+    <script>
+      // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
+      (function(){
+        const userStatusLink = document.getElementById('userStatusLink');
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        
+        try {
+          const user = JSON.parse(localStorage.getItem('mq_user'));
+          if(user && user.name) {
+            userStatusLink.textContent = user.name;
+            userStatusLink.href = '#';
+            userStatusLink.style.cursor = 'pointer';
+            userMenuBtn.classList.remove('hidden');
+            
+            userStatusLink.addEventListener('click', function(e){
+              e.preventDefault();
+              if(confirm('ออกจากระบบ?')) {
+                localStorage.removeItem('mq_user');
+                localStorage.removeItem('mq_registeredUser');
+                window.location.reload();
+              }
+            });
+          }
+        } catch(e) {
+          // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
+        }
+      })();
+
+      // ตรวจสอบการเข้าสู่ระบบสำหรับลิงก์จองคิวและดูตัวของฉัน
+      document.querySelectorAll('a[href="booking.html"], a[href="myticket.html"], a[href="history.html"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          try {
+            const user = JSON.parse(localStorage.getItem('mq_user'));
+            if(!user || !user.name) {
+              e.preventDefault();
+              alert('กรุณาเข้าสู่ระบบก่อนดำเนินการ');
+              window.location.href = 'index.html';
+            }
+          } catch(ex) {
+            e.preventDefault();
+            alert('กรุณาเข้าสู่ระบบก่อนดำเนินการ');
+            window.location.href = 'index.html';
+          }
+        });
+      });
+    </script>
   </body>
 </html>
