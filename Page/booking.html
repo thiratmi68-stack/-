@@ -1,4 +1,4 @@
-# จองคิวตรวจรักษา
+//จองคิวตรวจรักษา
 
 <!DOCTYPE html>
 <html lang="th">
@@ -27,6 +27,25 @@
   </head>
 
   <body class="bg-gray-50 min-h-screen flex flex-col">
+    <script>
+      // ตรวจสอบการเข้าสู่ระบบ - ถ้าไม่ได้เข้าสู่ระบบ ให้ไปหน้า login
+      (function(){
+        try {
+          const user = JSON.parse(localStorage.getItem('mq_user'));
+          if(!user || !user.name) {
+            alert('กรุณาเข้าสู่ระบบก่อนจองคิว');
+            window.location.href = 'index.html';
+          } else {
+            // เก็บชื่อผู้ใช้งานสำหรับใช้ในฟอร์ม
+            localStorage.setItem('mq_patientName', user.name);
+          }
+        } catch(e) {
+          alert('กรุณาเข้าสู่ระบบก่อนจองคิว');
+          window.location.href = 'index.html';
+        }
+      })();
+    </script>
+
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div
         class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
@@ -87,7 +106,7 @@
 
           <li>
             <a
-              href="#"
+              href="notification.html"
               class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
               >แจ้งเตือน</a
             >
@@ -96,12 +115,14 @@
 
         <div class="flex items-center gap-4">
           <a
+            id="userStatusLink"
             href="index.html"
             class="text-blue-600 font-medium hover:underline text-sm md:text-base"
             >ลงทะเบียน / เข้าสู่ระบบ</a
           >
           <div
-            class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white"
+            id="userMenuBtn"
+            class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden"
           >
             <svg
               class="w-5 h-5 text-gray-600"
@@ -187,7 +208,7 @@
               </svg>
               เลือกแผนกที่ต้องการรักษา
             </label>
-            <select
+            <select id="departmentSelect"
               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
             >
               <option value="" disabled selected>กรุณาเลือกแผนก</option>
@@ -218,7 +239,8 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div
-                class="border-2 border-blue-500 bg-blue-50 rounded-lg p-4 cursor-pointer relative hover:shadow-md transition"
+                class="border-2 border-blue-500 bg-blue-50 rounded-lg p-4 cursor-pointer relative hover:shadow-md transition doctor-card"
+                data-name="นพ. สมชาย ใจดี"
               >
                 <div class="absolute top-3 right-3 text-blue-600">
                   <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -244,7 +266,8 @@
               </div>
 
               <div
-                class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-300 hover:shadow-md transition"
+                class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-300 hover:shadow-md transition doctor-card"
+                data-name="พญ. วารี รักษา"
               >
                 <div class="flex items-center gap-4">
                   <img
@@ -274,123 +297,22 @@
               >อาการเบื้องต้น / สาเหตุที่มาตรวจ</label
             >
             <textarea
+              id="symptoms"
               rows="3"
               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="เช่น มีไข้สูง ปวดหัว ตัวร้อน เป็นมา 2 วัน..."
             ></textarea>
           </div>
+
+          <button
+            id="nextBtn"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5"
+          >
+            ถัดไป
+          </button>
         </div>
 
-        <div class="lg:col-span-1">
-          <div
-            class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 sticky top-24"
-          >
-            <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-              วันและเวลาที่ต้องการ
-            </h3>
-
-            <div class="mb-6">
-              <label class="block text-sm font-medium text-gray-600 mb-2"
-                >วันที่นัดหมาย</label
-              >
-              <input
-                type="date"
-                class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
-              />
-            </div>
-
-            <div class="mb-6">
-              <label class="block text-sm font-medium text-gray-600 mb-3"
-                >เลือกช่วงเวลา (16 ม.ค. 67)</label
-              >
-              <div class="grid grid-cols-3 gap-2">
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition"
-                >
-                  09:00
-                </button>
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded bg-gray-100 text-gray-400 cursor-not-allowed"
-                >
-                  09:30
-                </button>
-                <button
-                  class="py-2 px-1 text-sm bg-blue-600 text-white rounded shadow-md ring-2 ring-blue-300"
-                >
-                  10:00
-                </button>
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition"
-                >
-                  10:30
-                </button>
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition"
-                >
-                  13:00
-                </button>
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition bg-orange-300"
-                >
-                  13:30
-                </button>
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition"
-                >
-                  14:00
-                </button>
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded bg-gray-100 text-gray-400 cursor-not-allowed"
-                >
-                  14:30
-                </button>
-                <button
-                  class="py-2 px-1 text-sm bg-red-500 text-white rounded shadow-md ring-2 ring-blue-300"
-                >
-                  15:00
-                </button>
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition"
-                >
-                  15:30
-                </button>
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition"
-                >
-                  16:00
-                </button>
-                <button
-                  class="py-2 px-1 text-sm border border-gray-200 rounded hover:border-blue-500 hover:text-blue-600 transition"
-                >
-                  16:30
-                </button>
-              </div>
-            </div>
-
-            <div class="bg-gray-50 rounded-lg p-4 mb-4">
-              <div class="flex justify-between text-sm mb-1">
-                <span class="text-gray-500">แพทย์:</span>
-                <span class="font-medium text-gray-800">นพ. สมชาย</span>
-              </div>
-              <div class="flex justify-between text-sm mb-1">
-                <span class="text-gray-500">วันที่:</span>
-                <span class="font-medium text-gray-800">16 ม.ค. 67</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-500">เวลา:</span>
-                <span class="font-medium text-blue-600">10:00 น.</span>
-              </div>
-            </div>
-
-            <button
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5"
-            >
-              ยืนยันการจองคิว
-            </button>
-            <p class="text-xs text-center text-gray-400 mt-3">
-              กรุณามาก่อนเวลานัดหมาย 15 นาที
-            </p>
-          </div>
+        
         </div>
       </div>
     </main>
@@ -404,5 +326,90 @@
         </p>
       </div>
     </footer>
+    <script>
+      (function(){
+        const nextBtn = document.getElementById('nextBtn');
+        const leftContainer = document.getElementById('dateContainerLeft');
+        const rightContainer = document.getElementById('dateContainerRight');
+        const leftInput = document.getElementById('appointmentDate');
+        const rightInput = document.getElementById('appointmentDateRight');
+
+        if(!nextBtn) return;
+
+        nextBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          // gather current selections and save to localStorage
+          try{
+            const deptEl = document.getElementById('departmentSelect');
+            const deptValue = deptEl ? deptEl.value : '';
+            const deptText = deptEl ? (deptEl.options[deptEl.selectedIndex]?.text || '') : '';
+            const symptomsVal = document.getElementById('symptoms')?.value || '';
+            const dateValLeft = leftInput ? leftInput.value : '';
+            const selectedDoctorEl = document.querySelector('.doctor-card.selected');
+            const doctorName = selectedDoctorEl ? selectedDoctorEl.dataset.name : '';
+
+            localStorage.setItem('mq_departmentValue', deptValue);
+            localStorage.setItem('mq_departmentName', deptText);
+            localStorage.setItem('mq_doctorName', doctorName);
+            localStorage.setItem('mq_symptoms', symptomsVal);
+            if(dateValLeft) localStorage.setItem('mq_date', dateValLeft);
+          }catch(err){/* ignore */}
+
+          // navigate to datetime (preserve date in query if present)
+          const dateVal = leftInput ? leftInput.value : '';
+          const target = dateVal ? ('datetime.html?date=' + encodeURIComponent(dateVal)) : 'datetime.html';
+          window.location.href = target;
+        });
+        // navigate to datetime page when right-card button clicked
+        const goToDatetime = document.getElementById('goToDatetime');
+        if(goToDatetime){
+          goToDatetime.addEventListener('click', function(){
+            window.location.href = 'datetime.html';
+          });
+        }
+        // doctor card selection
+        document.querySelectorAll('.doctor-card').forEach(card =>{
+          card.addEventListener('click', function(){
+            document.querySelectorAll('.doctor-card').forEach(c=>c.classList.remove('selected','border-blue-500','bg-blue-50'));
+            this.classList.add('selected','border-blue-500','bg-blue-50');
+          });
+        });
+      })();
+      // ดึงข้อมูลผู้ใช้งาน และตั้งชื่อผู้ป่วยอัตโนมัติ
+      (function(){
+        try {
+          const user = JSON.parse(localStorage.getItem('mq_user'));
+          if(user && user.name) {
+            localStorage.setItem('mq_patientName', user.name);
+          }
+        } catch(e) {}
+      })();
+      // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
+      (function(){
+        const userStatusLink = document.getElementById('userStatusLink');
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        
+        try {
+          const user = JSON.parse(localStorage.getItem('mq_user'));
+          if(user && user.name) {
+            userStatusLink.textContent = user.name;
+            userStatusLink.href = '#';
+            userStatusLink.style.cursor = 'pointer';
+            userMenuBtn.classList.remove('hidden');
+            
+            userStatusLink.addEventListener('click', function(e){
+              e.preventDefault();
+              if(confirm('ออกจากระบบ?')) {
+                localStorage.removeItem('mq_user');
+                localStorage.removeItem('mq_registeredUser');
+                window.location.reload();
+              }
+            });
+          }
+        } catch(e) {
+          // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
+        }
+      })();
+    </script>
   </body>
 </html>
