@@ -2,136 +2,103 @@
 
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ตั๋วของฉัน | Medical Queue</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <style>
-    body { font-family: 'Sarabun', sans-serif; }
+    body {
+      font-family: 'Sarabun', sans-serif;
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
-    <script>
-      // ตรวจสอบการเข้าสู่ระบบ - ถ้าไม่ได้เข้าสู่ระบบ ให้ไปหน้า login
-      (function(){
-        try {
-          const user = JSON.parse(localStorage.getItem('mq_user'));
-          if(!user || !user.name) {
-            alert('กรุณาเข้าสู่ระบบเพื่อดูตั๋วของคุณ');
-            window.location.href = 'index.html';
-          }
-        } catch(e) {
+  <script>
+    // ตรวจสอบการเข้าสู่ระบบ - ถ้าไม่ได้เข้าสู่ระบบ ให้ไปหน้า login
+    (function () {
+      try {
+        const user = JSON.parse(localStorage.getItem('mq_user'));
+        if (!user || !user.name) {
           alert('กรุณาเข้าสู่ระบบเพื่อดูตั๋วของคุณ');
           window.location.href = 'index.html';
         }
-      })();
-    </script>
+      } catch (e) {
+        alert('กรุณาเข้าสู่ระบบเพื่อดูตั๋วของคุณ');
+        window.location.href = 'index.html';
+      }
+    })();
+  </script>
 
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div
-        class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
-      >
-        <a
-          href="home.html"
-          class="flex items-center gap-3 hover:opacity-80 transition-opacity"
-        >
-          <div
-            class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center"
-          >
-            <svg
-              class="w-5 h-5 text-blue-600"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <path d="M3 12h4l3-6 4 12 3-6h4" />
-            </svg>
-          </div>
-          <div>
-            <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
-            <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
-          </div>
-        </a>
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="home.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <div class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 12h4l3-6 4 12 3-6h4" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
+          <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
+        </div>
+      </a>
 
-        <ul class="hidden md:flex gap-10 text-gray-700 font-medium">
-          <li>
-            <a
-              href="home.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >หน้าหลัก</a
-            >
-          </li>
-          <li>
-            <a
-              href="booking.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >จองคิวตรวจ</a
-            >
-          </li>
-          <li>
-            <a
-              href="myticket.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >ตัวของฉัน</a
-            >
-          </li>
+      <ul class="hidden md:flex gap-10 text-gray-700 font-medium">
+        <li>
+          <a href="home.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">หน้าหลัก</a>
+        </li>
+        <li>
+          <a href="booking.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">จองคิวตรวจ</a>
+        </li>
+        <li>
+          <a href="myticket.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">ตัวของฉัน</a>
+        </li>
 
-          <li>
-            <a
-              href="history.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >ประวัติ</a
-            >
-          </li>
+        <li>
+          <a href="history.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">ประวัติ</a>
+        </li>
 
-          <li>
-            <a
-              href="notification.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >แจ้งเตือน</a
-            >
-          </li>
-        </ul>
+        <li>
+          <a href="notification.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">แจ้งเตือน</a>
+        </li>
+      </ul>
 
-        <div class="flex items-center gap-4">
-          <a
-            id="userStatusLink"
-            href="index.html"
-            class="text-blue-600 font-medium hover:underline text-sm md:text-base"
-            >ลงทะเบียน / เข้าสู่ระบบ</a
-          >
-          <div
-            id="userMenuBtn"
-            class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden"
-          >
-            <svg
-              class="w-5 h-5 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
+      <div class="flex items-center gap-4">
+        <a id="userStatusLink" href="index.html"
+          class="text-blue-600 font-medium hover:underline text-sm md:text-base">ลงทะเบียน / เข้าสู่ระบบ</a>
+        <div id="userMenuBtn"
+          class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden">
+          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
         </div>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-<!-- ----------------------------------------------------------------- -->
+  <!-- ----------------------------------------------------------------- -->
 
-<main class="flex-grow max-w-4xl mx-auto px-4 py-8 w-full">
+  <main class="flex-grow max-w-4xl mx-auto px-4 py-8 w-full">
 
     <h1 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-        <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
-        บัตรคิวของฉัน (Active Ticket)
+      <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z">
+        </path>
+      </svg>
+      บัตรคิวของฉัน (Active Ticket)
     </h1>
 
     <div id="bookingsContainer" class="space-y-6">
@@ -139,78 +106,84 @@
     </div>
 
     <div class="mt-6 text-center">
-        <p class="text-gray-500 text-sm">หากท่านมาไม่ทันเรียกคิว กรุณาติดต่อเจ้าหน้าที่เคาน์เตอร์พยาบาล</p>
+      <p class="text-gray-500 text-sm">หากท่านมาไม่ทันเรียกคิว กรุณาติดต่อเจ้าหน้าที่เคาน์เตอร์พยาบาล</p>
     </div>
 
-</main>
+  </main>
 
-<!-- ----------------------------------------------------------------- -->
+  <!-- ----------------------------------------------------------------- -->
 
-<footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+  <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
     <div class="max-w-7xl mx-auto px-6 text-center">
-        <p class="text-gray-500 text-sm">&copy; 2024 Medical Queue System. ระบบจองคิวโรงพยาบาลออนไลน์</p>
+      <p class="text-gray-500 text-sm">&copy; 2024 Medical Queue System. ระบบจองคิวโรงพยาบาลออนไลน์</p>
     </div>
-</footer>
+  </footer>
 
-<script>
-  // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
-  (function(){
-    const userStatusLink = document.getElementById('userStatusLink');
-    const userMenuBtn = document.getElementById('userMenuBtn');
-    
-    try {
-      const user = JSON.parse(localStorage.getItem('mq_user'));
-      if(user && user.name) {
-        userStatusLink.textContent = user.name;
-        userStatusLink.href = '#';
-        userStatusLink.style.cursor = 'pointer';
-        userMenuBtn.classList.remove('hidden');
-        
-        userStatusLink.addEventListener('click', function(e){
-          e.preventDefault();
-          if(confirm('ออกจากระบบ?')) {
-            localStorage.removeItem('mq_user');
-            localStorage.removeItem('mq_registeredUser');
-            window.location.reload();
-          }
-        });
+  <script>
+    // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
+    (function () {
+      const userStatusLink = document.getElementById('userStatusLink');
+      const userMenuBtn = document.getElementById('userMenuBtn');
+
+      try {
+        const user = JSON.parse(localStorage.getItem('mq_user'));
+        if (user && user.name) {
+          userStatusLink.textContent = user.name;
+          userStatusLink.href = '#';
+          userStatusLink.style.cursor = 'pointer';
+          userMenuBtn.classList.remove('hidden');
+
+          userStatusLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (confirm('ออกจากระบบ?')) {
+              localStorage.removeItem('mq_user');
+              localStorage.removeItem('mq_registeredUser');
+              window.location.reload();
+            }
+          });
+        }
+      } catch (e) {
+        // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
       }
-    } catch(e) {
-      // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
-    }
-  })();
-  
-  // Format numeric id to alphanumeric booking code, e.g. MQ-00018
-  function formatBookingCode(id){
-    if(id === undefined || id === null) return '-';
-    const n = String(id).padStart(5,'0');
-    return 'MQ-' + n;
-  }
-  
-  // ดึงรายการการจองจาก backend และแสดงเฉพาะของผู้ใช้งาน
-  (function(){
-    const container = document.getElementById('bookingsContainer');
-    const user = JSON.parse(localStorage.getItem('mq_user') || 'null');
-    const patientName = (user && user.name) || localStorage.getItem('mq_patientName') || '';
+    })();
 
-    if(!patientName){
-      container.innerHTML = '<p class="text-gray-500">ไม่มีข้อมูลการจองสำหรับผู้ใช้ปัจจุบัน</p>';
-      return;
+    // Format numeric id to alphanumeric booking code, e.g. MQ-00018
+    function formatBookingCode(id) {
+      if (id === undefined || id === null) return '-';
+      const n = String(id).padStart(5, '0');
+      return 'MQ-' + n;
     }
 
-    const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
-    fetch(API_BASE + '/api/bookings').then(r => r.json()).then(list => {
-      const my = list.filter(b => (b.patient_name || '').trim() === patientName.trim());
-      if(!my.length){
-        container.innerHTML = '<p class="text-gray-500">ยังไม่มีการจองสำหรับบัญชีนี้</p>';
+    // ดึงรายการการจองจาก backend และแสดงเฉพาะของผู้ใช้งาน
+    (function () {
+      const container = document.getElementById('bookingsContainer');
+      const user = JSON.parse(localStorage.getItem('mq_user') || 'null');
+      const patientName = (user && user.name) || localStorage.getItem('mq_patientName') || '';
+
+      if (!patientName) {
+        container.innerHTML = '<p class="text-gray-500">ไม่มีข้อมูลการจองสำหรับผู้ใช้ปัจจุบัน</p>';
         return;
       }
 
-      // render most recent first
-      my.forEach(b => {
-        const el = document.createElement('div');
-        el.className = 'bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 relative';
-        el.innerHTML = `
+      const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
+      fetch(API_BASE + '/api/bookings').then(r => r.json()).then(list => {
+        const my = list.filter(b => {
+          const isOwner = (b.patient_name || '').trim() === patientName.trim();
+          const isMyUser = b.patient_name === user.name; // extra safety
+          // Filter out arrived/completed/cancelled
+          const isActive = !['arrived', 'completed', 'cancelled'].includes(b.status);
+          return (isOwner || isMyUser) && isActive;
+        });
+        if (!my.length) {
+          container.innerHTML = '<p class="text-gray-500">ยังไม่มีการจองสำหรับบัญชีนี้</p>';
+          return;
+        }
+
+        // render most recent first
+        my.forEach(b => {
+          const el = document.createElement('div');
+          el.className = 'bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 relative';
+          el.innerHTML = `
           <div class="bg-blue-600 px-6 py-3 flex justify-between items-center text-white">
             <span class="font-medium flex items-center gap-2">
               <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
@@ -235,50 +208,51 @@
             </div>
           </div>
         `;
-        // mark element with booking id for later highlighting
-        el.dataset.bookingId = String(b.id);
-        container.appendChild(el);
+          // mark element with booking id for later highlighting
+          el.dataset.bookingId = String(b.id);
+          container.appendChild(el);
 
-        // Generate QR code pointing to the detail page for this booking
-        try {
-          const qrEl = el.querySelector('#qr-' + b.id);
-          const url = (window.location.origin || (location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : ''))) + '/details.html?id=' + b.id;
-          if (typeof QRCode !== 'undefined' && qrEl) {
-            new QRCode(qrEl, { text: url, width: 100, height: 100 });
+          // Generate QR code pointing to the detail page for this booking
+          try {
+            const qrEl = el.querySelector('#qr-' + b.id);
+            const url = (window.location.origin || (location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : ''))) + '/details.html?id=' + b.id;
+            if (typeof QRCode !== 'undefined' && qrEl) {
+              new QRCode(qrEl, { text: url, width: 100, height: 100 });
+            }
+          } catch (e) {
+            // ignore QR failures
           }
-        } catch (e) {
-          // ignore QR failures
-        }
-        // highlight recently created booking if any
-        try{
-          const last = localStorage.getItem('mq_lastBookingId');
-          if(last && String(b.id) === String(last)){
-            el.classList.add('ring-4','ring-green-200');
-            el.scrollIntoView({behavior:'smooth', block:'center'});
-            // remove the marker so it won't highlight again on reload
-            localStorage.removeItem('mq_lastBookingId');
-          }
-        }catch(e){}
-      });
-
-      // attach cancel handlers
-      container.querySelectorAll('.cancel-btn').forEach(btn => {
-        btn.addEventListener('click', function(){
-          const id = this.dataset.id;
-          if(!confirm('ต้องการยกเลิกการจองหรือไม่?')) return;
-          fetch(API_BASE + '/api/bookings/' + id, { method: 'DELETE' }).then(res => {
-            if(res.ok){
-              alert('ยกเลิกเรียบร้อย');
-              window.location.reload();
-            } else alert('ไม่สามารถยกเลิกได้');
-          }).catch(()=> alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์'));
+          // highlight recently created booking if any
+          try {
+            const last = localStorage.getItem('mq_lastBookingId');
+            if (last && String(b.id) === String(last)) {
+              el.classList.add('ring-4', 'ring-green-200');
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              // remove the marker so it won't highlight again on reload
+              localStorage.removeItem('mq_lastBookingId');
+            }
+          } catch (e) { }
         });
+
+        // attach cancel handlers
+        container.querySelectorAll('.cancel-btn').forEach(btn => {
+          btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            if (!confirm('ต้องการยกเลิกการจองหรือไม่?')) return;
+            fetch(API_BASE + '/api/bookings/' + id, { method: 'DELETE' }).then(res => {
+              if (res.ok) {
+                alert('ยกเลิกเรียบร้อย');
+                window.location.reload();
+              } else alert('ไม่สามารถยกเลิกได้');
+            }).catch(() => alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์'));
+          });
+        });
+      }).catch(() => {
+        container.innerHTML = '<p class="text-red-500">ไม่สามารถดึงข้อมูลจากเซิร์ฟเวอร์</p>';
       });
-    }).catch(()=>{
-      container.innerHTML = '<p class="text-red-500">ไม่สามารถดึงข้อมูลจากเซิร์ฟเวอร์</p>';
-    });
-  })();
-</script>
+    })();
+  </script>
 
 </body>
+
 </html>

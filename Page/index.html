@@ -1,472 +1,373 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>เข้าสู่ระบบ | Medical Queue</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
 
-    <style>
-      body {
-        font-family: "Sarabun", sans-serif;
-      }
-      /* Smooth transition for tab switching */
-      .tab-btn {
-        transition: all 0.3s ease;
-      }
-    </style>
-  </head>
-  <body class="bg-gray-50 min-h-screen flex flex-col">
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div
-        class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
-      >
-        <a
-          href="home.html"
-          class="flex items-center gap-3 hover:opacity-80 transition-opacity"
-        >
-          <div
-            class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center"
-          >
-            <svg
-              class="w-5 h-5 text-blue-600"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <path d="M3 12h4l3-6 4 12 3-6h4" />
-            </svg>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เข้าสู่ระบบ | Medical Queue</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: "Sarabun", sans-serif;
+    }
+
+    /* Smooth transition for tab switching */
+    .tab-btn {
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="home.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <div class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 12h4l3-6 4 12 3-6h4" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
+          <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
+        </div>
+      </a>
+
+      <ul class="hidden md:flex gap-10 text-gray-700 font-medium">
+        <li>
+          <a href="home.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">หน้าหลัก</a>
+        </li>
+        <li>
+          <a href="booking.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">จองคิวตรวจ</a>
+        </li>
+        <li>
+          <a href="myticket.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">ตัวของฉัน</a>
+        </li>
+
+        <li>
+          <a href="history.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">ประวัติ</a>
+        </li>
+
+        <li>
+          <a href="notification.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">แจ้งเตือน</a>
+        </li>
+      </ul>
+
+      <div class="flex items-center gap-4">
+        <a id="userStatusLink" href="index.html"
+          class="text-blue-600 font-medium hover:underline text-sm md:text-base">ลงทะเบียน / เข้าสู่ระบบ</a>
+        <div id="userMenuBtn"
+          class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden">
+          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ----------------------------------------------------------------- -->
+
+  <main class="flex-grow flex flex-col md:flex-row">
+    <div class="w-full md:w-1/2 lg:w-5/12 xl:w-1/3 flex items-center justify-center p-6 md:p-12 bg-white">
+      <div class="w-full max-w-sm">
+        <div class="mb-6">
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">ยินดีต้อนรับ</h1>
+          <p class="text-gray-500">กรุณาเลือกประเภทผู้ใช้งานและเข้าสู่ระบบ</p>
+        </div>
+
+        <div class="flex p-1 bg-gray-100 rounded-lg mb-6">
+          <button type="button" id="btn-patient" onclick="switchRole('patient')"
+            class="tab-btn w-1/2 py-2.5 text-sm font-semibold rounded-md shadow-sm bg-white text-blue-600 ring-1 ring-black/5">
+            ผู้รับบริการ (คนไข้)
+          </button>
+          <button type="button" id="btn-staff" onclick="switchRole('staff')"
+            class="tab-btn w-1/2 py-2.5 text-sm font-medium rounded-md text-gray-500 hover:text-gray-700">
+            เจ้าหน้าที่
+          </button>
+        </div>
+
+        <form action="#" method="POST" class="space-y-5">
+          <input type="hidden" name="role" id="role-input" value="patient" />
+
           <div>
-            <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
-            <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
-          </div>
-        </a>
-
-        <ul class="hidden md:flex gap-10 text-gray-700 font-medium">
-          <li>
-            <a
-              href="home.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >หน้าหลัก</a
-            >
-          </li>
-          <li>
-            <a
-              href="booking.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >จองคิวตรวจ</a
-            >
-          </li>
-          <li>
-            <a
-              href="myticket.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >ตัวของฉัน</a
-            >
-          </li>
-
-          <li>
-            <a
-              href="history.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >ประวัติ</a
-            >
-          </li>
-
-          <li>
-            <a
-              href="notification.html"
-              class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors"
-              >แจ้งเตือน</a
-            >
-          </li>
-        </ul>
-
-        <div class="flex items-center gap-4">
-          <a
-            id="userStatusLink"
-            href="index.html"
-            class="text-blue-600 font-medium hover:underline text-sm md:text-base"
-            >ลงทะเบียน / เข้าสู่ระบบ</a
-          >
-          <div
-            id="userMenuBtn"
-            class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden"
-          >
-            <svg
-              class="w-5 h-5 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- ----------------------------------------------------------------- -->
-
-    <main class="flex-grow flex flex-col md:flex-row">
-      <div
-        class="w-full md:w-1/2 lg:w-5/12 xl:w-1/3 flex items-center justify-center p-6 md:p-12 bg-white"
-      >
-        <div class="w-full max-w-sm">
-          <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">ยินดีต้อนรับ</h1>
-            <p class="text-gray-500">กรุณาเลือกประเภทผู้ใช้งานและเข้าสู่ระบบ</p>
+            <label for="username" id="label-username" class="block text-sm font-medium text-gray-700 mb-1">
+              เบอร์โทรศัพท์ / Email
+            </label>
+            <input type="text" id="username"
+              class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition duration-200"
+              placeholder="ระบุข้อมูลผู้ใช้งาน" />
           </div>
 
-          <div class="flex p-1 bg-gray-100 rounded-lg mb-6">
-            <button
-              type="button"
-              id="btn-patient"
-              onclick="switchRole('patient')"
-              class="tab-btn w-1/2 py-2.5 text-sm font-semibold rounded-md shadow-sm bg-white text-blue-600 ring-1 ring-black/5"
-            >
-              ผู้รับบริการ (คนไข้)
-            </button>
-            <button
-              type="button"
-              id="btn-staff"
-              onclick="switchRole('staff')"
-              class="tab-btn w-1/2 py-2.5 text-sm font-medium rounded-md text-gray-500 hover:text-gray-700"
-            >
-              เจ้าหน้าที่
-            </button>
-          </div>
-
-          <form action="#" method="POST" class="space-y-5">
-            <input type="hidden" name="role" id="role-input" value="patient" />
-
-            <div>
-              <label
-                for="username"
-                id="label-username"
-                class="block text-sm font-medium text-gray-700 mb-1"
-              >
-                เบอร์โทรศัพท์ / Email
-              </label>
-              <input
-                type="text"
-                id="username"
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label for="password" class="block text-sm font-medium text-gray-700">รหัสผ่าน</label>
+              <a href="forgot-password.html" class="text-sm text-blue-600 hover:underline">ลืมรหัสผ่าน?</a>
+            </div>
+            <div class="relative">
+              <input type="password" id="password"
                 class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition duration-200"
-                placeholder="ระบุข้อมูลผู้ใช้งาน"
-              />
+                placeholder="••••••••" />
+              <button id="togglePass" type="button" aria-label="แสดงรหัสผ่าน" title="แสดง/ซ่อนรหัสผ่าน"
+                style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;border:none;padding:4px;cursor:pointer">
+                <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                  fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
             </div>
+          </div>
 
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label
-                  for="password"
-                  class="block text-sm font-medium text-gray-700"
-                  >รหัสผ่าน</label
-                >
-                <a
-                  href="forgot-password.html"
-                  class="text-sm text-blue-600 hover:underline"
-                  >ลืมรหัสผ่าน?</a
-                >
-              </div>
-              <div class="relative">
-                <input
-                  type="password"
-                  id="password"
-                  class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-0 transition duration-200"
-                  placeholder="••••••••"
-                />
-                <button id="togglePass" type="button" aria-label="แสดงรหัสผ่าน" title="แสดง/ซ่อนรหัสผ่าน" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;border:none;padding:4px;cursor:pointer">
-                  <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                </button>
-              </div>
+          <button type="button" id="loginBtn"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-lg shadow-blue-500/30 transition duration-300 transform hover:-translate-y-0.5">
+            เข้าสู่ระบบ
+          </button>
+        </form>
+
+        <div id="register-link" class="mt-8 text-center transition-opacity duration-300">
+          <p class="text-gray-600 mb-4">ยังไม่มีบัญชีผู้ใช้งาน?</p>
+          <a href="register.html"
+            class="block w-full py-3 px-4 rounded-lg border-2 border-gray-200 text-gray-700 font-semibold hover:border-blue-600 hover:text-blue-600 transition duration-300 text-center">
+            ลงทะเบียนคนไข้ใหม่
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hidden md:flex md:w-1/2 lg:w-7/12 xl:w-2/3 bg-blue-600 relative overflow-hidden">
+      <img
+        src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+        alt="Hospital Background" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-50" />
+
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-600/90 to-indigo-900/90 mix-blend-multiply"></div>
+
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-12 left-12 w-64 h-64 bg-cyan-400 opacity-20 rounded-full blur-3xl"></div>
+
+      <div class="relative z-10 flex flex-col justify-center px-12 lg:px-24 h-full text-white">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-8 drop-shadow-md">
+          ดูแลสุขภาพของคุณ<br />ได้ง่ายกว่าที่เคย
+        </h2>
+        <p class="text-blue-100 text-lg lg:text-xl max-w-xl mb-12 font-light leading-relaxed">
+          ระบบจองคิวออนไลน์ ลดเวลารอคอยที่โรงพยาบาล ตรวจสอบสถานะคิวได้แบบ
+          Real-time พร้อมดูประวัติการรักษาย้อนหลังได้ทุกที่
+        </p>
+        <div class="space-y-6">
+          <div class="flex items-center gap-4">
+            <div
+              class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shadow-sm flex-shrink-0">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
             </div>
-
-            <button
-              type="button"
-              id="loginBtn"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-lg shadow-blue-500/30 transition duration-300 transform hover:-translate-y-0.5"
-            >
-              เข้าสู่ระบบ
-            </button>
-          </form>
-
-          <div
-            id="register-link"
-            class="mt-8 text-center transition-opacity duration-300"
-          >
-            <p class="text-gray-600 mb-4">ยังไม่มีบัญชีผู้ใช้งาน?</p>
-            <a
-              href="register.html"
-              class="block w-full py-3 px-4 rounded-lg border-2 border-gray-200 text-gray-700 font-semibold hover:border-blue-600 hover:text-blue-600 transition duration-300 text-center"
-            >
-              ลงทะเบียนคนไข้ใหม่
-            </a>
+            <span class="text-lg font-medium">จองคิวล่วงหน้า 24 ชั่วโมง</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <div
+              class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shadow-sm flex-shrink-0">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <span class="text-lg font-medium">แจ้งเตือนเมื่อใกล้ถึงคิว</span>
           </div>
         </div>
       </div>
+    </div>
+  </main>
 
-      <div
-        class="hidden md:flex md:w-1/2 lg:w-7/12 xl:w-2/3 bg-blue-600 relative overflow-hidden"
-      >
-        <img
-          src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-          alt="Hospital Background"
-          class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-50"
-        />
+  <!-- ----------------------------------------------------------------- -->
 
-        <div
-          class="absolute inset-0 bg-gradient-to-br from-blue-600/90 to-indigo-900/90 mix-blend-multiply"
-        ></div>
+  <script>
+    function switchRole(role) {
+      const btnPatient = document.getElementById("btn-patient");
+      const btnStaff = document.getElementById("btn-staff");
+      const roleInput = document.getElementById("role-input");
+      const labelUsername = document.getElementById("label-username");
+      const registerLink = document.getElementById("register-link");
 
-        <div
-          class="absolute -top-24 -right-24 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"
-        ></div>
-        <div
-          class="absolute bottom-12 left-12 w-64 h-64 bg-cyan-400 opacity-20 rounded-full blur-3xl"
-        ></div>
+      // Styles for Active State
+      const activeClass = [
+        "bg-white",
+        "text-blue-600",
+        "shadow-sm",
+        "ring-1",
+        "ring-black/5",
+        "font-semibold",
+      ];
+      // Styles for Inactive State
+      const inactiveClass = [
+        "text-gray-500",
+        "hover:text-gray-700",
+        "font-medium",
+        "bg-transparent",
+        "shadow-none",
+        "ring-0",
+      ];
 
-        <div
-          class="relative z-10 flex flex-col justify-center px-12 lg:px-24 h-full text-white"
-        >
-          <h2
-            class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-8 drop-shadow-md"
-          >
-            ดูแลสุขภาพของคุณ<br />ได้ง่ายกว่าที่เคย
-          </h2>
-          <p
-            class="text-blue-100 text-lg lg:text-xl max-w-xl mb-12 font-light leading-relaxed"
-          >
-            ระบบจองคิวออนไลน์ ลดเวลารอคอยที่โรงพยาบาล ตรวจสอบสถานะคิวได้แบบ
-            Real-time พร้อมดูประวัติการรักษาย้อนหลังได้ทุกที่
-          </p>
-          <div class="space-y-6">
-            <div class="flex items-center gap-4">
-              <div
-                class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shadow-sm flex-shrink-0"
-              >
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-              </div>
-              <span class="text-lg font-medium">จองคิวล่วงหน้า 24 ชั่วโมง</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <div
-                class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shadow-sm flex-shrink-0"
-              >
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-              </div>
-              <span class="text-lg font-medium">แจ้งเตือนเมื่อใกล้ถึงคิว</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+      if (role === "patient") {
+        // Update Input Value
+        roleInput.value = "patient";
 
-    <!-- ----------------------------------------------------------------- -->
-
-    <script>
-      function switchRole(role) {
-        const btnPatient = document.getElementById("btn-patient");
-        const btnStaff = document.getElementById("btn-staff");
-        const roleInput = document.getElementById("role-input");
-        const labelUsername = document.getElementById("label-username");
-        const registerLink = document.getElementById("register-link");
-
-        // Styles for Active State
-        const activeClass = [
-          "bg-white",
-          "text-blue-600",
-          "shadow-sm",
-          "ring-1",
-          "ring-black/5",
-          "font-semibold",
-        ];
-        // Styles for Inactive State
-        const inactiveClass = [
-          "text-gray-500",
-          "hover:text-gray-700",
-          "font-medium",
+        // Update Visuals
+        btnPatient.classList.add(...activeClass);
+        btnPatient.classList.remove(...inactiveClass.slice(0, 2)); // keep font-medium base if needed, simplified here
+        btnPatient.classList.remove(
           "bg-transparent",
           "shadow-none",
-          "ring-0",
-        ];
+          "ring-0"
+        );
 
-        if (role === "patient") {
-          // Update Input Value
-          roleInput.value = "patient";
+        btnStaff.classList.remove(...activeClass);
+        btnStaff.classList.add(
+          "text-gray-500",
+          "bg-transparent",
+          "shadow-none"
+        );
 
-          // Update Visuals
-          btnPatient.classList.add(...activeClass);
-          btnPatient.classList.remove(...inactiveClass.slice(0, 2)); // keep font-medium base if needed, simplified here
-          btnPatient.classList.remove(
-            "bg-transparent",
-            "shadow-none",
-            "ring-0"
-          );
+        // Update Text
+        labelUsername.innerText = "เบอร์โทรศัพท์ / เลขบัตรประชาชน";
+        registerLink.style.display = "block"; // Show register link for patients
+      } else {
+        // Update Input Value
+        roleInput.value = "staff";
 
-          btnStaff.classList.remove(...activeClass);
-          btnStaff.classList.add(
-            "text-gray-500",
-            "bg-transparent",
-            "shadow-none"
-          );
+        // Update Visuals
+        btnStaff.classList.add(...activeClass);
+        btnStaff.classList.remove("text-gray-500", "bg-transparent");
 
-          // Update Text
-          labelUsername.innerText = "เบอร์โทรศัพท์ / เลขบัตรประชาชน";
-          registerLink.style.display = "block"; // Show register link for patients
-        } else {
-          // Update Input Value
-          roleInput.value = "staff";
+        btnPatient.classList.remove(...activeClass);
+        btnPatient.classList.add(
+          "text-gray-500",
+          "bg-transparent",
+          "shadow-none"
+        );
 
-          // Update Visuals
-          btnStaff.classList.add(...activeClass);
-          btnStaff.classList.remove("text-gray-500", "bg-transparent");
-
-          btnPatient.classList.remove(...activeClass);
-          btnPatient.classList.add(
-            "text-gray-500",
-            "bg-transparent",
-            "shadow-none"
-          );
-
-          // Update Text
-          labelUsername.innerText = "รหัสพนักงาน / ชื่อผู้ใช้งาน (Username)";
-          registerLink.style.display = "none"; // Hide register link for staff (usually staff created by admin)
-        }
+        // Update Text
+        labelUsername.innerText = "รหัสพนักงาน / ชื่อผู้ใช้งาน (Username)";
+        registerLink.style.display = "none"; // Hide register link for staff (usually staff created by admin)
       }
-    </script>
-    <script>
-      // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
-      (function(){
-        const userStatusLink = document.getElementById('userStatusLink');
-        const userMenuBtn = document.getElementById('userMenuBtn');
-        
-        try {
-          const user = JSON.parse(localStorage.getItem('mq_user'));
-          if(user && user.name) {
-            userStatusLink.textContent = user.name;
-            userStatusLink.href = '#';
-            userStatusLink.style.cursor = 'pointer';
-            userMenuBtn.classList.remove('hidden');
-            
-            userStatusLink.addEventListener('click', function(e){
-              e.preventDefault();
-              if(confirm('ออกจากระบบ?')) {
-                localStorage.removeItem('mq_user');
-                localStorage.removeItem('mq_registeredUser');
-                window.location.reload();
-              }
-            });
-          }
-        } catch(e) {
-          // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
-        }
-      })();
-    </script>
-    <script>
-      // simple login handler: validate fields and redirect to home
-      (function(){
-        const API_BASE = (window.location.hostname === '127.0.0.1' && window.location.port === '5500') ? 'http://127.0.0.1:5000' : '';
-        const toggleBtn = document.getElementById('togglePass');
-        const pwdInput = document.getElementById('password');
-        if(toggleBtn && pwdInput){
-          toggleBtn.addEventListener('click', function(){
-            if(pwdInput.type === 'password'){
-              pwdInput.type = 'text';
-              document.getElementById('eyeIcon').innerHTML = '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8 .95-1.8 2.3-3.4 3.95-4.68"/><path d="M1 1l22 22"/>';
-            } else {
-              pwdInput.type = 'password';
-              document.getElementById('eyeIcon').innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle>';
+    }
+  </script>
+  <script>
+    // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
+    (function () {
+      const userStatusLink = document.getElementById('userStatusLink');
+      const userMenuBtn = document.getElementById('userMenuBtn');
+
+      try {
+        const user = JSON.parse(localStorage.getItem('mq_user'));
+        if (user && user.name) {
+          userStatusLink.textContent = user.name;
+          userStatusLink.href = '#';
+          userStatusLink.style.cursor = 'pointer';
+          userMenuBtn.classList.remove('hidden');
+
+          userStatusLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (confirm('ออกจากระบบ?')) {
+              localStorage.removeItem('mq_user');
+              localStorage.removeItem('mq_registeredUser');
+              window.location.reload();
             }
           });
         }
-        const loginBtn = document.getElementById('loginBtn');
-        if(!loginBtn) return;
-        loginBtn.addEventListener('click', async function(){
-          const username = document.getElementById('username')?.value?.trim();
-          const password = document.getElementById('password')?.value;
-          const role = document.getElementById('role-input')?.value || 'patient';
-          if(!username || !password){
-            alert('กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน');
-            return;
+      } catch (e) {
+        // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
+      }
+    })();
+  </script>
+  <script>
+    // simple login handler: validate fields and redirect to home
+    (function () {
+      const API_BASE = (window.location.hostname === '127.0.0.1' && window.location.port === '5500') ? 'http://127.0.0.1:5000' : '';
+      const toggleBtn = document.getElementById('togglePass');
+      const pwdInput = document.getElementById('password');
+      if (toggleBtn && pwdInput) {
+        toggleBtn.addEventListener('click', function () {
+          if (pwdInput.type === 'password') {
+            pwdInput.type = 'text';
+            document.getElementById('eyeIcon').innerHTML = '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8 .95-1.8 2.3-3.4 3.95-4.68"/><path d="M1 1l22 22"/>';
+          } else {
+            pwdInput.type = 'password';
+            document.getElementById('eyeIcon').innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle>';
           }
-
-          if(role === 'staff'){
-            // call backend admin login
-            try{
-              const res = await fetch(API_BASE + '/api/admin/login', {
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify({ username, password })
-              })
-              if(!res.ok){
-                const err = await res.json().catch(()=>({}));
-                alert(err.error || 'เข้าสู่ระบบเจ้าหน้าที่ไม่สำเร็จ')
-                return;
-              }
-              const staff = await res.json()
-              try{ localStorage.setItem('mq_user', JSON.stringify({ username: staff.username, name: staff.full_name || staff.username, role: staff.role })); }catch(e){}
-              window.location.href = API_BASE + '/admin'
-            }catch(e){
-              console.error(e); alert('เกิดข้อผิดพลาดขณะเชื่อมต่อเซิร์ฟเวอร์')
-            }
-            return;
-          }
-
-          // patient login (existing localStorage-based flow)
-          let reg = null;
-          try{ reg = JSON.parse(localStorage.getItem('mq_registeredUser') || 'null'); }catch(e){ reg = null; }
-          if(!reg){
-            if(confirm('ยังไม่มีการลงทะเบียน ต้องการไปหน้าลงทะเบียนหรือไม่?')){
-              window.location.href = 'register.html';
-            }
-            return;
-          }
-
-          // username may be phone or email or national id — compare to stored email/phone
-          const matchesUser = (username === (reg.email || '')) || (username === (reg.phone || ''));
-          if(!matchesUser || password !== reg.password){
-            alert('ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบ Email/เบอร์ หรือรหัสผ่าน');
-            return;
-          }
-
-          // login success
-          try{ localStorage.setItem('mq_user', JSON.stringify({ username: reg.email || reg.phone, name: (reg.firstName||'') + ' ' + (reg.lastName||'') })); }catch(e){}
-          window.location.href = 'home.html';
         });
-      })();
-    </script>
-  </body>
+      }
+      const loginBtn = document.getElementById('loginBtn');
+      if (!loginBtn) return;
+      loginBtn.addEventListener('click', async function () {
+        const username = document.getElementById('username')?.value?.trim();
+        const password = document.getElementById('password')?.value;
+        const role = document.getElementById('role-input')?.value || 'patient';
+        if (!username || !password) {
+          alert('กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน');
+          return;
+        }
+
+        if (role === 'staff') {
+          // call backend admin login
+          try {
+            const res = await fetch(API_BASE + '/api/admin/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username, password })
+            })
+            if (!res.ok) {
+              const err = await res.json().catch(() => ({}));
+              alert(err.error || 'เข้าสู่ระบบเจ้าหน้าที่ไม่สำเร็จ')
+              return;
+            }
+            const staff = await res.json()
+            try { localStorage.setItem('mq_user', JSON.stringify({ username: staff.username, name: staff.full_name || staff.username, role: staff.role })); } catch (e) { }
+            window.location.href = API_BASE + '/admin'
+          } catch (e) {
+            console.error(e); alert('เกิดข้อผิดพลาดขณะเชื่อมต่อเซิร์ฟเวอร์')
+          }
+          return;
+        }
+
+        // patient login (backend authenticated)
+        try {
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            alert(err.error || 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง');
+            return;
+          }
+
+          const user = await res.json();
+          // Save to localStorage for persistent session
+          try {
+            localStorage.setItem('mq_user', JSON.stringify(user));
+          } catch (e) { }
+
+          window.location.href = 'home.html';
+
+        } catch (e) {
+          console.error(e);
+          alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+        }
+      });
+    })();
+  </script>
+</body>
+
 </html>
