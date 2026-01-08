@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="th">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -8,54 +9,88 @@
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Sarabun', sans-serif; background-color: #f3f4f6; }
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: #f3f4f6;
+    }
+
     /* ปรับแต่ง UI ของ Scanner */
-    #reader__scan_region { background: white; }
-    #reader__dashboard_section_csr button { 
-      background-color: #2563eb; color: white; padding: 5px 10px; border-radius: 5px; border: none; margin-top: 10px;
+    #reader__scan_region {
+      background: white;
+    }
+
+    #reader__dashboard_section_csr button {
+      background-color: #2563eb;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 10px;
     }
   </style>
 </head>
+
 <body class="bg-gray-100 min-h-screen">
-  
+
   <div class="max-w-6xl mx-auto p-4">
     <header class="mb-8 flex justify-between items-center bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-600">
       <div>
         <h1 class="text-2xl font-bold text-gray-800">ระบบเจ้าหน้าที่ (Admin Check-in)</h1>
         <p class="text-gray-500 text-sm">สแกน QR Code หรือค้นหาด้วยรหัส MQ</p>
       </div>
-      <button onclick="logout()" class="text-red-600 hover:text-red-800 font-medium bg-red-50 px-4 py-2 rounded-lg transition-colors">ออกจากระบบ</button>
+      <button onclick="logout()"
+        class="text-red-600 hover:text-red-800 font-medium bg-red-50 px-4 py-2 rounded-lg transition-colors">ออกจากระบบ</button>
     </header>
 
-    <section class="mb-8 bg-white p-6 rounded-xl shadow-sm">
+    <div class="flex border-b border-gray-200 mb-6">
+      <button id="tabScanner" onclick="switchTab('scanner')"
+        class="px-6 py-3 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none">Scanner /
+        Check-in</button>
+      <button id="tabDoctors" onclick="switchTab('doctors')"
+        class="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium focus:outline-none">จัดการรายชื่อแพทย์</button>
+    </div>
+
+    <!-- SCANNER SECTION -->
+    <section id="sectionScanner" class="mb-8 bg-white p-6 rounded-xl shadow-sm">
       <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-700">
-        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4h-2-2v4h-2 0v-4H6v-4H4v-4h2v-4h2V6h6zM6 6h4v4H6zM14 6h4v4h-4zM6 14h4v4H6zM14 14h4v4h-4z"></path></svg>
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 4v1m6 11h2m-6 0h-2v4h-2-2v4h-2 0v-4H6v-4H4v-4h2v-4h2V6h6zM6 6h4v4H6zM14 6h4v4h-4zM6 14h4v4H6zM14 14h4v4h-4z">
+          </path>
+        </svg>
         จุดสแกนรับคิว (QR Code Scanner)
       </h3>
-      
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
+
         <div class="flex flex-col gap-4">
           <div class="bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300 relative overflow-hidden">
-             <div id="reader" class="w-full mx-auto" style="max-width: 500px;"></div>
+            <div id="reader" class="w-full mx-auto" style="max-width: 500px;"></div>
             <p class="text-center text-sm text-gray-500 mt-2">หันกล้องไปที่ QR Code ของคนไข้</p>
           </div>
 
           <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
             <p class="text-sm font-semibold text-gray-600 mb-2">ค้นหาด้วย Booking ID (กรณีสแกนไม่ได้)</p>
             <div class="flex gap-2">
-                <input type="text" id="manualBookingId" placeholder="ระบุ ID เช่น MQ-00021" class="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase font-mono">
-                <button onclick="manualSearch()" class="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors font-medium">ค้นหา</button>
+              <input type="text" id="manualBookingId" placeholder="ระบุ ID เช่น MQ-00021"
+                class="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase font-mono">
+              <button onclick="manualSearch()"
+                class="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors font-medium">ค้นหา</button>
             </div>
             <p class="text-xs text-gray-400 mt-1">* พิมพ์แค่ตัวเลข หรือ MQ-xxxxx ก็ได้</p>
           </div>
         </div>
 
         <div class="relative">
-          <div id="bookingEmpty" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-gray-200 border-dashed h-full min-h-[400px]">
-             <svg class="w-20 h-20 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-             <p class="text-lg font-medium">รอการสแกน...</p>
-             <p class="text-sm">ข้อมูลคนไข้จะปรากฏที่นี่</p>
+          <div id="bookingEmpty"
+            class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-gray-200 border-dashed h-full min-h-[400px]">
+            <svg class="w-20 h-20 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+              </path>
+            </svg>
+            <p class="text-lg font-medium">รอการสแกน...</p>
+            <p class="text-sm">ข้อมูลคนไข้จะปรากฏที่นี่</p>
           </div>
 
           <div id="bookingResult" class="hidden h-full">
@@ -66,7 +101,8 @@
                     <p class="text-blue-100 text-sm">Booking ID</p>
                     <h2 id="resId" class="text-3xl font-mono font-bold tracking-wider">MQ------</h2>
                   </div>
-                  <span id="resStatusBadge" class="px-3 py-1 bg-white/20 rounded-full text-xs font-bold backdrop-blur-sm">
+                  <span id="resStatusBadge"
+                    class="px-3 py-1 bg-white/20 rounded-full text-xs font-bold backdrop-blur-sm">
                     Checking
                   </span>
                 </div>
@@ -77,7 +113,7 @@
                   <label class="text-xs text-gray-500 uppercase font-bold">ชื่อ-นามสกุล คนไข้</label>
                   <p id="resName" class="text-xl font-medium text-gray-800 border-b pb-2"></p>
                 </div>
-                
+
                 <div class="grid grid-cols-2 gap-4">
                   <div>
                     <label class="text-xs text-gray-500 uppercase font-bold">แผนก</label>
@@ -97,23 +133,34 @@
                   </div>
                 </div>
 
-                <div class="mt-4 p-3 bg-yellow-50 border border-yellow-100 rounded-lg text-sm text-yellow-800 flex items-start gap-2">
-                  <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div
+                  class="mt-4 p-3 bg-yellow-50 border border-yellow-100 rounded-lg text-sm text-yellow-800 flex items-start gap-2">
+                  <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
                   <span>กรุณาตรวจสอบชื่อ-นามสกุล และเวลานัดหมายให้ถูกต้องก่อนกดยืนยัน</span>
                 </div>
               </div>
 
               <div class="p-4 bg-gray-50 border-t border-gray-100">
-                 <button id="btnConfirm" class="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow-md transition-all transform active:scale-95 flex justify-center items-center gap-2 text-lg">
-                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                   ยืนยันคนไข้มาถึง (Check-in)
-                 </button>
-                 
-                 <div id="msgConfirmed" class="hidden flex-col items-center justify-center py-2 text-green-600">
-                    <svg class="w-12 h-12 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    <span class="font-bold text-lg">ยืนยันเรียบร้อยแล้ว</span>
-                    <button onclick="resetBookingView()" class="mt-2 text-sm text-gray-500 underline hover:text-gray-700">สแกนคนต่อไป</button>
-                 </div>
+                <button id="btnConfirm"
+                  class="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow-md transition-all transform active:scale-95 flex justify-center items-center gap-2 text-lg">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  ยืนยันคนไข้มาถึง (Check-in)
+                </button>
+
+                <div id="msgConfirmed" class="hidden flex-col items-center justify-center py-2 text-green-600">
+                  <svg class="w-12 h-12 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="font-bold text-lg">ยืนยันเรียบร้อยแล้ว</span>
+                  <button onclick="resetBookingView()"
+                    class="mt-2 text-sm text-gray-500 underline hover:text-gray-700">สแกนคนต่อไป</button>
+                </div>
               </div>
             </div>
           </div>
@@ -121,6 +168,105 @@
 
       </div>
     </section>
+
+    <!-- DOCTOR MANAGEMENT SECTION -->
+    <section id="sectionDoctors" class="mb-8 bg-white p-6 rounded-xl shadow-sm hidden">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold flex items-center gap-2 text-gray-700">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+          </svg>
+          จัดการรายชื่อแพทย์
+        </h3>
+        <button onclick="openDoctorModal()"
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-medium flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          เพิ่มแพทย์
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
+              <th class="p-4 border-b">รูปภาพ</th>
+              <th class="p-4 border-b">ชื่อ-สกุล</th>
+              <th class="p-4 border-b">แผนก</th>
+              <th class="p-4 border-b">ความเชี่ยวชาญ</th>
+              <th class="p-4 border-b">สถานะ</th>
+              <th class="p-4 border-b text-center">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="doctorTableBody" class="text-sm">
+            <!-- Data will be populated here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Doctor Modal -->
+  <div id="doctorModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
+      <h3 id="modalTitle" class="text-xl font-bold mb-4">เพิ่มแพทย์</h3>
+      <input type="hidden" id="doctorId">
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1">ชื่อ-สกุล</label>
+          <input type="text" id="docName"
+            class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">แผนก</label>
+            <select id="docDept" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="med">อายุรกรรมทั่วไป</option>
+              <option value="dent">ทันตกรรม</option>
+              <option value="ortho">ศัลยกรรมกระดูก</option>
+              <option value="pedia">กุมารเวชกรรม</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">สถานะ</label>
+            <select id="docStatus" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="ว่างวันนี้">ว่างวันนี้</option>
+              <option value="ว่างช่วงเช้า">ว่างช่วงเช้า</option>
+              <option value="ว่างช่วงบ่าย">ว่างช่วงบ่าย</option>
+              <option value="คิวเต็มช่วงเช้า">คิวเต็มช่วงเช้า</option>
+              <option value="คิวเต็มช่วงบ่าย">คิวเต็มช่วงบ่าย</option>
+              <option value="คิวเต็มวันนี้">คิวเต็มวันนี้</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1">ความเชี่ยวชาญ</label>
+          <input type="text" id="docSpecialty"
+            class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1">URL รูปภาพ</label>
+          <input type="text" id="docImage"
+            class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+            value="https://cdn-icons-png.flaticon.com/512/3774/3774299.png">
+        </div>
+
+      </div>
+
+      <div class="mt-6 flex justify-end gap-3">
+        <button onclick="closeDoctorModal()"
+          class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">ยกเลิก</button>
+        <button onclick="saveDoctor()"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">บันทึกข้อมูล</button>
+      </div>
+    </div>
+  </div>
   </div>
 
   <script>
@@ -128,23 +274,23 @@
     // CONFIGURATION
     // ==========================================
     // ตั้งค่าเป็น false เพื่อใช้ API จาก Python Backend
-    const USE_MOCK_API = false; 
+    const USE_MOCK_API = false;
 
     // ==========================================
     // HELPER FUNCTIONS
     // ==========================================
-    
+
     // แปลง Text "MQ-00021" ให้เหลือแค่ตัวเลข ID (21)
     function normalizeId(inputStr) {
-        if(!inputStr) return null;
-        const numericPart = String(inputStr).replace(/\D/g, ''); 
-        return numericPart ? parseInt(numericPart) : null;
+      if (!inputStr) return null;
+      const numericPart = String(inputStr).replace(/\D/g, '');
+      return numericPart ? parseInt(numericPart) : null;
     }
 
     // แปลงตัวเลข ID (21) กลับไปเป็น Format "MQ-00021"
-    function formatBookingCode(id){
-        if(!id) return '-';
-        return 'MQ-' + String(id).padStart(5,'0');
+    function formatBookingCode(id) {
+      if (!id) return '-';
+      return 'MQ-' + String(id).padStart(5, '0');
     }
 
     // ==========================================
@@ -153,148 +299,299 @@
     let html5QrcodeScanner;
 
     function onScanSuccess(decodedText, decodedResult) {
-        console.log(`Scan result: ${decodedText}`);
-        
-        let id = null;
-        try {
-            const url = new URL(decodedText);
-            const idParam = url.searchParams.get("id"); 
-            if(idParam) id = idParam;
-        } catch(e) {}
+      console.log(`Scan result: ${decodedText}`);
 
-        if(!id) {
-            id = normalizeId(decodedText);
-        }
+      let id = null;
+      try {
+        const url = new URL(decodedText);
+        const idParam = url.searchParams.get("id");
+        if (idParam) id = idParam;
+      } catch (e) { }
 
-        if(id){
-            html5QrcodeScanner.pause(); 
-            fetchBookingDetails(id);
-        } else {
-            alert("QR Code ไม่ถูกต้อง (ไม่พบข้อมูล ID)");
-        }
+      if (!id) {
+        id = normalizeId(decodedText);
+      }
+
+      if (id) {
+        html5QrcodeScanner.pause();
+        fetchBookingDetails(id);
+      } else {
+        alert("QR Code ไม่ถูกต้อง (ไม่พบข้อมูล ID)");
+      }
     }
 
-    function initScanner(){
-        html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader", { fps: 10, qrbox: 250, aspectRatio: 1.0 }, false
-        );
-        html5QrcodeScanner.render(onScanSuccess, (error) => {});
+    function initScanner() {
+      html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 10, qrbox: 250, aspectRatio: 1.0 }, false
+      );
+      html5QrcodeScanner.render(onScanSuccess, (error) => { });
     }
 
     // ==========================================
     // SEARCH & DISPLAY LOGIC
     // ==========================================
 
-    function manualSearch(){
-        const inputVal = document.getElementById('manualBookingId').value;
-        const id = normalizeId(inputVal); 
+    function manualSearch() {
+      const inputVal = document.getElementById('manualBookingId').value;
+      const id = normalizeId(inputVal);
 
-        if(!id) return alert("กรุณากรอก Booking ID ที่ถูกต้อง");
-        
-        if(html5QrcodeScanner && html5QrcodeScanner.getState() === 2) { 
-             html5QrcodeScanner.pause();
-        }
-        
-        fetchBookingDetails(id);
+      if (!id) return alert("กรุณากรอก Booking ID ที่ถูกต้อง");
+
+      if (html5QrcodeScanner && html5QrcodeScanner.getState() === 2) {
+        html5QrcodeScanner.pause();
+      }
+
+      fetchBookingDetails(id);
     }
 
-    async function fetchBookingDetails(id){
-        try {
-            // เรียกใช้ API จริงจาก Flask
-            const res = await fetch(`/api/bookings/${id}`);
-            if(!res.ok) throw new Error("Booking not found");
-            const data = await res.json();
+    async function fetchBookingDetails(id) {
+      try {
+        // เรียกใช้ API จริงจาก Flask
+        const res = await fetch(`/api/bookings/${id}`);
+        if (!res.ok) throw new Error("Booking not found");
+        const data = await res.json();
 
-            displayBooking(data);
+        displayBooking(data);
 
-        } catch(e) {
-            alert("ไม่พบข้อมูลการจอง ID: " + formatBookingCode(id));
-            resetBookingView();
-        }
+      } catch (e) {
+        alert("ไม่พบข้อมูลการจอง ID: " + formatBookingCode(id));
+        resetBookingView();
+      }
     }
 
-    function displayBooking(data){
-        document.getElementById('bookingEmpty').classList.add('hidden');
-        document.getElementById('bookingResult').classList.remove('hidden');
+    function displayBooking(data) {
+      document.getElementById('bookingEmpty').classList.add('hidden');
+      document.getElementById('bookingResult').classList.remove('hidden');
 
-        // แสดง ID ในรูปแบบ MQ-XXXXX
-        document.getElementById('resId').innerText = formatBookingCode(data.id);
-        
-        // Map ข้อมูลให้ตรงกับ Database (SQLite)
-        // หมายเหตุ: Python ส่งข้อมูลกลับมาเป็น Key แบบ snake_case (เช่น patient_name)
-        document.getElementById('resName').innerText = data.patient_name || '-';
-        document.getElementById('resDept').innerText = data.department_name || '-';
-        document.getElementById('resDoctor').innerText = data.doctor_name || '-';
-        document.getElementById('resDate').innerText = data.date || '-';
-        document.getElementById('resTime').innerText = data.time || '-';
+      // แสดง ID ในรูปแบบ MQ-XXXXX
+      document.getElementById('resId').innerText = formatBookingCode(data.id);
 
-        updateStatusUI(data.status, data.id);
+      // Map ข้อมูลให้ตรงกับ Database (SQLite)
+      // หมายเหตุ: Python ส่งข้อมูลกลับมาเป็น Key แบบ snake_case (เช่น patient_name)
+      document.getElementById('resName').innerText = data.patient_name || '-';
+      document.getElementById('resDept').innerText = data.department_name || '-';
+      document.getElementById('resDoctor').innerText = data.doctor_name || '-';
+      document.getElementById('resDate').innerText = data.date || '-';
+      document.getElementById('resTime').innerText = data.time || '-';
+
+      updateStatusUI(data.status, data.id);
     }
 
-    function updateStatusUI(status, id){
-        const badge = document.getElementById('resStatusBadge');
-        const btnConfirm = document.getElementById('btnConfirm');
-        const msgConfirmed = document.getElementById('msgConfirmed');
+    function updateStatusUI(status, id) {
+      const badge = document.getElementById('resStatusBadge');
+      const btnConfirm = document.getElementById('btnConfirm');
+      const msgConfirmed = document.getElementById('msgConfirmed');
 
-        btnConfirm.classList.add('hidden');
-        msgConfirmed.classList.add('hidden');
-        
-        if(status === 'booked') {
-            badge.innerText = 'รอเข้ารับบริการ';
-            badge.className = 'px-3 py-1 bg-yellow-400 rounded-full text-xs font-bold text-yellow-900';
-            
-            btnConfirm.classList.remove('hidden');
-            btnConfirm.onclick = () => confirmArrival(id);
+      btnConfirm.classList.add('hidden');
+      msgConfirmed.classList.add('hidden');
 
-        } else if (status === 'arrived') {
-            badge.innerText = '✓ มาถึงแล้ว';
-            badge.className = 'px-3 py-1 bg-green-500 rounded-full text-xs font-bold text-white';
-            
-            msgConfirmed.classList.remove('hidden');
+      if (status === 'booked') {
+        badge.innerText = 'รอเข้ารับบริการ';
+        badge.className = 'px-3 py-1 bg-yellow-400 rounded-full text-xs font-bold text-yellow-900';
+
+        btnConfirm.classList.remove('hidden');
+        btnConfirm.onclick = () => confirmArrival(id);
+
+      } else if (status === 'arrived') {
+        badge.innerText = '✓ มาถึงแล้ว';
+        badge.className = 'px-3 py-1 bg-green-500 rounded-full text-xs font-bold text-white';
+
+        msgConfirmed.classList.remove('hidden');
+      } else {
+        badge.innerText = status;
+        badge.className = 'px-3 py-1 bg-gray-400 rounded-full text-xs font-bold text-white';
+      }
+    }
+
+    async function confirmArrival(id) {
+      if (!confirm('ยืนยัน Check-in ผู้ป่วย?')) return;
+
+      try {
+        const res = await fetch(`/api/bookings/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'arrived' })
+        });
+
+        if (res.ok) {
+          const newData = await res.json();
+          displayBooking(newData);
         } else {
-            badge.innerText = status;
-            badge.className = 'px-3 py-1 bg-gray-400 rounded-full text-xs font-bold text-white';
+          alert('เกิดข้อผิดพลาดในการบันทึก');
         }
+      } catch (e) {
+        alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์');
+      }
     }
 
-    async function confirmArrival(id){
-        if(!confirm('ยืนยัน Check-in ผู้ป่วย?')) return;
+    function resetBookingView() {
+      document.getElementById('bookingEmpty').classList.remove('hidden');
+      document.getElementById('bookingResult').classList.add('hidden');
+      document.getElementById('manualBookingId').value = '';
 
-        try {
-            const res = await fetch(`/api/bookings/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: 'arrived' })
-            });
-            
-            if(res.ok){
-                const newData = await res.json();
-                displayBooking(newData);
-            } else {
-                alert('เกิดข้อผิดพลาดในการบันทึก');
-            }
-        } catch(e) {
-            alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์');
-        }
+      if (html5QrcodeScanner && html5QrcodeScanner.getState() === 3) {
+        html5QrcodeScanner.resume();
+      }
     }
 
-    function resetBookingView(){
-        document.getElementById('bookingEmpty').classList.remove('hidden');
-        document.getElementById('bookingResult').classList.add('hidden');
-        document.getElementById('manualBookingId').value = '';
-
-        if(html5QrcodeScanner && html5QrcodeScanner.getState() === 3) {
-            html5QrcodeScanner.resume();
-        }
+    function logout() {
+      if (confirm("ต้องการออกจากระบบ?")) window.location.href = '/login';
     }
 
-    function logout(){
-        if(confirm("ต้องการออกจากระบบ?")) window.location.href = '/login';
-    }
-
-    window.onload = function() {
-        initScanner();
+    window.onload = function () {
+      initScanner();
     };
+
+    // ==========================================
+    // TAB MANAGEMENT
+    // ==========================================
+    function switchTab(tab) {
+      document.getElementById('sectionScanner').classList.add('hidden');
+      document.getElementById('sectionDoctors').classList.add('hidden');
+      document.getElementById('tabScanner').className = "px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium focus:outline-none";
+      document.getElementById('tabDoctors').className = "px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium focus:outline-none";
+
+      if (tab === 'scanner') {
+        document.getElementById('sectionScanner').classList.remove('hidden');
+        document.getElementById('tabScanner').className = "px-6 py-3 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none";
+        if (html5QrcodeScanner && html5QrcodeScanner.getState() === 3) {
+          html5QrcodeScanner.resume();
+        }
+      } else {
+        document.getElementById('sectionDoctors').classList.remove('hidden');
+        document.getElementById('tabDoctors').className = "px-6 py-3 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none";
+        if (html5QrcodeScanner && html5QrcodeScanner.getState() === 2) {
+          html5QrcodeScanner.pause();
+        }
+        fetchDoctors();
+      }
+    }
+
+    // ==========================================
+    // DOCTOR MANAGEMENT LOGIC
+    // ==========================================
+    async function fetchDoctors() {
+      try {
+        const res = await fetch('/api/doctors');
+        const data = await res.json();
+        renderDoctorTable(data);
+      } catch (e) {
+        console.error("Error fetching doctors:", e);
+      }
+    }
+
+    function renderDoctorTable(doctors) {
+      const tbody = document.getElementById('doctorTableBody');
+      tbody.innerHTML = '';
+
+      doctors.forEach(doc => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b hover:bg-gray-50";
+        tr.innerHTML = `
+                <td class="p-4"><img src="${doc.image}" class="w-10 h-10 rounded-full object-cover bg-gray-100"></td>
+                <td class="p-4 font-medium text-gray-800">${doc.name}</td>
+                <td class="p-4 text-gray-600">${deptName(doc.department)}</td>
+                <td class="p-4 text-gray-600">${doc.specialty}</td>
+                <td class="p-4"><span class="text-xs font-bold px-2 py-1 rounded bg-gray-100 ${doc.status_color.replace('text-', 'text-')}">${doc.status}</span></td>
+                <td class="p-4 text-center">
+                    <button onclick="editDoctor(${doc.id}, '${doc.name}', '${doc.department}', '${doc.specialty}', '${doc.status}', '${doc.image}')" class="text-blue-600 hover:text-blue-800 mr-2">แก้ไข</button>
+                    <button onclick="deleteDoctor(${doc.id})" class="text-red-600 hover:text-red-800">ลบ</button>
+                </td>
+            `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function deptName(code) {
+      const map = { 'med': 'อายุรกรรมทั่วไป', 'dent': 'ทันตกรรม', 'ortho': 'ศัลยกรรมกระดูก', 'pedia': 'กุมารเวชกรรม' };
+      return map[code] || code;
+    }
+
+    // Modal Functions
+    function openDoctorModal(id = null) {
+      document.getElementById('doctorModal').classList.remove('hidden');
+      document.getElementById('doctorId').value = id || '';
+      document.getElementById('modalTitle').innerText = id ? 'แก้ไขข้อมูลแพทย์' : 'เพิ่มแพทย์';
+
+      if (!id) {
+        // clear form
+        document.getElementById('docName').value = '';
+        document.getElementById('docDept').value = 'med';
+        document.getElementById('docSpecialty').value = '';
+        document.getElementById('docStatus').value = 'ว่างวันนี้';
+        document.getElementById('docImage').value = 'https://cdn-icons-png.flaticon.com/512/3774/3774299.png';
+      }
+    }
+
+    function closeDoctorModal() {
+      document.getElementById('doctorModal').classList.add('hidden');
+    }
+
+    function editDoctor(id, name, dept, specialty, status, image) {
+      openDoctorModal(id);
+      document.getElementById('docName').value = name;
+      document.getElementById('docDept').value = dept;
+      document.getElementById('docSpecialty').value = specialty;
+      document.getElementById('docStatus').value = status;
+      document.getElementById('docImage').value = image;
+    }
+
+    async function saveDoctor() {
+      const id = document.getElementById('doctorId').value;
+      const statusVal = document.getElementById('docStatus').value;
+      let color = 'text-green-600';
+
+      if (statusVal.includes('เต็ม')) {
+        color = 'text-red-600';
+      } else if (statusVal.includes('บ่าย') || statusVal.includes('เช้า')) {
+        // If it's partial availability but not full, maybe yellow? 
+        // For now let's keep it simple: if full -> red, else -> green/yellow.
+        if (statusVal !== 'ว่างวันนี้' && !statusVal.includes('เต็ม')) color = 'text-yellow-600';
+      }
+
+      const data = {
+        name: document.getElementById('docName').value,
+        department: document.getElementById('docDept').value,
+        specialty: document.getElementById('docSpecialty').value,
+        status: statusVal,
+        image: document.getElementById('docImage').value,
+        status_color: color
+      };
+
+      if (!data.name || !data.specialty) return alert('กรุณากรอกข้อมูลให้ครบ');
+
+      try {
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/api/admin/doctors/${id}` : '/api/admin/doctors';
+
+        const res = await fetch(url, {
+          method: method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          closeDoctorModal();
+          fetchDoctors();
+        } else {
+          alert('เกิดข้อผิดพลาดในการบันทึก');
+        }
+      } catch (e) {
+        alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์');
+      }
+    }
+
+    async function deleteDoctor(id) {
+      if (!confirm('ยืนยันลบรายชื่อแพทย์นี้?')) return;
+      try {
+        const res = await fetch(`/api/admin/doctors/${id}`, { method: 'DELETE' });
+        if (res.ok) fetchDoctors();
+        else alert('ลบไม่สำเร็จ');
+      } catch (e) {
+        alert('Error deleting doctor');
+      }
+    }
   </script>
 </body>
+
 </html>

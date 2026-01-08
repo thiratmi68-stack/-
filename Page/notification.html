@@ -1,282 +1,271 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>แจ้งเตือน | Medical Queue</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <style>
-    body { font-family: 'Sarabun', sans-serif; }
+    body {
+      font-family: 'Sarabun', sans-serif;
+    }
   </style>
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
-    <script>
-      // ตรวจสอบการเข้าสู่ระบบ - ถ้าไม่ได้เข้าสู่ระบบ ให้ไปหน้า login
-      (function(){
-        try {
-          const user = JSON.parse(localStorage.getItem('mq_user'));
-          if(!user || !user.name) {
-            alert('กรุณาเข้าสู่ระบบเพื่อดูแจ้งเตือน');
-            window.location.href = 'index.html';
-          }
-        } catch(e) {
+  <script>
+    // ตรวจสอบการเข้าสู่ระบบ - ถ้าไม่ได้เข้าสู่ระบบ ให้ไปหน้า login
+    (function () {
+      try {
+        const user = JSON.parse(localStorage.getItem('mq_user'));
+        if (!user || !user.name) {
           alert('กรุณาเข้าสู่ระบบเพื่อดูแจ้งเตือน');
           window.location.href = 'index.html';
         }
-      })();
-    </script>
+      } catch (e) {
+        alert('กรุณาเข้าสู่ระบบเพื่อดูแจ้งเตือน');
+        window.location.href = 'index.html';
+      }
+    })();
+  </script>
 
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="home.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M3 12h4l3-6 4 12 3-6h4" />
-            </svg>
-          </div>
-          <div>
-            <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
-            <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
-          </div>
-        </a>
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="home.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <div class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 12h4l3-6 4 12 3-6h4" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
+          <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
+        </div>
+      </a>
 
-        <ul class="hidden md:flex gap-10 text-gray-700 font-medium">
-          <li>
-            <a href="home.html" class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">หน้าหลัก</a>
-          </li>
-          <li>
-            <a href="booking.html" class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">จองคิวตรวจ</a>
-          </li>
-          <li>
-            <a href="myticket.html" class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">ตัวของฉัน</a>
-          </li>
-          <li>
-            <a href="history.html" class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">ประวัติ</a>
-          </li>
-          <li>
-            <a href="notification.html" class="border-b-2 border-blue-600 pb-1 text-blue-600 font-semibold transition-colors">แจ้งเตือน</a>
-          </li>
-        </ul>
+      <ul class="hidden md:flex gap-10 text-gray-700 font-medium">
+        <li>
+          <a href="home.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">หน้าหลัก</a>
+        </li>
+        <li>
+          <a href="booking.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">จองคิวตรวจ</a>
+        </li>
+        <li>
+          <a href="myticket.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">ตัวของฉัน</a>
+        </li>
+        <li>
+          <a href="history.html"
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">ประวัติ</a>
+        </li>
+        <li>
+          <a href="notification.html"
+            class="border-b-2 border-blue-600 pb-1 text-blue-600 font-semibold transition-colors">แจ้งเตือน</a>
+        </li>
+      </ul>
 
-        <div class="flex items-center gap-4">
-          <a id="userStatusLink" href="index.html" class="text-blue-600 font-medium hover:underline text-sm md:text-base">ลงทะเบียน / เข้าสู่ระบบ</a>
-          <div id="userMenuBtn" class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden">
-            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
+      <div class="flex items-center gap-4">
+        <a id="userStatusLink" href="index.html"
+          class="text-blue-600 font-medium hover:underline text-sm md:text-base">ลงทะเบียน / เข้าสู่ระบบ</a>
+        <div id="userMenuBtn"
+          class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden">
+          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
         </div>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-<!-- ----------------------------------------------------------------- -->
+  <!-- ----------------------------------------------------------------- -->
 
-<main class="flex-grow max-w-7xl mx-auto px-6 py-8 w-full">
+  <main class="flex-grow max-w-7xl mx-auto px-6 py-8 w-full">
 
     <div class="flex items-center justify-between mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-            </svg>
-            แจ้งเตือน
-        </h1>
-        <button id="markAllRead" class="text-sm text-blue-600 font-medium hover:text-blue-800 transition">ทำเครื่องหมายว่าอ่านทั้งหมด</button>
+      <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        แจ้งเตือน
+      </h1>
+      <button id="markAllRead"
+        class="text-sm text-blue-600 font-medium hover:text-blue-800 transition">ทำเครื่องหมายว่าอ่านทั้งหมด</button>
     </div>
 
     <!-- ตัวกรอง -->
     <div class="flex gap-2 mb-8 flex-wrap">
-        <button class="px-4 py-2 rounded-full bg-blue-600 text-white font-medium text-sm transition" data-filter="all">ทั้งหมด</button>
-        <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-300 transition" data-filter="appointment">นัดหมาย</button>
-        <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-300 transition" data-filter="reminder">เตือนความจำ</button>
-        <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-300 transition" data-filter="system">ระบบ</button>
+      <button class="px-4 py-2 rounded-full bg-blue-600 text-white font-medium text-sm transition"
+        data-filter="all">ทั้งหมด</button>
+      <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-300 transition"
+        data-filter="appointment">นัดหมาย</button>
+      <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-300 transition"
+        data-filter="reminder">เตือนความจำ</button>
+      <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-300 transition"
+        data-filter="system">ระบบ</button>
     </div>
 
     <!-- รายการแจ้งเตือน -->
     <div class="space-y-4">
-
-        <!-- แจ้งเตือนนัดหมาย -->
-        <div class="notification-item bg-white rounded-xl shadow-sm border border-blue-200 p-6 hover:shadow-md transition" data-type="appointment">
-            <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                </div>
-                <div class="flex-grow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-900">นัดหมายใหม่ - ตรวจหัวใจ</h3>
-                            <p class="text-sm text-gray-600 mt-1">คุณได้จองคิวตรวจหัวใจเรียบร้อย</p>
-                        </div>
-                        <span class="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-semibold">ใหม่</span>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-3">📅 15 มกราคม 2026 เวลา 10:00 น. | 📍 ห้องตรวจหลัก</p>
-                    <p class="text-xs text-gray-400 mt-3">เมื่อ 1 ชั่วโมงที่แล้ว</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- แจ้งเตือนเตือนความจำ -->
-        <div class="notification-item bg-white rounded-xl shadow-sm border border-yellow-200 p-6 hover:shadow-md transition" data-type="reminder">
-            <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                </div>
-                <div class="flex-grow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-900">เตือนนัดหมายใกล้เข้ามา</h3>
-                            <p class="text-sm text-gray-600 mt-1">นัดหมายของคุณจะถึง 24 ชั่วโมงแล้ว</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-3">📅 14 มกราคม 2026 เวลา 14:30 น. | 🏥 ห้องตรวจแพทย์ ผู้เชี่ยวชาญ</p>
-                    <p class="text-xs text-gray-400 mt-3">เมื่อ 6 ชั่วโมงที่แล้ว</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- แจ้งเตือนระบบ -->
-        <div class="notification-item bg-white rounded-xl shadow-sm border border-green-200 p-6 hover:shadow-md transition" data-type="system">
-            <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                </div>
-                <div class="flex-grow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-900">อัปเดตระบบเสร็จสิ้น</h3>
-                            <p class="text-sm text-gray-600 mt-1">ระบบได้อัปเดตเพื่อปรับปรุงประสิทธิภาพ</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-3">✓ ระบบทั้งหมดทำงานปกติ</p>
-                    <p class="text-xs text-gray-400 mt-3">เมื่อ 1 วันที่แล้ว</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- แจ้งเตือนนัดหมาย 2 -->
-        <div class="notification-item bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition opacity-75" data-type="appointment">
-            <div class="flex items-start gap-4">
-                <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                </div>
-                <div class="flex-grow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-900">นัดหมายเดิม - ตรวจสายตา</h3>
-                            <p class="text-sm text-gray-600 mt-1">คุณได้ยกเลิกนัดหมายเรียบร้อย</p>
-                        </div>
-                        <span class="text-xs bg-gray-100 text-gray-800 px-3 py-1 rounded-full font-semibold">อ่านแล้ว</span>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-3">📅 8 มกราคม 2026 เวลา 11:00 น. | ยกเลิก</p>
-                    <p class="text-xs text-gray-400 mt-3">เมื่อ 3 วันที่แล้ว</p>
-                </div>
-            </div>
-        </div>
-
+      <p class="text-center text-gray-500 py-4">กำลังโหลด...</p>
     </div>
 
     <!-- ข้อความเมื่อไม่มีแจ้งเตือน -->
     <div id="emptyState" class="hidden text-center py-16">
-        <svg class="w-20 h-20 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-        </svg>
-        <p class="text-gray-500 text-xl font-medium">ไม่มีแจ้งเตือน</p>
-        <p class="text-gray-400">คุณปัจจุบันไม่มีแจ้งเตือนใหม่</p>
+      <svg class="w-20 h-20 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+      </svg>
+      <p class="text-gray-500 text-xl font-medium">ไม่มีแจ้งเตือน</p>
+      <p class="text-gray-400">คุณปัจจุบันไม่มีแจ้งเตือนใหม่</p>
     </div>
 
-</main>
+  </main>
 
-<!-- ----------------------------------------------------------------- -->
+  <!-- ----------------------------------------------------------------- -->
 
-<footer class="bg-white border-t border-gray-200 py-6 mt-8">
+  <footer class="bg-white border-t border-gray-200 py-6 mt-8">
     <div class="max-w-7xl mx-auto px-6 text-center">
-        <p class="text-gray-500 text-sm">&copy; 2024 Medical Queue System. ระบบจองคิวโรงพยาบาลออนไลน์</p>
+      <p class="text-gray-500 text-sm">&copy; 2024 Medical Queue System. ระบบจองคิวโรงพยาบาลออนไลน์</p>
     </div>
-</footer>
+  </footer>
 
-<script>
-  // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
-  (function(){
-    const userStatusLink = document.getElementById('userStatusLink');
-    const userMenuBtn = document.getElementById('userMenuBtn');
-    
-    try {
-      const user = JSON.parse(localStorage.getItem('mq_user'));
-      if(user && user.name) {
-        userStatusLink.textContent = user.name;
-        userStatusLink.href = '#';
-        userStatusLink.style.cursor = 'pointer';
-        userMenuBtn.classList.remove('hidden');
-        
-        userStatusLink.addEventListener('click', function(e){
-          e.preventDefault();
-          if(confirm('ออกจากระบบ?')) {
-            localStorage.removeItem('mq_user');
-            localStorage.removeItem('mq_registeredUser');
-            window.location.reload();
-          }
+  <script>
+    // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
+    (function () {
+      const userStatusLink = document.getElementById('userStatusLink');
+      const userMenuBtn = document.getElementById('userMenuBtn');
+
+      try {
+        const user = JSON.parse(localStorage.getItem('mq_user'));
+        if (user && user.name) {
+          userStatusLink.textContent = user.name;
+          userStatusLink.href = '#';
+          userStatusLink.style.cursor = 'pointer';
+          userMenuBtn.classList.remove('hidden');
+
+          userStatusLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (confirm('ออกจากระบบ?')) {
+              localStorage.removeItem('mq_user');
+              localStorage.removeItem('mq_registeredUser');
+              window.location.reload();
+            }
+          });
+        }
+      } catch (e) {
+        // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
+      }
+    })();
+
+    // ฟังก์ชันการกรองแจ้งเตือนและดึงข้อมูล
+    (function () {
+      const filterBtns = document.querySelectorAll('[data-filter]');
+      const container = document.querySelector('.space-y-4'); // container for items
+      const emptyState = document.getElementById('emptyState');
+      const user = JSON.parse(localStorage.getItem('mq_user') || '{}');
+      let allNotifications = [];
+
+      function render(filter) {
+        container.innerHTML = '';
+        const filtered = allNotifications.filter(n => filter === 'all' || n.type === filter);
+
+        if (filtered.length === 0) {
+          emptyState.classList.remove('hidden');
+          return;
+        }
+        emptyState.classList.add('hidden');
+
+        filtered.forEach(n => {
+          const el = document.createElement('div');
+          el.className = 'notification-item bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition mb-4';
+          el.setAttribute('data-type', n.type);
+
+          // Colors based on type
+          let colorClass = 'blue';
+          if (n.type === 'reminder') colorClass = 'yellow';
+          if (n.type === 'system') colorClass = 'green';
+          el.classList.add(`border-${colorClass}-200`);
+
+          el.innerHTML = `
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-full bg-${colorClass}-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-${colorClass}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/> 
+                        </svg>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900">${n.title}</h3>
+                                <p class="text-sm text-gray-600 mt-1">${n.message}</p>
+                            </div>
+                            <span class="text-xs bg-${colorClass}-100 text-${colorClass}-800 px-3 py-1 rounded-full font-semibold">
+                                ${n.type === 'appointment' ? 'Booking' : (n.type === 'reminder' ? 'Reminder' : 'System')}
+                            </span>
+                        </div>
+                        ${n.date ? `<p class="text-sm text-gray-500 mt-3">📅 ${n.date} ${n.time} | 🏥 ${n.patient_name}</p>` : ''}
+                        <p class="text-xs text-gray-400 mt-3">${n.meta || ''}</p>
+                    </div>
+                </div>
+            `;
+          container.appendChild(el);
         });
       }
-    } catch(e) {
-      // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
-    }
-  })();
 
-  // ฟังก์ชันการกรองแจ้งเตือน
-  (function(){
-    const filterBtns = document.querySelectorAll('[data-filter]');
-    const notificationItems = document.querySelectorAll('.notification-item');
-    const emptyState = document.getElementById('emptyState');
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', function(){
-        const filter = this.getAttribute('data-filter');
-        
-        // อัปเดตสไตล์ปุ่ม
-        filterBtns.forEach(b => {
-          b.classList.remove('bg-blue-600', 'text-white');
-          b.classList.add('bg-gray-200', 'text-gray-700');
-        });
-        this.classList.remove('bg-gray-200', 'text-gray-700');
-        this.classList.add('bg-blue-600', 'text-white');
-
-        // กรองแจ้งเตือน
-        let visibleCount = 0;
-        notificationItems.forEach(item => {
-          if(filter === 'all' || item.getAttribute('data-type') === filter) {
-            item.style.display = 'block';
-            visibleCount++;
-          } else {
-            item.style.display = 'none';
-          }
+      // Fetch notifications
+      const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
+      fetch(API_BASE + '/api/notifications')
+        .then(r => r.json())
+        .then(list => {
+          // Filter by logged in user (or allow system messages for everyone)
+          allNotifications = list.filter(n => {
+            if (n.type === 'system') return true;
+            if (!user.name) return false;
+            // Match by patient name loosely or exactly
+            return (n.patient_name || '').trim() === user.name.trim();
+          });
+          render('all');
+        })
+        .catch(err => {
+          console.error(err);
+          container.innerHTML = '<p class="text-center text-red-500">ไม่สามารถโหลดการแจ้งเตือนได้</p>';
         });
 
-        // แสดง/ซ่อนข้อความ "ไม่มีแจ้งเตือน"
-        emptyState.classList.toggle('hidden', visibleCount > 0);
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const filter = this.getAttribute('data-filter');
+
+          // Update styles
+          filterBtns.forEach(b => {
+            b.classList.remove('bg-blue-600', 'text-white');
+            b.classList.add('bg-gray-200', 'text-gray-700');
+          });
+          this.classList.remove('bg-gray-200', 'text-gray-700');
+          this.classList.add('bg-blue-600', 'text-white');
+
+          render(filter);
+        });
       });
-    });
-  })();
+    })();
 
-  // ฟังก์ชันทำเครื่องหมายว่าอ่านทั้งหมด
-  document.getElementById('markAllRead').addEventListener('click', function(){
-    const items = document.querySelectorAll('.notification-item');
-    items.forEach(item => {
-      item.classList.add('opacity-75');
+    // ฟังก์ชันทำเครื่องหมายว่าอ่านทั้งหมด
+    document.getElementById('markAllRead').addEventListener('click', function () {
+      const items = document.querySelectorAll('.notification-item');
+      items.forEach(item => {
+        item.classList.add('opacity-75');
+      });
+      alert('ทำเครื่องหมายว่าอ่านทั้งหมดเรียบร้อย');
     });
-    alert('ทำเครื่องหมายว่าอ่านทั้งหมดเรียบร้อย');
-  });
-</script>
+  </script>
 
 </body>
+
 </html>
