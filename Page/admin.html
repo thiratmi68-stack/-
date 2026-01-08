@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ระบบเจ้าหน้าที่ (Check-in)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Sarabun', sans-serif; background-color: #f3f4f6; }
+    /* ปรับแต่ง UI ของ Scanner */
+    #reader__scan_region { background: white; }
+    #reader__dashboard_section_csr button { 
+      background-color: #2563eb; color: white; padding: 5px 10px; border-radius: 5px; border: none; margin-top: 10px;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  
+  <div class="max-w-6xl mx-auto p-4">
+    <header class="mb-8 flex justify-between items-center bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-600">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">ระบบเจ้าหน้าที่ (Admin Check-in)</h1>
+        <p class="text-gray-500 text-sm">สแกน QR Code หรือค้นหาด้วยรหัส MQ</p>
+      </div>
+      <button onclick="logout()" class="text-red-600 hover:text-red-800 font-medium bg-red-50 px-4 py-2 rounded-lg transition-colors">ออกจากระบบ</button>
+    </header>
+
+    <section class="mb-8 bg-white p-6 rounded-xl shadow-sm">
+      <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-700">
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4h-2-2v4h-2 0v-4H6v-4H4v-4h2v-4h2V6h6zM6 6h4v4H6zM14 6h4v4h-4zM6 14h4v4H6zM14 14h4v4h-4z"></path></svg>
+        จุดสแกนรับคิว (QR Code Scanner)
+      </h3>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <div class="flex flex-col gap-4">
+          <div class="bg-gray-50 rounded-xl p-4 border-2 border-dashed border-gray-300 relative overflow-hidden">
+             <div id="reader" class="w-full mx-auto" style="max-width: 500px;"></div>
+            <p class="text-center text-sm text-gray-500 mt-2">หันกล้องไปที่ QR Code ของคนไข้</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+            <p class="text-sm font-semibold text-gray-600 mb-2">ค้นหาด้วย Booking ID (กรณีสแกนไม่ได้)</p>
+            <div class="flex gap-2">
+                <input type="text" id="manualBookingId" placeholder="ระบุ ID เช่น MQ-00021" class="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase font-mono">
+                <button onclick="manualSearch()" class="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors font-medium">ค้นหา</button>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">* พิมพ์แค่ตัวเลข หรือ MQ-xxxxx ก็ได้</p>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div id="bookingEmpty" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-gray-200 border-dashed h-full min-h-[400px]">
+             <svg class="w-20 h-20 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+             <p class="text-lg font-medium">รอการสแกน...</p>
+             <p class="text-sm">ข้อมูลคนไข้จะปรากฏที่นี่</p>
+          </div>
+
+          <div id="bookingResult" class="hidden h-full">
+            <div class="bg-white border border-blue-100 rounded-xl shadow-lg h-full overflow-hidden flex flex-col">
+              <div class="bg-blue-600 p-4 text-white">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="text-blue-100 text-sm">Booking ID</p>
+                    <h2 id="resId" class="text-3xl font-mono font-bold tracking-wider">MQ------</h2>
+                  </div>
+                  <span id="resStatusBadge" class="px-3 py-1 bg-white/20 rounded-full text-xs font-bold backdrop-blur-sm">
+                    Checking
+                  </span>
+                </div>
+              </div>
+
+              <div class="p-6 flex-1 space-y-4">
+                <div>
+                  <label class="text-xs text-gray-500 uppercase font-bold">ชื่อ-นามสกุล คนไข้</label>
+                  <p id="resName" class="text-xl font-medium text-gray-800 border-b pb-2"></p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs text-gray-500 uppercase font-bold">แผนก</label>
+                    <p id="resDept" class="text-gray-800 font-medium"></p>
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 uppercase font-bold">แพทย์</label>
+                    <p id="resDoctor" class="text-gray-800 font-medium"></p>
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 uppercase font-bold">วันที่นัด</label>
+                    <p id="resDate" class="text-gray-800 font-medium"></p>
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 uppercase font-bold">เวลา</label>
+                    <p id="resTime" class="text-gray-800 font-medium text-blue-600"></p>
+                  </div>
+                </div>
+
+                <div class="mt-4 p-3 bg-yellow-50 border border-yellow-100 rounded-lg text-sm text-yellow-800 flex items-start gap-2">
+                  <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span>กรุณาตรวจสอบชื่อ-นามสกุล และเวลานัดหมายให้ถูกต้องก่อนกดยืนยัน</span>
+                </div>
+              </div>
+
+              <div class="p-4 bg-gray-50 border-t border-gray-100">
+                 <button id="btnConfirm" class="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow-md transition-all transform active:scale-95 flex justify-center items-center gap-2 text-lg">
+                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                   ยืนยันคนไข้มาถึง (Check-in)
+                 </button>
+                 
+                 <div id="msgConfirmed" class="hidden flex-col items-center justify-center py-2 text-green-600">
+                    <svg class="w-12 h-12 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="font-bold text-lg">ยืนยันเรียบร้อยแล้ว</span>
+                    <button onclick="resetBookingView()" class="mt-2 text-sm text-gray-500 underline hover:text-gray-700">สแกนคนต่อไป</button>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ==========================================
+    // CONFIGURATION
+    // ==========================================
+    // ตั้งค่าเป็น false เพื่อใช้ API จาก Python Backend
+    const USE_MOCK_API = false; 
+
+    // ==========================================
+    // HELPER FUNCTIONS
+    // ==========================================
+    
+    // แปลง Text "MQ-00021" ให้เหลือแค่ตัวเลข ID (21)
+    function normalizeId(inputStr) {
+        if(!inputStr) return null;
+        const numericPart = String(inputStr).replace(/\D/g, ''); 
+        return numericPart ? parseInt(numericPart) : null;
+    }
+
+    // แปลงตัวเลข ID (21) กลับไปเป็น Format "MQ-00021"
+    function formatBookingCode(id){
+        if(!id) return '-';
+        return 'MQ-' + String(id).padStart(5,'0');
+    }
+
+    // ==========================================
+    // QR SCANNER LOGIC
+    // ==========================================
+    let html5QrcodeScanner;
+
+    function onScanSuccess(decodedText, decodedResult) {
+        console.log(`Scan result: ${decodedText}`);
+        
+        let id = null;
+        try {
+            const url = new URL(decodedText);
+            const idParam = url.searchParams.get("id"); 
+            if(idParam) id = idParam;
+        } catch(e) {}
+
+        if(!id) {
+            id = normalizeId(decodedText);
+        }
+
+        if(id){
+            html5QrcodeScanner.pause(); 
+            fetchBookingDetails(id);
+        } else {
+            alert("QR Code ไม่ถูกต้อง (ไม่พบข้อมูล ID)");
+        }
+    }
+
+    function initScanner(){
+        html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250, aspectRatio: 1.0 }, false
+        );
+        html5QrcodeScanner.render(onScanSuccess, (error) => {});
+    }
+
+    // ==========================================
+    // SEARCH & DISPLAY LOGIC
+    // ==========================================
+
+    function manualSearch(){
+        const inputVal = document.getElementById('manualBookingId').value;
+        const id = normalizeId(inputVal); 
+
+        if(!id) return alert("กรุณากรอก Booking ID ที่ถูกต้อง");
+        
+        if(html5QrcodeScanner && html5QrcodeScanner.getState() === 2) { 
+             html5QrcodeScanner.pause();
+        }
+        
+        fetchBookingDetails(id);
+    }
+
+    async function fetchBookingDetails(id){
+        try {
+            // เรียกใช้ API จริงจาก Flask
+            const res = await fetch(`/api/bookings/${id}`);
+            if(!res.ok) throw new Error("Booking not found");
+            const data = await res.json();
+
+            displayBooking(data);
+
+        } catch(e) {
+            alert("ไม่พบข้อมูลการจอง ID: " + formatBookingCode(id));
+            resetBookingView();
+        }
+    }
+
+    function displayBooking(data){
+        document.getElementById('bookingEmpty').classList.add('hidden');
+        document.getElementById('bookingResult').classList.remove('hidden');
+
+        // แสดง ID ในรูปแบบ MQ-XXXXX
+        document.getElementById('resId').innerText = formatBookingCode(data.id);
+        
+        // Map ข้อมูลให้ตรงกับ Database (SQLite)
+        // หมายเหตุ: Python ส่งข้อมูลกลับมาเป็น Key แบบ snake_case (เช่น patient_name)
+        document.getElementById('resName').innerText = data.patient_name || '-';
+        document.getElementById('resDept').innerText = data.department_name || '-';
+        document.getElementById('resDoctor').innerText = data.doctor_name || '-';
+        document.getElementById('resDate').innerText = data.date || '-';
+        document.getElementById('resTime').innerText = data.time || '-';
+
+        updateStatusUI(data.status, data.id);
+    }
+
+    function updateStatusUI(status, id){
+        const badge = document.getElementById('resStatusBadge');
+        const btnConfirm = document.getElementById('btnConfirm');
+        const msgConfirmed = document.getElementById('msgConfirmed');
+
+        btnConfirm.classList.add('hidden');
+        msgConfirmed.classList.add('hidden');
+        
+        if(status === 'booked') {
+            badge.innerText = 'รอเข้ารับบริการ';
+            badge.className = 'px-3 py-1 bg-yellow-400 rounded-full text-xs font-bold text-yellow-900';
+            
+            btnConfirm.classList.remove('hidden');
+            btnConfirm.onclick = () => confirmArrival(id);
+
+        } else if (status === 'arrived') {
+            badge.innerText = '✓ มาถึงแล้ว';
+            badge.className = 'px-3 py-1 bg-green-500 rounded-full text-xs font-bold text-white';
+            
+            msgConfirmed.classList.remove('hidden');
+        } else {
+            badge.innerText = status;
+            badge.className = 'px-3 py-1 bg-gray-400 rounded-full text-xs font-bold text-white';
+        }
+    }
+
+    async function confirmArrival(id){
+        if(!confirm('ยืนยัน Check-in ผู้ป่วย?')) return;
+
+        try {
+            const res = await fetch(`/api/bookings/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'arrived' })
+            });
+            
+            if(res.ok){
+                const newData = await res.json();
+                displayBooking(newData);
+            } else {
+                alert('เกิดข้อผิดพลาดในการบันทึก');
+            }
+        } catch(e) {
+            alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์');
+        }
+    }
+
+    function resetBookingView(){
+        document.getElementById('bookingEmpty').classList.remove('hidden');
+        document.getElementById('bookingResult').classList.add('hidden');
+        document.getElementById('manualBookingId').value = '';
+
+        if(html5QrcodeScanner && html5QrcodeScanner.getState() === 3) {
+            html5QrcodeScanner.resume();
+        }
+    }
+
+    function logout(){
+        if(confirm("ต้องการออกจากระบบ?")) window.location.href = '/login';
+    }
+
+    window.onload = function() {
+        initScanner();
+    };
+  </script>
+</body>
+</html>
