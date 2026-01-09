@@ -207,6 +207,21 @@ def create_booking():
     data = request.get_json() or {}
     # accept partial data; store what's provided
     db = get_db()
+
+    # Limit Check: Max 10 bookings per doctor per day
+    doctor_name = data.get('doctorName')
+    booking_date = data.get('date')
+    
+    if doctor_name and booking_date:
+        # Check active bookings for this doctor on this date
+        count_res = db.execute(
+            "SELECT COUNT(*) FROM bookings WHERE doctor_name = ? AND date = ? AND status != 'cancelled'",
+            (doctor_name, booking_date)
+        ).fetchone()
+        
+        if count_res and count_res[0] >= 10:
+             return jsonify({'error': 'แพทย์ท่านนี้คิวเต็มแล้วสำหรับวันที่เลือก (สูงสุด 10 คิว)'}), 400
+
     cur = db.execute(
         "INSERT INTO bookings (patient_name, department_value, department_name, doctor_name, symptoms, date, time, created_at, status) VALUES (?,?,?,?,?,?,?,?,?)",
         (
@@ -258,7 +273,25 @@ def update_booking(booking_id):
     if not fields:
         return jsonify({'error': 'no fields to update'}), 400
 
-    # map keys to column names
+    # Fetch current booking to determine limit context
+    current = db.execute('SELECT * FROM bookings WHERE id = ?', (booking_id,)).fetchone()
+    if not current:
+        return jsonify({'error': 'not found'}), 404
+        
+    # Check limit if doctor or date involved
+    if 'doctorName' in fields or 'date' in fields:
+        target_doctor = fields.get('doctorName', current['doctor_name'])
+        target_date = fields.get('date', current['date'])
+        
+        if target_doctor and target_date:
+            count_res = db.execute(
+                "SELECT COUNT(*) FROM bookings WHERE doctor_name = ? AND date = ? AND status != 'cancelled' AND id != ?",
+                (target_doctor, target_date, booking_id)
+            ).fetchone()
+            
+            if count_res and count_res[0] >= 10:
+                return jsonify({'error': 'แพทย์ท่านนี้คิวเต็มแล้วสำหรับวันที่เลือก (เลื่อนนัดไม่ได้)'}), 400
+
     colmap = {
         'date': 'date',
         'time': 'time',
@@ -270,10 +303,9 @@ def update_booking(booking_id):
     }
 
     set_clause = ', '.join([f"{colmap[k]} = ?" for k in fields.keys()])
+    
     # Only set rescheduled flag if we are NOT just updating status (i.e. if we are changing date/time etc)
-    # But simplifying: if date/time is in fields, set rescheduled=1?
-    # For now, keep logic simple. If we update status, rescheduled flag logic might need care.
-    # If the user is just confirming arrival (status='arrived'), we shouldn't mark as rescheduled.
+    # If date/time is changed, mark as rescheduled
     if any(k in fields for k in ['date', 'time']):
          set_clause += ', rescheduled = 1'
     
@@ -282,15 +314,18 @@ def update_booking(booking_id):
 
     cur = db.execute(f"UPDATE bookings SET {set_clause} WHERE id = ?", values)
     db.commit()
-    if cur.rowcount == 0:
-        return jsonify({'error': 'not found'}), 404
+
     row = db.execute('SELECT * FROM bookings WHERE id = ?', (booking_id,)).fetchone()
     return jsonify(dict(row)), 200
 
 @app.route('/api/bookings', methods=['GET'])
 def list_bookings():
     db = get_db()
-    rows = db.execute('SELECT * FROM bookings ORDER BY id DESC').fetchall()
+    date_filter = request.args.get('date')
+    if date_filter:
+        rows = db.execute('SELECT * FROM bookings WHERE date = ? ORDER BY id DESC', (date_filter,)).fetchall()
+    else:
+        rows = db.execute('SELECT * FROM bookings ORDER BY id DESC').fetchall()
     return jsonify([dict(r) for r in rows])
 
 

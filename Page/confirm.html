@@ -1,89 +1,98 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ยืนยันการจอง | Medical Queue</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <style>body{font-family:"Sarabun",sans-serif}</style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  </head>
-  <body class="bg-gray-50 min-h-screen flex flex-col">
-    <script>
-      // ตรวจสอบการเข้าสู่ระบบ - ถ้าไม่ได้เข้าสู่ระบบ ให้ไปหน้า login
-      (function(){
-        try {
-          const user = JSON.parse(localStorage.getItem('mq_user'));
-          if(!user || !user.name) {
-            alert('กรุณาเข้าสู่ระบบก่อนยืนยันการจอง');
-            window.location.href = 'index.html';
-          }
-        } catch(e) {
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ยืนยันการจอง | Medical Queue</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    body {
+      font-family: "Sarabun", sans-serif
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <script>
+    // ตรวจสอบการเข้าสู่ระบบ - ถ้าไม่ได้เข้าสู่ระบบ ให้ไปหน้า login
+    (function () {
+      try {
+        const user = JSON.parse(localStorage.getItem('mq_user'));
+        if (!user || !user.name) {
           alert('กรุณาเข้าสู่ระบบก่อนยืนยันการจอง');
           window.location.href = 'index.html';
         }
-      })();
-    </script>
+      } catch (e) {
+        alert('กรุณาเข้าสู่ระบบก่อนยืนยันการจอง');
+        window.location.href = 'index.html';
+      }
+    })();
+  </script>
 
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="home.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h4l3-6 4 12 3-6h4"/></svg>
-          </div>
-          <div>
-            <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
-            <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
-          </div>
-        </a>
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="home.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <div class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 12h4l3-6 4 12 3-6h4" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
+          <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
+        </div>
+      </a>
 
-        <div class="flex items-center gap-4">
-          <a id="userStatusLink" href="index.html" class="text-blue-600 font-medium hover:underline text-sm md:text-base">ลงทะเบียน / เข้าสู่ระบบ</a>
-          <div id="userMenuBtn" class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden">
-            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-          </div>
+      <div class="flex items-center gap-4">
+        <a id="userStatusLink" href="index.html"
+          class="text-blue-600 font-medium hover:underline text-sm md:text-base">ลงทะเบียน / เข้าสู่ระบบ</a>
+        <div id="userMenuBtn"
+          class="w-9 h-9 border rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors bg-white hidden">
+          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
         </div>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-        <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full">
-      <div class="mb-8">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-          จองคิวตรวจรักษา
-        </h1>
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full">
+    <div class="mb-8">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+        จองคิวตรวจรักษา
+      </h1>
 
-        <div
-          class="flex items-center justify-between relative max-w-3xl mx-auto mb-10"
-        >
+      <div class="flex items-center justify-between relative max-w-3xl mx-auto mb-10">
+        <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-200 -z-10"></div>
+
+        <div class="flex flex-col items-center bg-gray-50 px-2">
           <div
-            class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-200 -z-10"
-          ></div>
-
-          <div class="flex flex-col items-center bg-gray-50 px-2">
-            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white border-gray-300 text-blue-600 flex items-center justify-center font-bold mb-2">
-              1
-            </div>
-            <span class="text-xs md:text-sm font-medium text-gray-500">เลือกแผนก/แพทย์</span>
+            class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white border-gray-300 text-blue-600 flex items-center justify-center font-bold mb-2">
+            1
           </div>
-          <div class="flex flex-col items-center bg-gray-50 px-2">
-            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white text-blue-600 flex items-center justify-center font-bold mb-2 shadow-md">
-              2
-            </div>
-            <span class="text-xs md:text-sm font-medium text-blue-800">วันเวลา</span>
+          <span class="text-xs md:text-sm font-medium text-gray-500">เลือกแผนก/แพทย์</span>
+        </div>
+        <div class="flex flex-col items-center bg-gray-50 px-2">
+          <div
+            class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white text-blue-600 flex items-center justify-center font-bold mb-2 shadow-md">
+            2
           </div>
-          <div class="flex flex-col items-center bg-gray-50 px-2">
-            <div
-              class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-600 border-2 border-gray-300 text-white flex items-center justify-center font-bold mb-2"
-            >
-              3
-            </div>
-            <span class="text-xs md:text-sm font-medium text-gray-500"
-              >ยืนยัน</span
-            >
+          <span class="text-xs md:text-sm font-medium text-blue-800">วันเวลา</span>
+        </div>
+        <div class="flex flex-col items-center bg-gray-50 px-2">
+          <div
+            class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-600 border-2 border-gray-300 text-white flex items-center justify-center font-bold mb-2">
+            3
           </div>
+          <span class="text-xs md:text-sm font-medium text-gray-500">ยืนยัน</span>
         </div>
       </div>
+    </div>
 
     <main class="flex-grow max-w-3xl mx-auto px-4 sm:px-6 py-8 w-full">
       <h1 class="text-2xl font-bold text-gray-900 mb-6">ยืนยันข้อมูลการจอง</h1>
@@ -92,13 +101,13 @@
         <div class="grid grid-cols-1 gap-4">
           <div>
             <p class="text-sm text-gray-500">ชื่อผู้ป่วย</p>
-              <p id="patientName" class="font-medium text-gray-800">-</p>
-              <div id="bookingMeta" class="mt-3 hidden">
-                <div class="text-xs text-gray-500">ID - การจอง</div>
-                <div id="bookingIdDisplay" class="font-mono font-semibold text-lg">#-</div>
-                <div id="qrContainer" class="mt-3"></div>
-                <div id="afterConfirmNote" class="text-sm text-gray-500 mt-2"></div>
-              </div>
+            <p id="patientName" class="font-medium text-gray-800">-</p>
+            <div id="bookingMeta" class="mt-3 hidden">
+              <div class="text-xs text-gray-500">ID - การจอง</div>
+              <div id="bookingIdDisplay" class="font-mono font-semibold text-lg">#-</div>
+              <div id="qrContainer" class="mt-3"></div>
+              <div id="afterConfirmNote" class="text-sm text-gray-500 mt-2"></div>
+            </div>
           </div>
 
           <div>
@@ -130,8 +139,10 @@
       </div>
 
       <div class="flex gap-3">
-        <a href="datetime.html" class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">ย้อนกลับ</a>
-        <button id="finalConfirm" class="ml-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">ยืนยันการจองคิว</button>
+        <a href="datetime.html"
+          class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">ย้อนกลับ</a>
+        <button id="finalConfirm"
+          class="ml-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">ยืนยันการจองคิว</button>
       </div>
     </main>
 
@@ -142,7 +153,7 @@
     </footer>
 
     <script>
-      (function(){
+      (function () {
         const patientNameEl = document.getElementById('patientName');
         const departmentEl = document.getElementById('department');
         const doctorEl = document.getElementById('doctor');
@@ -167,7 +178,7 @@
         dateEl.textContent = date || '-';
         timeEl.textContent = time || '-';
 
-        finalBtn.addEventListener('click', function(){
+        finalBtn.addEventListener('click', function () {
           // read values again
           const patientName = localStorage.getItem('mq_patientName') || '';
           const departmentName = localStorage.getItem('mq_departmentName') || '';
@@ -186,105 +197,112 @@
           };
 
           // POST to backend
-            const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
-            const rescheduleId = localStorage.getItem('mq_rescheduleBookingId');
-            if(rescheduleId){
-              // do update (PUT) to change date/time (and optionally other fields)
-              const updatePayload = { date, time };
-              // include department/doctor if present
-              if(departmentName) updatePayload.departmentName = departmentName;
-              if(doctorName) updatePayload.doctorName = doctorName;
-              if(symptoms) updatePayload.symptoms = symptoms;
-              fetch(API_BASE + '/api/bookings/' + rescheduleId, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatePayload)
-              }).then(res => {
-                if(!res.ok) throw new Error('network');
-                return res.json();
-              }).then(data => {
-                // clear saved data
-                ['mq_departmentValue','mq_departmentName','mq_doctorName','mq_symptoms','mq_date','mq_time','mq_rescheduleBookingId'].forEach(k=>localStorage.removeItem(k));
-                try{ localStorage.setItem('mq_lastBookingId', data.id); }catch(e){}
-                // navigate to myticket
-                window.location.href = 'myticket.html';
-              }).catch(()=> alert('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองใหม่ภายหลัง'));
-            } else {
-              // create new booking
-              fetch(API_BASE + '/api/bookings', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-              }).then(res => {
-                if(!res.ok) throw new Error('network');
-                return res.json();
-              }).then(data => {
-                // clear saved data
-                ['mq_departmentValue','mq_departmentName','mq_doctorName','mq_symptoms','mq_date','mq_time'].forEach(k=>localStorage.removeItem(k));
-                try{ localStorage.setItem('mq_lastBookingId', data.id); }catch(e){}
-                window.location.href = 'myticket.html';
-              }).catch(err => {
-                alert('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองใหม่ภายหลัง');
-              });
-            }
+          const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
+          const rescheduleId = localStorage.getItem('mq_rescheduleBookingId');
+          if (rescheduleId) {
+            // do update (PUT) to change date/time (and optionally other fields)
+            const updatePayload = { date, time };
+            // include department/doctor if present
+            if (departmentName) updatePayload.departmentName = departmentName;
+            if (doctorName) updatePayload.doctorName = doctorName;
+            if (symptoms) updatePayload.symptoms = symptoms;
+            fetch(API_BASE + '/api/bookings/' + rescheduleId, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(updatePayload)
+            }).then(async res => {
+              if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.error || 'เกิดข้อผิดพลาดในการเลื่อนนัด');
+              }
+              return res.json();
+            }).then(data => {
+              // clear saved data
+              ['mq_departmentValue', 'mq_departmentName', 'mq_doctorName', 'mq_symptoms', 'mq_date', 'mq_time', 'mq_rescheduleBookingId'].forEach(k => localStorage.removeItem(k));
+              try { localStorage.setItem('mq_lastBookingId', data.id); } catch (e) { }
+              // navigate to myticket
+              window.location.href = 'myticket.html';
+            }).catch(err => alert(err.message || 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองใหม่ภายหลัง'));
+          } else {
+            // create new booking
+            fetch(API_BASE + '/api/bookings', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            }).then(async res => {
+              if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.error || 'เกิดข้อผิดพลาดในการจอง');
+              }
+              return res.json();
+            }).then(data => {
+              // clear saved data
+              ['mq_departmentValue', 'mq_departmentName', 'mq_doctorName', 'mq_symptoms', 'mq_date', 'mq_time'].forEach(k => localStorage.removeItem(k));
+              try { localStorage.setItem('mq_lastBookingId', data.id); } catch (e) { }
+              window.location.href = 'myticket.html';
+            }).catch(err => {
+              alert(err.message || 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ กรุณาลองใหม่ภายหลัง');
+            });
+          }
         });
       })();
-      
+
       // Format numeric id to alphanumeric booking code, e.g. MQ-00018
-      function formatBookingCode(id){
-        if(id === undefined || id === null) return '-';
-        const n = String(id).padStart(5,'0');
+      function formatBookingCode(id) {
+        if (id === undefined || id === null) return '-';
+        const n = String(id).padStart(5, '0');
         return 'MQ-' + n;
       }
-      
+
       // helper to show booking id and generate QR code
-      function showBookingMeta(id){
-        try{
+      function showBookingMeta(id) {
+        try {
           const meta = document.getElementById('bookingMeta');
           const idEl = document.getElementById('bookingIdDisplay');
           const qrContainer = document.getElementById('qrContainer');
-          if(!meta || !idEl || !qrContainer) return;
+          if (!meta || !idEl || !qrContainer) return;
           idEl.textContent = formatBookingCode(id);
           // clear previous qr
           qrContainer.innerHTML = '';
           // build URL to this detail page
           const origin = (location.protocol && location.hostname) ? (location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '')) : '';
           const url = origin + '/details.html?id=' + id;
-          if(typeof QRCode !== 'undefined'){
+          if (typeof QRCode !== 'undefined') {
             new QRCode(qrContainer, { text: url, width: 140, height: 140 });
           } else {
             // fallback: show link
             const a = document.createElement('a'); a.href = url; a.textContent = url; a.target = '_blank'; qrContainer.appendChild(a);
           }
           meta.classList.remove('hidden');
-        }catch(e){console.warn(e)}
+        } catch (e) { console.warn(e) }
       }
       // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
-      (function(){
+      (function () {
         const userStatusLink = document.getElementById('userStatusLink');
         const userMenuBtn = document.getElementById('userMenuBtn');
-        
+
         try {
           const user = JSON.parse(localStorage.getItem('mq_user'));
-          if(user && user.name) {
+          if (user && user.name) {
             userStatusLink.textContent = user.name;
             userStatusLink.href = '#';
             userStatusLink.style.cursor = 'pointer';
             userMenuBtn.classList.remove('hidden');
-            
-            userStatusLink.addEventListener('click', function(e){
+
+            userStatusLink.addEventListener('click', function (e) {
               e.preventDefault();
-              if(confirm('ออกจากระบบ?')) {
+              if (confirm('ออกจากระบบ?')) {
                 localStorage.removeItem('mq_user');
                 localStorage.removeItem('mq_registeredUser');
                 window.location.reload();
               }
             });
           }
-        } catch(e) {
+        } catch (e) {
           // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
         }
       })();
     </script>
-  </body>
+</body>
+
 </html>
