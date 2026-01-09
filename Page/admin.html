@@ -46,6 +46,10 @@
       <button id="tabScanner" onclick="switchTab('scanner')"
         class="px-6 py-3 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none">Scanner /
         Check-in</button>
+      <button id="tabToday" onclick="switchTab('today')"
+        class="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium focus:outline-none">ตรวจสอบรายชื่อผู้ป่วย</button>
+      <button id="tabHistory" onclick="switchTab('history')"
+        class="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium focus:outline-none">ประวัติการจอง</button>
       <button id="tabDoctors" onclick="switchTab('doctors')"
         class="px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium focus:outline-none">จัดการรายชื่อแพทย์</button>
     </div>
@@ -192,7 +196,7 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
-              <th class="p-4 border-b">รูปภาพ</th>
+              <th class="p-4 border-b">ลำดับ</th>
               <th class="p-4 border-b">ชื่อ-สกุล</th>
               <th class="p-4 border-b">แผนก</th>
               <th class="p-4 border-b">ความเชี่ยวชาญ</th>
@@ -203,6 +207,60 @@
           <tbody id="doctorTableBody" class="text-sm">
             <!-- Data will be populated here -->
           </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ACTIVE PATIENTS SECTION -->
+    <section id="sectionToday" class="mb-8 bg-white p-6 rounded-xl shadow-sm hidden">
+      <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-700">
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        ตรวจสอบรายชื่อผู้ป่วยวันนี้
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
+              <th class="p-4 border-b">วันที่</th>
+              <th class="p-4 border-b">เวลา</th>
+              <th class="p-4 border-b">ชื่อ-สกุล</th>
+              <th class="p-4 border-b">แผนก</th>
+              <th class="p-4 border-b">แพทย์</th>
+              <th class="p-4 border-b">สถานะ</th>
+            </tr>
+          </thead>
+          <tbody id="todayTableBody" class="text-sm"></tbody>
+        </table>
+        <p id="todayEmpty" class="text-center text-gray-400 py-8 hidden">ไม่มีรายการนัดหมายวันนี้</p>
+      </div>
+    </section>
+
+    <!-- ALL HISTORY SECTION -->
+    <section id="sectionHistory" class="mb-8 bg-white p-6 rounded-xl shadow-sm hidden">
+      <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-700">
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+          </path>
+        </svg>
+        ประวัติการจองทั้งหมด
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
+              <th class="p-4 border-b">ID</th>
+              <th class="p-4 border-b">วันที่</th>
+              <th class="p-4 border-b">เวลา</th>
+              <th class="p-4 border-b">ชื่อ-สกุล</th>
+              <th class="p-4 border-b">แผนก</th>
+              <th class="p-4 border-b">สถานะ</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody" class="text-sm"></tbody>
         </table>
       </div>
     </section>
@@ -237,8 +295,6 @@
               <option value="ว่างวันนี้">ว่างวันนี้</option>
               <option value="ว่างช่วงเช้า">ว่างช่วงเช้า</option>
               <option value="ว่างช่วงบ่าย">ว่างช่วงบ่าย</option>
-              <option value="คิวเต็มช่วงเช้า">คิวเต็มช่วงเช้า</option>
-              <option value="คิวเต็มช่วงบ่าย">คิวเต็มช่วงบ่าย</option>
               <option value="คิวเต็มวันนี้">คิวเต็มวันนี้</option>
             </select>
           </div>
@@ -249,14 +305,6 @@
           <input type="text" id="docSpecialty"
             class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
-
-        <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1">URL รูปภาพ</label>
-          <input type="text" id="docImage"
-            class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none"
-            value="https://cdn-icons-png.flaticon.com/512/3774/3774299.png">
-        </div>
-
       </div>
 
       <div class="mt-6 flex justify-end gap-3">
@@ -415,7 +463,14 @@
 
         if (res.ok) {
           const newData = await res.json();
-          displayBooking(newData);
+          // Update details view if visible
+          if (!document.getElementById('bookingResult').classList.contains('hidden')) {
+            displayBooking(newData);
+          }
+          // Refresh other tables if active
+          fetchTodayPatients();
+          fetchAllHistory();
+          alert('Check-in สำเร็จ');
         } else {
           alert('เกิดข้อผิดพลาดในการบันทึก');
         }
@@ -448,23 +503,128 @@
     function switchTab(tab) {
       document.getElementById('sectionScanner').classList.add('hidden');
       document.getElementById('sectionDoctors').classList.add('hidden');
-      document.getElementById('tabScanner').className = "px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium focus:outline-none";
-      document.getElementById('tabDoctors').className = "px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium focus:outline-none";
+      document.getElementById('sectionToday').classList.add('hidden');
+      document.getElementById('sectionHistory').classList.add('hidden');
+
+      const tabs = ['tabScanner', 'tabToday', 'tabHistory', 'tabDoctors'];
+      tabs.forEach(t => document.getElementById(t).className = "px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium focus:outline-none");
 
       if (tab === 'scanner') {
         document.getElementById('sectionScanner').classList.remove('hidden');
         document.getElementById('tabScanner').className = "px-6 py-3 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none";
-        if (html5QrcodeScanner && html5QrcodeScanner.getState() === 3) {
-          html5QrcodeScanner.resume();
-        }
-      } else {
+        if (html5QrcodeScanner && html5QrcodeScanner.getState() === 3) html5QrcodeScanner.resume();
+      }
+      else if (tab === 'today') {
+        document.getElementById('sectionToday').classList.remove('hidden');
+        document.getElementById('tabToday').className = "px-6 py-3 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none";
+        pauseScanner();
+        fetchTodayPatients();
+      }
+      else if (tab === 'history') {
+        document.getElementById('sectionHistory').classList.remove('hidden');
+        document.getElementById('tabHistory').className = "px-6 py-3 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none";
+        pauseScanner();
+        fetchAllHistory();
+      }
+      else {
         document.getElementById('sectionDoctors').classList.remove('hidden');
         document.getElementById('tabDoctors').className = "px-6 py-3 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none";
-        if (html5QrcodeScanner && html5QrcodeScanner.getState() === 2) {
-          html5QrcodeScanner.pause();
-        }
+        pauseScanner();
         fetchDoctors();
       }
+    }
+
+    function pauseScanner() {
+      if (html5QrcodeScanner && html5QrcodeScanner.getState() === 2) {
+        html5QrcodeScanner.pause();
+      }
+    }
+
+    // ==========================================
+    // NEW FEATURES LOGIC
+    // ==========================================
+    async function fetchTodayPatients() {
+      // Fetch ALL bookings to find active ones
+      try {
+        const res = await fetch(`/api/bookings`);
+        const allData = await res.json();
+
+        // Filter only active statuses (booked/pending) - Exclude arrived, cancelled, completed
+        const activeData = allData.filter(b => !['arrived', 'cancelled', 'completed'].includes(b.status));
+
+        renderTodayTable(activeData);
+      } catch (e) { console.error(e); }
+    }
+
+    function renderTodayTable(data) {
+      const tbody = document.getElementById('todayTableBody');
+      const empty = document.getElementById('todayEmpty');
+      tbody.innerHTML = '';
+      if (!data.length) {
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      // sort by DATE then TIME
+      data.sort((a, b) => {
+        if (a.date !== b.date) return a.date.localeCompare(b.date);
+        return a.time.localeCompare(b.time);
+      });
+
+      data.forEach(b => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b hover:bg-gray-50";
+
+        let statusBadge = `<span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-bold">รอรับบริการ</span>`;
+        if (b.status === 'arrived') statusBadge = `<span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-bold">มาถึงแล้ว</span>`;
+        if (b.status === 'cancelled') statusBadge = `<span class="px-2 py-1 bg-red-100 text-red-800 rounded text-xs font-bold">ยกเลิก</span>`;
+
+        // Format Date nicely? Or just raw YYYY-MM-DD
+        // Use b.date directly for now
+
+        tr.innerHTML = `
+                <td class="p-4 text-gray-900 font-medium">${b.date}</td>
+                <td class="p-4 font-mono text-blue-600 font-bold">${b.time}</td>
+                <td class="p-4 font-medium">${b.patient_name}</td>
+                <td class="p-4 text-gray-600">${b.department_name}</td>
+                <td class="p-4 text-gray-600 text-xs">${b.doctor_name || '-'}</td>
+                <td class="p-4">${statusBadge}</td>
+             `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function fetchAllHistory() {
+      try {
+        const res = await fetch(`/api/bookings`);
+        const data = await res.json();
+        renderHistoryTable(data);
+      } catch (e) { console.error(e); }
+    }
+
+    function renderHistoryTable(data) {
+      const tbody = document.getElementById('historyTableBody');
+      tbody.innerHTML = '';
+
+      data.forEach(b => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b hover:bg-gray-50";
+        tr.innerHTML = `
+                <td class="p-4 font-mono text-xs text-gray-500">${formatBookingCode(b.id)}</td>
+                <td class="p-4">${b.date}</td>
+                <td class="p-4">${b.time}</td>
+                <td class="p-4 font-medium">${b.patient_name}</td>
+                <td class="p-4 text-gray-600">${b.department_name}</td>
+                <td class="p-4">
+                    <span class="px-2 py-1 rounded text-xs font-bold 
+                        ${b.status === 'arrived' ? 'bg-green-100 text-green-800' : (b.status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800')}">
+                        ${b.status}
+                    </span>
+                </td>
+             `;
+        tbody.appendChild(tr);
+      });
     }
 
     // ==========================================
@@ -484,11 +644,11 @@
       const tbody = document.getElementById('doctorTableBody');
       tbody.innerHTML = '';
 
-      doctors.forEach(doc => {
+      doctors.forEach((doc, index) => {
         const tr = document.createElement('tr');
         tr.className = "border-b hover:bg-gray-50";
         tr.innerHTML = `
-                <td class="p-4"><img src="${doc.image}" class="w-10 h-10 rounded-full object-cover bg-gray-100"></td>
+                <td class="p-4 font-mono text-gray-500 font-bold">#${index + 1}</td>
                 <td class="p-4 font-medium text-gray-800">${doc.name}</td>
                 <td class="p-4 text-gray-600">${deptName(doc.department)}</td>
                 <td class="p-4 text-gray-600">${doc.specialty}</td>

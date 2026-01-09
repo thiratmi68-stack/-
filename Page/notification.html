@@ -95,8 +95,6 @@
         </svg>
         แจ้งเตือน
       </h1>
-      <button id="markAllRead"
-        class="text-sm text-blue-600 font-medium hover:text-blue-800 transition">ทำเครื่องหมายว่าอ่านทั้งหมด</button>
     </div>
 
     <!-- ตัวกรอง -->
@@ -206,9 +204,6 @@
                                 <h3 class="text-lg font-bold text-gray-900">${n.title}</h3>
                                 <p class="text-sm text-gray-600 mt-1">${n.message}</p>
                             </div>
-                            <span class="text-xs bg-${colorClass}-100 text-${colorClass}-800 px-3 py-1 rounded-full font-semibold">
-                                ${n.type === 'appointment' ? 'Booking' : (n.type === 'reminder' ? 'Reminder' : 'System')}
-                            </span>
                         </div>
                         ${n.date ? `<p class="text-sm text-gray-500 mt-3">📅 ${n.date} ${n.time} | 🏥 ${n.patient_name}</p>` : ''}
                         <p class="text-xs text-gray-400 mt-3">${n.meta || ''}</p>
