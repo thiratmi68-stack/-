@@ -183,7 +183,7 @@
     function formatBookingCode(id) {
       if (id === undefined || id === null) return '-';
       const n = String(id).padStart(5, '0');
-      return 'MQ-' + n;
+      return n;
     }
   </script>
 </body>
