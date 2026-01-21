@@ -1,4 +1,4 @@
-# หน้าตั๋วของฉัน
+# หน้าเมนูคิว
 
 <!DOCTYPE html>
 <html lang="th">
@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ตั๋วของฉัน | Medical Queue</title>
+  <title>เมนูคิว | Medical Queue</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -60,7 +60,7 @@
         </li>
         <li>
           <a href="myticket.html"
-            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">ตัวของฉัน</a>
+            class="border-b-2 border-transparent pb-1 hover:text-blue-600 hover:border-blue-600 transition-colors">เมนูคิว</a>
         </li>
 
         <li>
@@ -151,7 +151,7 @@
     function formatBookingCode(id) {
       if (id === undefined || id === null) return '-';
       const n = String(id).padStart(5, '0');
-      return 'MQ-' + n;
+      return n;
     }
 
     // ดึงรายการการจองจาก backend และแสดงเฉพาะของผู้ใช้งาน

@@ -76,12 +76,12 @@
           <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
             <p class="text-sm font-semibold text-gray-600 mb-2">ค้นหาด้วย Booking ID (กรณีสแกนไม่ได้)</p>
             <div class="flex gap-2">
-              <input type="text" id="manualBookingId" placeholder="ระบุ ID เช่น MQ-00021"
+              <input type="text" id="manualBookingId" placeholder="ระบุ ID เช่น 00021"
                 class="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase font-mono">
               <button onclick="manualSearch()"
                 class="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors font-medium">ค้นหา</button>
             </div>
-            <p class="text-xs text-gray-400 mt-1">* พิมพ์แค่ตัวเลข หรือ MQ-xxxxx ก็ได้</p>
+            <p class="text-xs text-gray-400 mt-1">* พิมพ์แค่ตัวเลข 5 หลัก</p>
           </div>
         </div>
 
@@ -103,7 +103,7 @@
                 <div class="flex justify-between items-start">
                   <div>
                     <p class="text-blue-100 text-sm">Booking ID</p>
-                    <h2 id="resId" class="text-3xl font-mono font-bold tracking-wider">MQ------</h2>
+                    <h2 id="resId" class="text-3xl font-mono font-bold tracking-wider">------</h2>
                   </div>
                   <span id="resStatusBadge"
                     class="px-3 py-1 bg-white/20 rounded-full text-xs font-bold backdrop-blur-sm">
@@ -335,10 +335,10 @@
       return numericPart ? parseInt(numericPart) : null;
     }
 
-    // แปลงตัวเลข ID (21) กลับไปเป็น Format "MQ-00021"
+    // แปลงตัวเลข ID (21) กลับไปเป็น Format "00021"
     function formatBookingCode(id) {
       if (!id) return '-';
-      return 'MQ-' + String(id).padStart(5, '0');
+      return String(id).padStart(5, '0');
     }
 
     // ==========================================
