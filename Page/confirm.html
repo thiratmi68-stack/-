@@ -187,13 +187,15 @@
           const date = localStorage.getItem('mq_date') || '';
           const time = localStorage.getItem('mq_time') || '';
 
+          const userId = localStorage.getItem('mq_registeredUser') || (JSON.parse(localStorage.getItem('mq_user') || '{}').id);
           const payload = {
             patientName,
             departmentName,
             doctorName,
             symptoms,
             date,
-            time
+            time,
+            userId
           };
 
           // POST to backend

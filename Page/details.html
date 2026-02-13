@@ -146,7 +146,7 @@
         meta.classList.remove('hidden');
 
         // Hide actions if not active
-        const validStatus = ['booked', 'pending', 'rescheduled']; // statuses that allow modification
+        const validStatus = ['booked', 'pending', 'rescheduled', 'รอรับบริการ']; // statuses that allow modification
         if (!validStatus.includes(data.status || 'booked')) {
           document.getElementById('rescheduleBtn').classList.add('hidden');
           document.getElementById('cancelBtn').classList.add('hidden');
