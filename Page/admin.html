@@ -197,9 +197,11 @@
           <thead>
             <tr class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
               <th class="p-4 border-b">ID แพทย์</th>
+              <th class="p-4 border-b">รหัสพนักงาน</th>
               <th class="p-4 border-b">ชื่อ-สกุล</th>
               <th class="p-4 border-b">แผนก</th>
               <th class="p-4 border-b">ความเชี่ยวชาญ</th>
+              <th class="p-4 border-b">เวลาออกตรวจ</th>
               <th class="p-4 border-b">สถานะ</th>
               <th class="p-4 border-b text-center">จัดการ</th>
             </tr>
@@ -271,12 +273,26 @@
     <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
       <h3 id="modalTitle" class="text-xl font-bold mb-4">เพิ่มแพทย์</h3>
       <input type="hidden" id="doctorId">
+      <input type="hidden" id="docImage">
 
       <div class="space-y-4">
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-1">ชื่อ-สกุล</label>
-          <input type="text" id="docName"
+          <input type="text" id="docName" placeholder="เช่น สมชาย ใจดี"
             class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">รหัสพนักงาน (Doctor ID)</label>
+            <input type="text" id="docEmpId" placeholder="เช่น D001"
+              class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">เวลาออกตรวจ</label>
+            <input type="text" id="docSchedule" placeholder="เช่น จ-ศ 09:00-16:00"
+              class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
@@ -433,7 +449,7 @@
       btnConfirm.classList.add('hidden');
       msgConfirmed.classList.add('hidden');
 
-      if (status === 'booked') {
+      if (status === 'booked' || status === 'รอรับบริการ') {
         badge.innerText = 'รอเข้ารับบริการ';
         badge.className = 'px-3 py-1 bg-yellow-400 rounded-full text-xs font-bold text-yellow-900';
 
@@ -463,10 +479,9 @@
 
         if (res.ok) {
           const newData = await res.json();
-          // Update details view if visible
-          if (!document.getElementById('bookingResult').classList.contains('hidden')) {
-            displayBooking(newData);
-          }
+          // Reset view immediately as requested
+          resetBookingView();
+          alert('Check-in สำเร็จ');
           // Refresh other tables if active
           fetchTodayPatients();
           fetchAllHistory();
@@ -662,14 +677,18 @@
         const tr = document.createElement('tr');
         tr.className = "border-b hover:bg-gray-50";
         tr.innerHTML = `
-                <td class="p-4 font-mono text-gray-500 font-bold">${String(doc.id).padStart(2, '0')}</td>
-                <td class="p-4 font-medium text-gray-800">${doc.name}</td>
+                <td class="p-4 font-mono text-gray-500 font-bold">${String(doc.id_doctor || doc.id).padStart(5, '0')}</td>
+                <td class="p-4 font-mono text-blue-600 font-medium">${doc.doctor_id || '-'}</td>
+                <td class="p-4 font-medium text-gray-800">${doc.name || (doc.firstname + ' ' + doc.lastname)}</td>
                 <td class="p-4 text-gray-600">${deptName(doc.department)}</td>
-                <td class="p-4 text-gray-600">${doc.specialty}</td>
+                <td class="p-4 text-gray-600">${doc.specialist || '-'}</td>
+                <td class="p-4 text-gray-600 text-xs">${doc.schedule || '-'}</td>
                 <td class="p-4"><span class="text-xs font-bold px-2 py-1 rounded bg-gray-100 ${doc.status_color.replace('text-', 'text-')}">${doc.status}</span></td>
                 <td class="p-4 text-center">
-                    <button onclick="editDoctor(${doc.id}, '${doc.name}', '${doc.department}', '${doc.specialty}', '${doc.status}', '${doc.image}')" class="text-blue-600 hover:text-blue-800 mr-2">แก้ไข</button>
-                    <button onclick="deleteDoctor(${doc.id})" class="text-red-600 hover:text-red-800">ลบ</button>
+                <td class="p-4 text-center">
+                    <button onclick="editDoctor(${doc.id_doctor || doc.id}, '${doc.name || (doc.firstname + ' ' + doc.lastname)}', '${doc.department}', '${doc.specialist}', '${doc.status}', '${doc.image}', '${doc.doctor_id || ''}', '${doc.schedule || ''}')" class="text-blue-600 hover:text-blue-800 mr-2">แก้ไข</button>
+                    <button onclick="deleteDoctor(${doc.id_doctor || doc.id})" class="text-red-600 hover:text-red-800">ลบ</button>
+                </td>
                 </td>
             `;
         tbody.appendChild(tr);
@@ -690,6 +709,8 @@
       if (!id) {
         // clear form
         document.getElementById('docName').value = '';
+        document.getElementById('docEmpId').value = '';
+        document.getElementById('docSchedule').value = '';
         document.getElementById('docDept').value = 'med';
         document.getElementById('docSpecialty').value = '';
         document.getElementById('docStatus').value = 'ว่างวันนี้';
@@ -701,9 +722,11 @@
       document.getElementById('doctorModal').classList.add('hidden');
     }
 
-    function editDoctor(id, name, dept, specialty, status, image) {
+    function editDoctor(id, name, dept, specialty, status, image, empId, schedule) {
       openDoctorModal(id);
       document.getElementById('docName').value = name;
+      document.getElementById('docEmpId').value = empId || '';
+      document.getElementById('docSchedule').value = schedule || '';
       document.getElementById('docDept').value = dept;
       document.getElementById('docSpecialty').value = specialty;
       document.getElementById('docStatus').value = status;
@@ -725,14 +748,16 @@
 
       const data = {
         name: document.getElementById('docName').value,
+        doctor_id: document.getElementById('docEmpId').value,
+        schedule: document.getElementById('docSchedule').value,
         department: document.getElementById('docDept').value,
-        specialty: document.getElementById('docSpecialty').value,
+        specialist: document.getElementById('docSpecialty').value,
         status: statusVal,
         image: document.getElementById('docImage').value,
         status_color: color
       };
 
-      if (!data.name || !data.specialty) return alert('กรุณากรอกข้อมูลให้ครบ');
+      if (!data.name || !data.specialist) return alert('กรุณากรอกข้อมูลให้ครบ');
 
       try {
         const method = id ? 'PUT' : 'POST';
