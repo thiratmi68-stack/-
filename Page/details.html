@@ -155,15 +155,26 @@
       }).catch(() => { alert('ไม่พบการจองดังกล่าว'); window.location.href = 'myticket.html'; });
 
       document.getElementById('rescheduleBtn').addEventListener('click', function () {
-        // start reschedule flow: store booking id and prefill booking info, then go to datetime.html
+        // start reschedule flow: store booking id and prefill booking info, then go to reschedule.html
         try {
           localStorage.setItem('mq_rescheduleBookingId', String(bookingId));
-          // also prefill fields so datetime/confirm pages have context
+          // also prefill fields 
           localStorage.setItem('mq_patientName', patientNameEl.textContent || '');
           localStorage.setItem('mq_departmentName', departmentEl.textContent || '');
           localStorage.setItem('mq_doctorName', doctorEl.textContent || '');
+          const deptText = departmentEl.textContent || '';
+          let deptVal = '';
+          if (deptText.includes('อายุรกรรม')) deptVal = 'med';
+          else if (deptText.includes('ทันตกรรม')) deptVal = 'dent';
+          else if (deptText.includes('กระดูก')) deptVal = 'ortho';
+          else if (deptText.includes('กุมาร')) deptVal = 'pedia';
+          if (deptVal) localStorage.setItem('mq_departmentValue', deptVal);
+
+          // We also need symptoms
+          localStorage.setItem('mq_symptoms', symptomsEl.textContent || '');
+
         } catch (e) { }
-        window.location.href = 'datetime.html';
+        window.location.href = 'reschedule.html';
       });
 
       cancelBtn.addEventListener('click', function () {

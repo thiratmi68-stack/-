@@ -220,11 +220,20 @@
         .then(r => r.json())
         .then(list => {
           // Filter by logged in user (or allow system messages for everyone)
+
+
           allNotifications = list.filter(n => {
-            if (n.type === 'system') return true;
-            if (!user.name) return false;
-            // Match by patient name loosely or exactly
-            return (n.patient_name || '').trim() === user.name.trim();
+            // Priority: Filter by User ID if available
+            const uid = user.id || user.ID_user;
+            if (n.user_id && uid) {
+              // Determine if this notification belongs to this user
+              return String(n.user_id) === String(uid);
+            }
+            // Fallback: Filter by Name (legacy or missing user_id)
+            if (n.patient_name && user.name) {
+              return n.patient_name.trim() === user.name.trim();
+            }
+            return false;
           });
           render('all');
         })

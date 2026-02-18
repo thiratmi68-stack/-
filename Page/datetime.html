@@ -114,111 +114,90 @@
         (function () {
           const timeGrid = document.getElementById('timeGrid');
           const dateInput = document.getElementById('date');
-          const timeSlots = [
-            "09:00", "09:30", "10:00", "10:30",
-            "13:00", "13:30", "14:00", "14:30",
-            "15:00", "15:30", "16:00", "16:30"
-          ];
+          // No static slots anymore - fetch from DB
 
           // Function to fetch bookings and render slots
           window.renderTimeSlots = async function () {
             const date = dateInput.value;
-            let bookedTimes = [];
-            let doctorStatus = 'ว่างวันนี้'; // Default
+            timeGrid.innerHTML = ''; // Clear existing
 
-            if (date) {
-              try {
-                const doctorName = localStorage.getItem('mq_doctorName');
-                const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
+            if (!date) return;
 
-                // 1. Fetch Bookings
-                const resBookings = await fetch(`${API_BASE}/api/bookings?date=${date}`);
-                const bookings = await resBookings.json();
+            try {
+              const doctorName = localStorage.getItem('mq_doctorName');
+              // We need doctor ID to fetch slots. 
+              // Currently fetching by name is tricky if API only takes ID.
+              // But let's check if we have doctor ID stored or can find it.
+              // Ideally, booking.html should store doctor ID.
+              // Assuming we can get doctor list and find ID by name for now (migration step).
 
-                // 2. Fetch Doctor Info (to get status)
-                // logic: fetch all doctors, find by name. 
-                // (Ideally API should support get-by-name or we store doctor ID, but fitting into existing structure)
-                if (doctorName) {
-                  // Fetch all doctors to find the current one's status
-                  // Optimization: In a real app, use ID. Here we use name.
-                  const resDocs = await fetch(`${API_BASE}/api/doctors`);
-                  const docs = await resDocs.json();
-                  const currentDoc = docs.find(d => d.name === doctorName);
-                  if (currentDoc) {
-                    doctorStatus = currentDoc.status;
-                  }
+              const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
 
-                  bookedTimes = bookings
-                    .filter(b => b.doctor_name === doctorName && !['cancelled'].includes(b.status))
-                    .map(b => b.time);
-                }
-              } catch (e) {
-                console.error("Error fetching data:", e);
-              }
-            }
+              // Fetch all doctors to find ID
+              const resDocs = await fetch(`${API_BASE}/api/doctors`);
+              const docs = await resDocs.json();
+              const currentDoc = docs.find(d => d.name === doctorName);
 
-            const selectedTime = localStorage.getItem('mq_time'); // or current memory state
-
-            timeGrid.innerHTML = '';
-            timeSlots.forEach(time => {
-              const btn = document.createElement('button');
-              const isBooked = bookedTimes.includes(time);
-
-              // Status Logic
-              let isTimeDisabled = false;
-              const hour = parseInt(time.split(':')[0]);
-
-              // Parse Status
-              // "ว่างช่วงเช้า" -> Disable Afternoon (>= 12:00)
-              // "ว่างช่วงบ่าย" -> Disable Morning (< 12:00)
-              // "คิวเต็มวันนี้" -> Disable All
-              // "คิวเต็มช่วงเช้า" -> Disable Morning
-              // "คิวเต็มช่วงบ่าย" -> Disable Afternoon
-
-              if (doctorStatus === 'คิวเต็มวันนี้') {
-                isTimeDisabled = true;
-              } else if (doctorStatus === 'ว่างช่วงเช้า' && hour >= 12) {
-                isTimeDisabled = true;
-              } else if (doctorStatus === 'ว่างช่วงบ่าย' && hour < 12) {
-                isTimeDisabled = true;
-              }
-              // Support legacy/other statuse just in case
-              else if (doctorStatus.includes('เต็มช่วงเช้า') && hour < 12) {
-                isTimeDisabled = true;
-              } else if (doctorStatus.includes('เต็มช่วงบ่าย') && hour >= 12) {
-                isTimeDisabled = true;
+              if (!currentDoc) {
+                timeGrid.innerHTML = '<p class="col-span-3 text-red-500 text-center">ไม่พบข้อมูลแพทย์</p>';
+                return;
               }
 
-              btn.textContent = time;
-              btn.className = "py-2 px-1 text-sm border rounded transition font-medium";
+              // Fetch Slots for this doctor
+              const resSlots = await fetch(`${API_BASE}/api/doctors/${currentDoc.id_doctor}/slots`);
+              let allSlots = await resSlots.json();
 
-              if (isBooked || isTimeDisabled) {
-                // Booked/Disabled = Red or Gray? 
-                // User request said "Red" for booked.
-                // For "Disabled by Status", maybe Gray to distinguish? Or Red?
-                // User request: "ถ้ามีคนจองแล้ว จะขึ้นเป็นสีแดง" (If booked -> Red)
-                // This new request: "ถ้าว่างเช้า ช่วงบ่ายจะเลือกไม่ได้" (If morning, afternoon cannot select)
-                // I will make status-disabled slots Gray (Cursor not allowed) and Booked slots Red.
+              // Filter by date
+              const daySlots = allSlots.filter(s => s.slot_date === date);
 
-                if (isBooked) {
-                  btn.classList.add('bg-red-500', 'text-white', 'border-red-500', 'cursor-not-allowed', 'opacity-80');
-                } else {
-                  // Disabled by admin status (not booked, but closed)
+              if (daySlots.length === 0) {
+                timeGrid.innerHTML = '<p class="col-span-3 text-gray-500 text-center py-4">ไม่มีตารางลงเวลานัดหมายในวันที่เลือก</p>';
+                return;
+              }
+
+              // Sort by time
+              daySlots.sort((a, b) => a.start_time.localeCompare(b.start_time));
+
+              daySlots.forEach(slot => {
+                const btn = document.createElement('button');
+                const isFull = slot.current_booking >= slot.max_capacity;
+
+                // Format time range
+                const timeRange = `${slot.start_time.slice(0, 5)} - ${slot.end_time.slice(0, 5)}`;
+                // Show capacity
+                const capacityInfo = `(${slot.current_booking}/${slot.max_capacity})`;
+
+                btn.innerHTML = `
+                   <div class="flex flex-col items-center leading-tight">
+                     <span>${timeRange}</span>
+                     <span class="text-xs ${isFull ? 'text-red-500' : 'text-gray-500'}">${capacityInfo}</span>
+                   </div>
+                `;
+                btn.dataset.slotId = slot.slot_id; // Store slot ID for booking
+
+                btn.className = "py-2 px-1 text-sm border rounded transition font-medium flex items-center justify-center h-14";
+
+                if (isFull) {
                   btn.classList.add('bg-gray-100', 'text-gray-400', 'border-gray-200', 'cursor-not-allowed');
-                }
-                btn.disabled = true;
-              } else {
-                // Available
-                btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200', 'hover:border-blue-500', 'hover:text-blue-600');
+                  btn.disabled = true;
+                  btn.title = "เต็มแล้ว";
+                } else {
+                  btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200', 'hover:border-blue-500', 'hover:text-blue-600');
 
-                // Check selected
-                if (btn.textContent === window.selectedTimeState) {
-                  btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
-                  btn.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'ring-2', 'ring-blue-300');
+                  // Check selected
+                  if (window.selectedSlotId == slot.slot_id) {
+                    btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                    btn.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'ring-2', 'ring-blue-300', 'border-transparent');
+                  }
                 }
-              }
-              timeGrid.appendChild(btn);
-            });
+
+                timeGrid.appendChild(btn);
+              });
+
+            } catch (e) {
+              console.error("Error fetching slots:", e);
+              timeGrid.innerHTML = '<p class="col-span-3 text-red-500 text-center">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+            }
           };
 
           // Hook into date change
@@ -283,27 +262,37 @@
           if (btn.disabled || btn.classList.contains('cursor-not-allowed')) return;
 
           // Update state
-          window.selectedTimeState = btn.textContent.trim();
-          selectedTime = window.selectedTimeState; // for compatibility with outer scope if needed?
+          // Parse time for legacy support? Or just use slot ID?
+          // We should save both for compatibility if backend needs time string
+          window.selectedTimeString = btn.textContent.split(' ')[0]; // "09:00 - 09:30" -> "09:00"
+          window.selectedSlotId = btn.dataset.slotId;
 
           // Refresh UI
-          window.renderTimeSlots();
+          window.renderTimeSlots(); // Re-render to update blue highlight check
           updateConfirmState();
         });
+
+        function updateConfirmState() {
+          const enabled = dateInput.value && window.selectedSlotId;
+          confirmBtn.disabled = !enabled;
+          confirmBtn.classList.toggle('opacity-50', !enabled);
+          confirmBtn.classList.toggle('cursor-not-allowed', !enabled);
+        }
 
         confirmBtn.addEventListener('click', function () {
           if (!dateInput.value) {
             alert('โปรดเลือกวันที่ก่อน');
             return;
           }
-          if (!window.selectedTimeState) {
+          if (!window.selectedSlotId) {
             alert('โปรดเลือกช่วงเวลาก่อน');
             return;
           }
           // save selections to localStorage and go to confirm page
           try {
             localStorage.setItem('mq_date', dateInput.value);
-            localStorage.setItem('mq_time', window.selectedTimeState);
+            localStorage.setItem('mq_time', window.selectedTimeString); // Legacy time string
+            localStorage.setItem('mq_slot_id', window.selectedSlotId); // New Slot ID
           } catch (e) { }
           window.location.href = 'confirm.html';
         });

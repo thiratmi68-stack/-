@@ -164,7 +164,8 @@
 
         // read from localStorage (confirmation flow)
         const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
-        const patientName = localStorage.getItem('mq_patientName') || '';
+        const user = JSON.parse(localStorage.getItem('mq_user') || '{}');
+        const patientName = localStorage.getItem('mq_patientName') || user.name || '';
         const departmentName = localStorage.getItem('mq_departmentName') || '';
         const doctorName = localStorage.getItem('mq_doctorName') || '';
         const symptoms = localStorage.getItem('mq_symptoms') || '';
@@ -180,14 +181,17 @@
 
         finalBtn.addEventListener('click', function () {
           // read values again
-          const patientName = localStorage.getItem('mq_patientName') || '';
+          const user = JSON.parse(localStorage.getItem('mq_user') || '{}');
+          const patientName = localStorage.getItem('mq_patientName') || user.name || '';
           const departmentName = localStorage.getItem('mq_departmentName') || '';
           const doctorName = localStorage.getItem('mq_doctorName') || '';
           const symptoms = localStorage.getItem('mq_symptoms') || '';
           const date = localStorage.getItem('mq_date') || '';
           const time = localStorage.getItem('mq_time') || '';
 
-          const userId = localStorage.getItem('mq_registeredUser') || (JSON.parse(localStorage.getItem('mq_user') || '{}').id);
+          const userId = localStorage.getItem('mq_registeredUser') || (user.id || user.ID_user);
+          const slotId = localStorage.getItem('mq_slot_id');
+
           const payload = {
             patientName,
             departmentName,
@@ -195,7 +199,8 @@
             symptoms,
             date,
             time,
-            userId
+            userId,
+            slot_id: slotId // Add slot_id
           };
 
           // POST to backend
@@ -239,7 +244,7 @@
               return res.json();
             }).then(data => {
               // clear saved data
-              ['mq_departmentValue', 'mq_departmentName', 'mq_doctorName', 'mq_symptoms', 'mq_date', 'mq_time'].forEach(k => localStorage.removeItem(k));
+              ['mq_departmentValue', 'mq_departmentName', 'mq_doctorName', 'mq_symptoms', 'mq_date', 'mq_time', 'mq_slot_id'].forEach(k => localStorage.removeItem(k));
               try { localStorage.setItem('mq_lastBookingId', data.id); } catch (e) { }
               window.location.href = 'myticket.html';
             }).catch(err => {
