@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>เลื่อนวันนัดหมาย | Medical Queue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        body {
+            font-family: "Sarabun", sans-serif
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <script>
+        // ตรวจสอบการเข้าสู่ระบบ
+        (function () {
+            try {
+                const user = JSON.parse(localStorage.getItem('mq_user'));
+                if (!user || !user.name) {
+                    alert('กรุณาเข้าสู่ระบบก่อน');
+                    window.location.href = 'index.html';
+                }
+            } catch (e) {
+                alert('กรุณาเข้าสู่ระบบก่อน');
+                window.location.href = 'index.html';
+            }
+        })();
+    </script>
+
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="home.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-9 h-9 rounded-full border border-blue-500 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path d="M3 12h4l3-6 4 12 3-6h4" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-bold text-blue-600 leading-none">Medical Queue</p>
+                    <p class="text-sm text-gray-500">ระบบจองคิวออนไลน์</p>
+                </div>
+            </a>
+            <div class="flex items-center gap-4">
+                <a id="userStatusLink" href="index.html"
+                    class="text-blue-600 font-medium hover:underline text-sm md:text-base">ลงทะเบียน / เข้าสู่ระบบ</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full">
+        <div class="mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                เลื่อนวันนัดหมาย
+            </h1>
+            <p class="text-gray-500">ระบุวันที่ต้องการนัดหมายใหม่ (ต้องล่วงหน้าอย่างน้อย 1 วัน)</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Left Column: Current Info (Read Only) -->
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-gray-700 font-bold mb-4 border-b pb-2">ข้อมูลเดิม</h3>
+
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-500 mb-1">แผนก</label>
+                        <div id="deptDisplay" class="font-medium text-lg text-gray-800">-</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-500 mb-1">แพทย์</label>
+                        <div id="doctorDisplay" class="font-medium text-lg text-gray-800">-</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-500 mb-1">อาการ/สาเหตุ</label>
+                        <div id="symptomsDisplay"
+                            class="text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100 min-h-[60px]">-</div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-blue-800 text-sm">
+                    <p class="flex gap-2">
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        ท่านสามารถเปลี่ยนได้เฉพาะวันที่และเวลาเท่านั้น หากต้องการเปลี่ยนแพทย์หรือแผนก
+                        กรุณายกเลิกการจองและจองใหม่
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Column: Date & Time Selection -->
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <label class="block text-gray-700 font-bold mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        วันที่นัดหมายใหม่
+                    </label>
+                    <input id="date" type="date"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700" />
+                    <p class="text-xs text-amver-600 mt-2">* ต้องจองล่วงหน้าอย่างน้อย 1 วัน</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <label class="block text-gray-700 font-bold mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        เลือกช่วงเวลา
+                    </label>
+                    <div id="timeGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <p class="col-span-full text-gray-400 text-center py-4 text-sm">กรุณาเลือกวันที่นัดหมายก่อน</p>
+                    </div>
+                </div>
+
+                <button id="confirmBtn" disabled
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
+                    ยืนยันการเลื่อนนัด
+                </button>
+
+                <a href="javascript:history.back()"
+                    class="block text-center text-gray-500 hover:text-gray-700 text-sm mt-4">ยกเลิก / กลับไปหน้าเดิม</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Constants & Global State
+        let selectedSlotId = null;
+        let selectedTimeString = null;
+        // Data from previous page
+        const doctorId = localStorage.getItem('mq_doctorId') || ''; // Better to store ID in details too if possible
+        // If doctorId is missing, we might have issues. We rely on finding it or mapping it.
+        // Actually, details.html sets mq_doctorName. We need to fetch doctors to find ID if not stored.
+
+        // NOTE: details.html currently only stores names. We need to find ID.
+
+        // -------------------------------------------------------------------------
+        // 1. Initialization & Verification
+        // -------------------------------------------------------------------------
+        (async function () {
+            const rescheduleId = localStorage.getItem('mq_rescheduleBookingId');
+            if (!rescheduleId) {
+                alert('ไม่พบข้อมูลการจองที่ต้องการเลื่อน');
+                window.location.href = 'myticket.html';
+                return;
+            }
+
+            const deptName = localStorage.getItem('mq_departmentName') || '-';
+            const docName = localStorage.getItem('mq_doctorName') || '-';
+            const symptoms = localStorage.getItem('mq_symptoms') || '-';
+
+            document.getElementById('deptDisplay').textContent = deptName;
+            document.getElementById('doctorDisplay').textContent = docName;
+            document.getElementById('symptomsDisplay').textContent = symptoms;
+
+            // Set Date constraints
+            const dateInput = document.getElementById('date');
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const yyyy = tomorrow.getFullYear();
+            const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const dd = String(tomorrow.getDate()).padStart(2, '0');
+            dateInput.min = `${yyyy}-${mm}-${dd}`;
+
+            // Find Doctor ID
+            // We fetch all doctors and find by name. 
+            // Ideally we should have passed ID, but for compatibility with existing flow:
+            let targetDoctorId = localStorage.getItem('mq_doctorId'); // Try reading directly
+
+            if (!targetDoctorId && docName !== '-') {
+                try {
+                    const res = await fetch('/api/doctors'); // Fetch all
+                    const docs = await res.json();
+                    const found = docs.find(d => d.name === docName);
+                    if (found) {
+                        targetDoctorId = found.id_doctor;
+                    }
+                } catch (e) { console.error(e); }
+            }
+
+            if (!targetDoctorId) {
+                alert('ไม่พบข้อมูลแพทย์ในระบบ กรุณาติดต่อเจ้าหน้าที่');
+                // return;
+            }
+
+            window.targetDoctorId = targetDoctorId;
+        })();
+
+        // -------------------------------------------------------------------------
+        // 2. Logic (Slot Fetching)
+        // -------------------------------------------------------------------------
+        (function () {
+            const timeGrid = document.getElementById('timeGrid');
+            const dateInput = document.getElementById('date');
+            const confirmBtn = document.getElementById('confirmBtn');
+
+            window.updateConfirmButton = function () {
+                confirmBtn.disabled = !selectedSlotId;
+            };
+
+            // Function to fetch bookings and render slots
+            window.renderTimeSlots = async function () {
+                const date = dateInput.value;
+                const doctorId = window.targetDoctorId;
+
+                timeGrid.innerHTML = '';
+                selectedSlotId = null;
+                window.updateConfirmButton();
+
+                if (!date) {
+                    timeGrid.innerHTML = '<p class="col-span-full text-gray-400 text-center py-4 text-sm">กรุณาเลือกวันที่</p>';
+                    return;
+                }
+
+                try {
+                    const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
+
+                    const resSlots = await fetch(`${API_BASE}/api/doctors/${doctorId}/slots`);
+                    let allSlots = await resSlots.json();
+
+                    const daySlots = allSlots.filter(s => s.slot_date === date);
+
+                    if (daySlots.length === 0) {
+                        timeGrid.innerHTML = '<p class="col-span-full text-gray-500 text-center py-4">ไม่มีตารางลงเวลานัดหมายในวันที่เลือก</p>';
+                        return;
+                    }
+
+                    daySlots.sort((a, b) => a.start_time.localeCompare(b.start_time));
+
+                    daySlots.forEach(slot => {
+                        const btn = document.createElement('button');
+                        const isFull = slot.current_booking >= slot.max_capacity;
+
+                        const timeRange = `${slot.start_time.slice(0, 5)} - ${slot.end_time.slice(0, 5)}`;
+                        const capacityInfo = `(${slot.current_booking}/${slot.max_capacity})`;
+
+                        btn.innerHTML = `
+               <div class="flex flex-col items-center leading-tight">
+                 <span>${timeRange}</span>
+                 <span class="text-xs ${isFull ? 'text-red-500' : 'text-gray-500'}">${capacityInfo}</span>
+               </div>
+            `;
+                        btn.dataset.slotId = slot.slot_id;
+
+                        btn.className = "py-2 px-1 text-sm border rounded transition font-medium flex items-center justify-center h-14 w-full";
+
+                        if (isFull) {
+                            btn.classList.add('bg-gray-100', 'text-gray-400', 'border-gray-200', 'cursor-not-allowed');
+                            btn.disabled = true;
+                        } else {
+                            btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200', 'hover:border-blue-500', 'hover:text-blue-600');
+                        }
+
+                        if (!isFull) {
+                            btn.addEventListener('click', function (e) {
+                                e.preventDefault();
+
+                                const allBtns = timeGrid.querySelectorAll('button');
+                                allBtns.forEach(b => {
+                                    b.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'ring-2', 'ring-blue-300', 'border-transparent');
+                                    if (!b.disabled) b.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                                });
+
+                                this.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                                this.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'ring-2', 'ring-blue-300', 'border-transparent');
+
+                                selectedSlotId = slot.slot_id;
+                                selectedTimeString = timeRange;
+                                window.updateConfirmButton();
+                            });
+                        }
+
+                        timeGrid.appendChild(btn);
+                    });
+
+                } catch (e) {
+                    console.error("Error fetching slots:", e);
+                    timeGrid.innerHTML = '<p class="col-span-full text-red-500 text-center">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                }
+            };
+
+            dateInput.addEventListener('change', window.renderTimeSlots);
+
+
+            // Submission Logic
+            confirmBtn.addEventListener('click', async function () {
+                const rescheduleId = localStorage.getItem('mq_rescheduleBookingId');
+                const date = dateInput.value;
+                const time = selectedTimeString;
+                const slotId = selectedSlotId;
+
+                if (!rescheduleId || !date || !selectedSlotId) return;
+
+                // We go to confirm page OR we just do it here?
+                // User request said "Same as booking page", which implies "Select -> Confirm".
+                // But maybe for reschedule we can just submit directly or show a small confirm modal?
+                // Let's redirect to confirm.html to keep it consistent, BUT confirm.html needs to know we are modifying.
+
+                // Using confirm.html is safe. We just overwrite the localStorage values.
+                // localStorage.setItem('mq_departmentName', ...) // Already set
+                // localStorage.setItem('mq_doctorName', ...) // Already set
+                localStorage.setItem('mq_date', date);
+                localStorage.setItem('mq_time', time);
+                localStorage.setItem('mq_slot_id', slotId);
+
+                window.location.href = 'confirm.html';
+            });
+
+        })();
+
+        // User Status
+        (function () {
+            const userStatusLink = document.getElementById('userStatusLink');
+            try {
+                const user = JSON.parse(localStorage.getItem('mq_user'));
+                if (user && user.name) {
+                    userStatusLink.textContent = user.name;
+                    userStatusLink.href = '#';
+                }
+            } catch (e) { }
+        })();
+    </script>
+</body>
+
+</html>

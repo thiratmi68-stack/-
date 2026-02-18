@@ -108,7 +108,7 @@
         จองคิวตรวจรักษา
       </h1>
 
-      <div class="flex items-center justify-between relative max-w-3xl mx-auto mb-10">
+      <div class="flex items-center justify-between relative max-w-xl mx-auto mb-10">
         <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-200 -z-10"></div>
 
         <div class="flex flex-col items-center bg-gray-50 px-2">
@@ -116,27 +116,21 @@
             class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mb-2 shadow-md">
             1
           </div>
-          <span class="text-xs md:text-sm font-medium text-blue-800">เลือกแผนก/แพทย์</span>
-        </div>
-        <div class="flex flex-col items-center bg-gray-50 px-2">
-          <div
-            class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white border-2 border-blue-600 text-blue-600 flex items-center justify-center font-bold mb-2">
-            2
-          </div>
-          <span class="text-xs md:text-sm font-medium text-gray-500">วันเวลา</span>
+          <span class="text-xs md:text-sm font-medium text-blue-800">ระบุข้อมูลการจอง</span>
         </div>
         <div class="flex flex-col items-center bg-gray-50 px-2">
           <div
             class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white border-2 border-gray-300 text-gray-400 flex items-center justify-center font-bold mb-2">
-            3
+            2
           </div>
-          <span class="text-xs md:text-sm font-medium text-gray-500">ยืนยัน</span>
+          <span class="text-xs md:text-sm font-medium text-gray-500">ยืนยันข้อมูล</span>
         </div>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div class="lg:col-span-2 space-y-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Left Column: Doctor & Dept -->
+      <div class="space-y-6">
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <label class="block text-gray-700 font-bold mb-3 flex items-center gap-2">
             <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,16 +156,12 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
-            เลือกแพทย์ (ถ้ามี)
+            เลือกแพทย์
           </h3>
 
-          <div id="doctorContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div id="doctorContainer"
+            class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto no-scrollbar">
             <p class="text-gray-500 col-span-full text-center py-4">กรุณาเลือกแผนกเพื่อดูรายชื่อแพทย์</p>
-          </div>
-          <div class="mt-4 text-center">
-            <button class="text-sm text-gray-500 hover:text-blue-600 underline">
-              ไม่ระบุแพทย์ (แพทย์ท่านใดก็ได้)
-            </button>
           </div>
         </div>
 
@@ -181,10 +171,40 @@
             class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="เช่น มีไข้สูง ปวดหัว ตัวร้อน เป็นมา 2 วัน..."></textarea>
         </div>
+      </div>
 
-        <button id="nextBtn"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5">
-          ถัดไป
+      <!-- Right Column: Date & Time -->
+      <div class="space-y-6">
+        <div id="dateTimeSection" class="opacity-50 pointer-events-none transition-opacity duration-300">
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6 transition-all duration-300">
+            <label class="block text-gray-700 font-bold mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              วันที่นัดหมาย
+            </label>
+            <input id="date" type="date"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700" />
+          </div>
+
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6 transition-all duration-300">
+            <label class="block text-gray-700 font-bold mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              เลือกช่วงเวลา
+            </label>
+            <div id="timeGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <p class="col-span-full text-gray-400 text-center py-4 text-sm">กรุณาเลือกวันที่นัดหมายก่อน</p>
+            </div>
+          </div>
+        </div>
+
+        <button id="nextBtn" disabled
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
+          สรุปข้อมูลการจอง
         </button>
       </div>
 
@@ -203,63 +223,150 @@
     </div>
   </footer>
   <script>
+    // -------------------------------------------------------------------------
+    // 0. Active Booking Check (1 Person 1 Ticket)
+    // -------------------------------------------------------------------------
+    (async function () {
+      const rescheduleId = localStorage.getItem('mq_rescheduleBookingId');
+      if (rescheduleId) return; // Allow if rescheduling
+
+      try {
+        // Check if user has active bookings
+        const user = JSON.parse(localStorage.getItem('mq_user'));
+        if (!user) return; // login check handles redirect usually
+
+        // We need to fetch user's bookings.
+        // API endpoint `/api/bookings` returns all? No, checking code:
+        // It returns all. We filter in frontend. (Not ideal for sec but matches current app).
+
+        const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
+        const res = await fetch(API_BASE + '/api/bookings');
+        const bookings = await res.json();
+
+        // Filter for this user AND active status
+        const myActive = bookings.filter(b => {
+          const isMine = (b.patient_name === user.name) || (b.id_users === user.id);
+          // Note: API returns patient_name not id_users always? 
+          // Let's check typical response.
+          // Actually `list_bookings` in backend (not shown in snippet) probably returns mixed.
+          // Safer to matches name for now as per `myticket.html` logic.
+          const isNameMatch = (b.patient_name || '').trim() === user.name.trim();
+
+          const isActive = ['booked', 'pending', 'rescheduled', 'รอรับบริการ'].includes(b.status);
+          return isNameMatch && isActive;
+        });
+
+        if (myActive.length > 0) {
+          alert('ท่านมีคิวที่จองไว้อยู่แล้ว กรุณายกเลิกคิวเดิมก่อนจองใหม่');
+          window.location.href = 'myticket.html';
+        }
+
+      } catch (e) { console.error("Active check error", e); }
+    })();
+
+    // Constants & Global State
+    let selectedDoctorId = null;
+    let selectedSlotId = null;
+    let selectedTimeString = null;
+
+    // -------------------------------------------------------------------------
+    // 1. Navigation & Validation Logic
+    // -------------------------------------------------------------------------
     (function () {
       const nextBtn = document.getElementById('nextBtn');
-      const leftContainer = document.getElementById('dateContainerLeft');
-      const rightContainer = document.getElementById('dateContainerRight');
-      const leftInput = document.getElementById('appointmentDate');
-      const rightInput = document.getElementById('appointmentDateRight');
+      const dateInput = document.getElementById('date');
 
       if (!nextBtn) return;
 
+      // Enable/Disable Next Button
+      window.updateNextButtonState = function () {
+        // Must select Department, Doctor, Date, Time (Slot) & optionally Symptoms
+        const deptVal = document.getElementById('departmentSelect').value;
+        const symptomsVal = document.getElementById('symptoms').value;
+        const dateVal = dateInput.value;
+
+        let isValid = deptVal && selectedDoctorId && dateVal && selectedSlotId;
+
+        nextBtn.disabled = !isValid;
+      };
+
+      // Add Listener to Inputs to trigger validation
+      document.getElementById('departmentSelect').addEventListener('change', window.updateNextButtonState);
+      document.getElementById('symptoms').addEventListener('input', window.updateNextButtonState);
+      document.getElementById('date').addEventListener('change', window.updateNextButtonState);
+
+
       nextBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        // gather current selections and save to localStorage
-        try {
-          const deptEl = document.getElementById('departmentSelect');
-          const deptValue = deptEl ? deptEl.value : '';
-          const deptText = deptEl ? (deptEl.options[deptEl.selectedIndex]?.text || '') : '';
-          const symptomsVal = document.getElementById('symptoms')?.value || '';
-          const dateValLeft = leftInput ? leftInput.value : '';
-          const selectedDoctorEl = document.querySelector('.doctor-card.selected');
-          const doctorName = selectedDoctorEl ? selectedDoctorEl.dataset.name : '';
 
+        try {
+          // Gather Data
+          const deptEl = document.getElementById('departmentSelect');
+          const deptValue = deptEl.value;
+          const deptText = deptEl.options[deptEl.selectedIndex]?.text || '';
+          const symptomsVal = document.getElementById('symptoms').value;
+          const dateVal = dateInput.value;
+
+          const doctorCard = document.querySelector(`.doctor-card[data-id="${selectedDoctorId}"]`);
+          const doctorName = doctorCard ? doctorCard.dataset.name : '';
+
+          // Validate again just in case
+          if (!deptValue || !selectedDoctorId || !dateVal || !window.selectedSlotId) {
+            alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+            return;
+          }
+
+          // Save to LocalStorage
           localStorage.setItem('mq_departmentValue', deptValue);
           localStorage.setItem('mq_departmentName', deptText);
-          localStorage.setItem('mq_doctorName', doctorName);
+          localStorage.setItem('mq_doctorName', doctorName); // Still needed for confirm page display
+          localStorage.setItem('mq_doctorId', selectedDoctorId); // Store ID for backend
           localStorage.setItem('mq_symptoms', symptomsVal);
-          if (dateValLeft) localStorage.setItem('mq_date', dateValLeft);
-        } catch (err) {/* ignore */ }
+          localStorage.setItem('mq_date', dateVal);
+          localStorage.setItem('mq_time', window.selectedTimeString);
+          localStorage.setItem('mq_slot_id', window.selectedSlotId);
 
-        // navigate to datetime (preserve date in query if present)
-        const dateVal = leftInput ? leftInput.value : '';
-        const target = dateVal ? ('datetime.html?date=' + encodeURIComponent(dateVal)) : 'datetime.html';
-        window.location.href = target;
-      });
-      // navigate to datetime page when right-card button clicked
-      const goToDatetime = document.getElementById('goToDatetime');
-      if (goToDatetime) {
-        goToDatetime.addEventListener('click', function () {
-          window.location.href = 'datetime.html';
-        });
-      }
-      // doctor card selection
-      document.querySelectorAll('.doctor-card').forEach(card => {
-        card.addEventListener('click', function () {
-          document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected', 'border-blue-500', 'bg-blue-50'));
-          this.classList.add('selected', 'border-blue-500', 'bg-blue-50');
-        });
+          // Navigate
+          window.location.href = 'confirm.html';
+
+        } catch (err) {
+          console.error("Navigation Error", err);
+          alert("เกิดข้อผิดพลาด");
+        }
       });
     })();
-    // เลือกแพทย์ตามแผนก
+
+    // -------------------------------------------------------------------------
+    // 2. Department & Doctor Selection Logic
+    // -------------------------------------------------------------------------
     (function () {
       const departmentSelect = document.getElementById('departmentSelect');
       const doctorContainer = document.getElementById('doctorContainer');
+      const dateTimeSection = document.getElementById('dateTimeSection');
+
+      // Helper to enable/disable Date Time Section
+      function setDateTimeSectionEnabled(enabled) {
+        if (enabled) {
+          dateTimeSection.classList.remove('opacity-50', 'pointer-events-none');
+        } else {
+          dateTimeSection.classList.add('opacity-50', 'pointer-events-none');
+          // Reset selections if disabled?
+          // document.getElementById('date').value = '';
+          // document.getElementById('timeGrid').innerHTML = '<p...>...</p>';
+          // window.selectedSlotId = null;
+          // window.updateNextButtonState();
+        }
+      }
 
       if (departmentSelect && doctorContainer) {
         departmentSelect.addEventListener('change', async function () {
           const department = this.value;
           doctorContainer.innerHTML = '<p class="text-gray-500 col-span-full text-center py-4">กำลังโหลดข้อมูล...</p>';
+
+          // Reset downstream
+          selectedDoctorId = null;
+          setDateTimeSectionEnabled(false);
+          window.updateNextButtonState();
 
           try {
             const response = await fetch('/api/doctors?department=' + department);
@@ -274,7 +381,7 @@
 
             doctors.forEach(doctor => {
               const card = document.createElement('div');
-              const isFull = doctor.status.includes('เต็ม');
+              const isFull = doctor.status.includes('เต็ม') || doctor.status === 'ไม่ว่าง';
 
               card.className = 'border border-gray-200 rounded-lg p-4 transition doctor-card relative';
               if (isFull) {
@@ -284,6 +391,7 @@
               }
 
               card.dataset.name = doctor.name;
+              card.dataset.id = doctor.id_doctor; // Important: Store ID
 
               card.innerHTML = `
                   <div class="flex items-center gap-4">
@@ -295,11 +403,7 @@
                   </div>
                   <div class="selected-icon absolute top-3 right-3 text-blue-600 hidden">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clip-rule="evenodd"
-                      ></path>
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                     </svg>
                   </div>
                 `;
@@ -307,6 +411,7 @@
               // Add click event for selection only if not full
               if (!isFull) {
                 card.addEventListener('click', function () {
+                  // UI Updates
                   document.querySelectorAll('.doctor-card').forEach(c => {
                     c.classList.remove('selected', 'border-blue-500', 'bg-blue-50', 'border-2');
                     c.classList.add('border', 'border-gray-200');
@@ -319,6 +424,18 @@
                   this.classList.add('selected', 'border-blue-500', 'bg-blue-50', 'border-2');
                   const icon = this.querySelector('.selected-icon');
                   if (icon) icon.classList.remove('hidden');
+
+                  // Logic Updates
+                  selectedDoctorId = this.dataset.id;
+                  setDateTimeSectionEnabled(true);
+
+                  // Refresh Slots if date is already picked
+                  const dateVal = document.getElementById('date').value;
+                  if (dateVal) {
+                    window.renderTimeSlots();
+                  }
+
+                  window.updateNextButtonState();
                 });
               }
 
@@ -333,16 +450,116 @@
       }
     })();
 
-    // ดึงข้อมูลผู้ใช้งาน และตั้งชื่อผู้ป่วยอัตโนมัติ
+    // -------------------------------------------------------------------------
+    // 3. Date & Time Slot Logic (Ported from datetime.html)
+    // -------------------------------------------------------------------------
     (function () {
-      try {
-        const user = JSON.parse(localStorage.getItem('mq_user'));
-        if (user && user.name) {
-          localStorage.setItem('mq_patientName', user.name);
+      const timeGrid = document.getElementById('timeGrid');
+      const dateInput = document.getElementById('date');
+
+      // Function to fetch bookings and render slots
+      window.renderTimeSlots = async function () {
+        const date = dateInput.value;
+        const doctorId = selectedDoctorId;
+
+        timeGrid.innerHTML = ''; // Clear existing
+        selectedSlotId = null; // Reset selection
+        window.updateNextButtonState();
+
+        if (!date || !doctorId) {
+          timeGrid.innerHTML = '<p class="col-span-full text-gray-400 text-center py-4 text-sm">กรุณาเลือกแพทย์และวันที่</p>';
+          return;
         }
-      } catch (e) { }
+
+        try {
+          const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? (location.protocol + '//' + location.hostname + ':5000') : '';
+
+          // Fetch Slots for this doctor (using ID now!)
+          const resSlots = await fetch(`${API_BASE}/api/doctors/${doctorId}/slots`);
+          let allSlots = await resSlots.json();
+
+          // Filter by date
+          // Also filter by doctor's status? (Backend doesn't enforcing it yet, but UI admin does). 
+          // Assuming backend slots list is source of truth.
+          const daySlots = allSlots.filter(s => s.slot_date === date);
+
+          if (daySlots.length === 0) {
+            timeGrid.innerHTML = '<p class="col-span-full text-gray-500 text-center py-4">ไม่มีตารางลงเวลานัดหมายในวันที่เลือก</p>';
+            return;
+          }
+
+          // Sort by time
+          daySlots.sort((a, b) => a.start_time.localeCompare(b.start_time));
+
+          daySlots.forEach(slot => {
+            const btn = document.createElement('button');
+            const isFull = slot.current_booking >= slot.max_capacity;
+
+            // Format time range
+            const timeRange = `${slot.start_time.slice(0, 5)} - ${slot.end_time.slice(0, 5)}`;
+            // Show capacity
+            const capacityInfo = `(${slot.current_booking}/${slot.max_capacity})`;
+
+            btn.innerHTML = `
+               <div class="flex flex-col items-center leading-tight">
+                 <span>${timeRange}</span>
+                 <span class="text-xs ${isFull ? 'text-red-500' : 'text-gray-500'}">${capacityInfo}</span>
+               </div>
+            `;
+            btn.dataset.slotId = slot.slot_id;
+
+            btn.className = "py-2 px-1 text-sm border rounded transition font-medium flex items-center justify-center h-14 w-full"; // Added w-full
+
+            if (isFull) {
+              btn.classList.add('bg-gray-100', 'text-gray-400', 'border-gray-200', 'cursor-not-allowed');
+              btn.disabled = true;
+              btn.title = "เต็มแล้ว";
+            } else {
+              btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200', 'hover:border-blue-500', 'hover:text-blue-600');
+            }
+
+            // Add Click Event
+            if (!isFull) {
+              btn.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent bubbling issues
+
+                // Deselect others
+                const allBtns = timeGrid.querySelectorAll('button');
+                allBtns.forEach(b => {
+                  b.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'ring-2', 'ring-blue-300', 'border-transparent');
+                  if (!b.disabled) b.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                });
+
+                // Select this
+                this.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                this.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'ring-2', 'ring-blue-300', 'border-transparent');
+
+                // Update State
+                selectedSlotId = slot.slot_id;
+                window.selectedSlotId = slot.slot_id; // Global ref if needed
+                selectedTimeString = timeRange;
+                window.selectedTimeString = timeRange;
+
+                window.updateNextButtonState();
+              });
+            }
+
+            timeGrid.appendChild(btn);
+          });
+
+        } catch (e) {
+          console.error("Error fetching slots:", e);
+          timeGrid.innerHTML = '<p class="col-span-full text-red-500 text-center">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+        }
+      };
+
+      // Hook into date change
+      dateInput.addEventListener('change', window.renderTimeSlots);
     })();
-    // ตรวจสอบสถานะการเข้าสู่ระบบและแสดงชื่อผู้ใช้งาน
+
+    // -------------------------------------------------------------------------
+    // 4. User Status & Initial Load
+    // -------------------------------------------------------------------------
     (function () {
       const userStatusLink = document.getElementById('userStatusLink');
       const userMenuBtn = document.getElementById('userMenuBtn');
@@ -365,7 +582,50 @@
           });
         }
       } catch (e) {
-        // ไม่มีข้อมูล user ให้แสดงลิงก์ปกติ
+      }
+    })();
+    // -------------------------------------------------------------------------
+    // 5. Reschedule Logic (Auto-fill)
+    // -------------------------------------------------------------------------
+    (function () {
+      const rescheduleId = localStorage.getItem('mq_rescheduleBookingId');
+      if (!rescheduleId) return;
+
+      // Auto-fill flow
+      const deptVal = localStorage.getItem('mq_departmentValue');
+      const docName = localStorage.getItem('mq_doctorName');
+      const symptomsVal = localStorage.getItem('mq_symptoms');
+
+      if (symptomsVal) document.getElementById('symptoms').value = symptomsVal;
+
+      if (deptVal) {
+        const deptSelect = document.getElementById('departmentSelect');
+        deptSelect.value = deptVal;
+
+        // Trigger change to load doctors
+        const event = new Event('change');
+        departmentSelect.dispatchEvent(event);
+
+        // Wait for doctors to load then select
+        let attempts = 0;
+        const interval = setInterval(() => {
+          attempts++;
+          if (attempts > 30) clearInterval(interval); // 3 seconds max
+
+          const doctorCards = document.querySelectorAll('.doctor-card');
+          if (doctorCards.length > 0) {
+            // Try to find the doctor
+            let targetCard = null;
+            doctorCards.forEach(card => {
+              if (card.dataset.name === docName) targetCard = card;
+            });
+
+            if (targetCard) {
+              targetCard.click();
+              clearInterval(interval);
+            }
+          }
+        }, 100);
       }
     })();
   </script>

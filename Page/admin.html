@@ -102,7 +102,7 @@
               <div class="bg-blue-600 p-4 text-white">
                 <div class="flex justify-between items-start">
                   <div>
-                    <p class="text-blue-100 text-sm">Booking ID</p>
+                    <p id="resIdLabel" class="text-blue-100 text-sm">Booking ID</p>
                     <h2 id="resId" class="text-3xl font-mono font-bold tracking-wider">------</h2>
                   </div>
                   <span id="resStatusBadge"
@@ -196,7 +196,7 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-gray-50 text-gray-600 uppercase text-xs font-semibold">
-              <th class="p-4 border-b">ID แพทย์</th>
+              <th class="p-4 border-b">ลำดับ</th>
               <th class="p-4 border-b">รหัสพนักงาน</th>
               <th class="p-4 border-b">ชื่อ-สกุล</th>
               <th class="p-4 border-b">แผนก</th>
@@ -269,65 +269,131 @@
   </div>
 
   <!-- Doctor Modal -->
-  <div id="doctorModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
-    <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
-      <h3 id="modalTitle" class="text-xl font-bold mb-4">เพิ่มแพทย์</h3>
-      <input type="hidden" id="doctorId">
-      <input type="hidden" id="docImage">
+  <div id="doctorModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div id="doctorModalContent"
+      class="bg-white rounded-xl shadow-lg w-full max-w-lg transition-all duration-300 flex flex-col max-h-[90vh]">
 
-      <div class="space-y-4">
-        <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1">ชื่อ-สกุล</label>
-          <input type="text" id="docName" placeholder="เช่น สมชาย ใจดี"
-            class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-        </div>
+      <div class="p-6 border-b">
+        <h3 id="modalTitle" class="text-xl font-bold">เพิ่มแพทย์</h3>
+      </div>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-1">รหัสพนักงาน (Doctor ID)</label>
-            <input type="text" id="docEmpId" placeholder="เช่น D001"
-              class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-1">เวลาออกตรวจ</label>
-            <input type="text" id="docSchedule" placeholder="เช่น จ-ศ 09:00-16:00"
-              class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-          </div>
-        </div>
+      <div class="p-6 overflow-y-auto flex-1">
+        <div id="doctorModalBody" class="grid grid-cols-1 gap-6">
 
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-1">แผนก</label>
-            <select id="docDept" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-              <option value="med">อายุรกรรมทั่วไป</option>
-              <option value="dent">ทันตกรรม</option>
-              <option value="ortho">ศัลยกรรมกระดูก</option>
-              <option value="pedia">กุมารเวชกรรม</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-bold text-gray-700 mb-1">สถานะ</label>
-            <select id="docStatus" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
-              <option value="ว่างวันนี้">ว่างวันนี้</option>
-              <option value="ว่างช่วงเช้า">ว่างช่วงเช้า</option>
-              <option value="ว่างช่วงบ่าย">ว่างช่วงบ่าย</option>
-              <option value="คิวเต็มวันนี้">คิวเต็มวันนี้</option>
-            </select>
-          </div>
-        </div>
+          <!-- Column 1: Doctor Info -->
+          <div class="space-y-4">
+            <input type="hidden" id="doctorId">
+            <input type="hidden" id="docImage">
 
-        <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1">ความเชี่ยวชาญ</label>
-          <input type="text" id="docSpecialty"
-            class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-1">ชื่อ-สกุล</label>
+              <input type="text" id="docName" placeholder="เช่น สมชาย ใจดี"
+                class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">รหัสพนักงาน (Doctor ID)</label>
+                <input type="text" id="docEmpId" placeholder="ระบบจะสร้างให้อัตโนมัติ" readonly
+                  class="w-full border rounded-lg p-2 bg-gray-100 text-gray-500 focus:outline-none cursor-not-allowed">
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">แผนก</label>
+                <select id="docDept" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                  <option value="med">อายุรกรรมทั่วไป</option>
+                  <option value="dent">ทันตกรรม</option>
+                  <option value="ortho">ศัลยกรรมกระดูก</option>
+                  <option value="pedia">กุมารเวชกรรม</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">สถานะ</label>
+                <select id="docStatus"
+                  class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                  <option value="ว่างวันนี้">ว่างวันนี้</option>
+                  <option value="ว่างช่วงเช้า">ว่างช่วงเช้า</option>
+                  <option value="ว่างช่วงบ่าย">ว่างช่วงบ่าย</option>
+                  <option value="คิวเต็มวันนี้">คิวเต็มวันนี้</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">ความเชี่ยวชาญ</label>
+                <input type="text" id="docSpecialty"
+                  class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: Slot Management Section -->
+          <div id="slotManagementSection"
+            class="hidden h-full flex flex-col border-t pt-6 lg:border-t-0 lg:pt-0 lg:border-l lg:pl-6 border-gray-100">
+            <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              จัดการเวลาตรวจ (Slots)
+            </h4>
+
+            <div class="bg-blue-50 p-4 rounded-lg mb-4 border border-blue-100">
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label class="block text-xs font-bold text-blue-800 mb-1">วันที่</label>
+                  <input type="date" id="slotDate"
+                    class="w-full border-blue-200 rounded p-1.5 text-sm bg-white focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-blue-800 mb-1">จำนวนสูงสุด/รอบ</label>
+                  <input type="number" id="slotCapacity"
+                    class="w-full border-blue-200 rounded p-1.5 text-sm focus:ring-blue-500 focus:border-blue-500"
+                    value="5">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="block text-xs font-bold text-blue-800 mb-2">เลือกช่วงเวลา:</label>
+                <div id="slotTimeGrid" class="grid grid-cols-4 gap-2">
+                  <!-- Generated by JS -->
+                </div>
+              </div>
+
+              <button onclick="saveBatchSlots()"
+                class="w-full bg-blue-600 text-white text-sm py-2.5 rounded-lg hover:bg-blue-700 font-bold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                  </path>
+                </svg>
+                บันทึกช่วงเวลาที่เลือก
+              </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto border rounded-xl" style="max-height: 300px;">
+              <table class="w-full text-sm text-left">
+                <thead class="bg-gray-50 sticky top-0 z-10">
+                  <tr>
+                    <th class="p-3 text-gray-500 font-semibold text-xs uppercase">วันที่</th>
+                    <th class="p-3 text-gray-500 font-semibold text-xs uppercase">เวลา</th>
+                    <th class="p-3 text-gray-500 font-semibold text-xs uppercase text-center">จอง/รับ</th>
+                    <th class="p-3 text-gray-500 font-semibold text-xs uppercase text-center">ลบ</th>
+                  </tr>
+                </thead>
+                <tbody id="slotTableBody" class="divide-y divide-gray-100">
+                  <!-- Slots will be populated here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="mt-6 flex justify-end gap-3">
+      <div class="p-4 border-t bg-gray-50 rounded-b-xl flex justify-end gap-3">
         <button onclick="closeDoctorModal()"
-          class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">ยกเลิก</button>
+          class="px-5 py-2.5 text-gray-600 hover:bg-gray-200 hover:text-gray-800 font-bold rounded-lg transition-colors">ยกเลิก</button>
         <button onclick="saveDoctor()"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">บันทึกข้อมูล</button>
+          class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold shadow-md transition-all active:scale-95">บันทึกข้อมูล</button>
       </div>
     </div>
   </div>
@@ -344,11 +410,11 @@
     // HELPER FUNCTIONS
     // ==========================================
 
-    // แปลง Text "MQ-00021" ให้เหลือแค่ตัวเลข ID (21)
+    // แปลง Text "MQ-00021" ให้เหลือแค่ตัวเลข ID (21) หรือคืนค่า 13 หลัก
     function normalizeId(inputStr) {
       if (!inputStr) return null;
       const numericPart = String(inputStr).replace(/\D/g, '');
-      return numericPart ? parseInt(numericPart) : null;
+      return numericPart || null;
     }
 
     // แปลงตัวเลข ID (21) กลับไปเป็น Format "00021"
@@ -410,15 +476,26 @@
 
     async function fetchBookingDetails(id) {
       try {
-        // เรียกใช้ API จริงจาก Flask
-        const res = await fetch(`/api/bookings/${id}`);
+        let res;
+        // Check if ID is 13 digits (National ID)
+        if (String(id).length === 13) {
+          res = await fetch(`/api/bookings/verify/${id}`);
+        } else {
+          // Normal Booking ID
+          res = await fetch(`/api/bookings/${id}`);
+        }
+
         if (!res.ok) throw new Error("Booking not found");
         const data = await res.json();
 
         displayBooking(data);
 
       } catch (e) {
-        alert("ไม่พบข้อมูลการจอง ID: " + formatBookingCode(id));
+        let msg = "ไม่พบข้อมูลการจอง";
+        if (String(id).length === 13) msg += " สำหรับเลขบัตรประชาชนนี้";
+        else msg += " ID: " + formatBookingCode(id);
+
+        alert(msg);
         resetBookingView();
       }
     }
@@ -427,8 +504,14 @@
       document.getElementById('bookingEmpty').classList.add('hidden');
       document.getElementById('bookingResult').classList.remove('hidden');
 
-      // แสดง ID ในรูปแบบ MQ-XXXXX
-      document.getElementById('resId').innerText = formatBookingCode(data.id);
+      // Show correct ID
+      if (String(data.qr_code).length === 13) {
+        document.getElementById('resId').innerText = data.qr_code;
+        document.getElementById('resIdLabel').innerText = "National ID / QR";
+      } else {
+        document.getElementById('resId').innerText = formatBookingCode(data.id);
+        document.getElementById('resIdLabel').innerText = "Booking ID";
+      }
 
       // Map ข้อมูลให้ตรงกับ Database (SQLite)
       // หมายเหตุ: Python ส่งข้อมูลกลับมาเป็น Key แบบ snake_case (เช่น patient_name)
@@ -677,7 +760,7 @@
         const tr = document.createElement('tr');
         tr.className = "border-b hover:bg-gray-50";
         tr.innerHTML = `
-                <td class="p-4 font-mono text-gray-500 font-bold">${String(doc.id_doctor || doc.id).padStart(5, '0')}</td>
+                <td class="p-4 font-mono text-gray-500 font-bold">${index + 1}</td>
                 <td class="p-4 font-mono text-blue-600 font-medium">${doc.doctor_id || '-'}</td>
                 <td class="p-4 font-medium text-gray-800">${doc.name || (doc.firstname + ' ' + doc.lastname)}</td>
                 <td class="p-4 text-gray-600">${deptName(doc.department)}</td>
@@ -702,19 +785,50 @@
 
     // Modal Functions
     function openDoctorModal(id = null) {
-      document.getElementById('doctorModal').classList.remove('hidden');
+      const modal = document.getElementById('doctorModal');
+      const content = document.getElementById('doctorModalContent');
+      const body = document.getElementById('doctorModalBody');
+      const slotSection = document.getElementById('slotManagementSection');
+
+      modal.classList.remove('hidden');
       document.getElementById('doctorId').value = id || '';
       document.getElementById('modalTitle').innerText = id ? 'แก้ไขข้อมูลแพทย์' : 'เพิ่มแพทย์';
 
-      if (!id) {
-        // clear form
+      // Resize Logic
+      if (id) {
+        // Edit Mode: Wide Modal + 2 Columns + Show Slots
+        content.classList.remove('max-w-lg');
+        content.classList.add('max-w-6xl');
+
+        body.classList.remove('grid-cols-1');
+        body.classList.add('lg:grid-cols-2');
+
+        slotSection.classList.remove('hidden'); // Show Slots
+
+        // Load Slots
+        document.getElementById('slotDate').valueAsDate = new Date(); // Start with today
+        fetchSlots(id);
+      } else {
+        // Add Mode: Narrow Modal + 1 Column + Hide Slots
+        content.classList.remove('max-w-6xl');
+        content.classList.add('max-w-lg');
+
+        body.classList.remove('lg:grid-cols-2');
+        body.classList.add('grid-cols-1');
+
+        slotSection.classList.add('hidden'); // Hide Slots
+
+        // Reset Form for New Doctor
         document.getElementById('docName').value = '';
-        document.getElementById('docEmpId').value = '';
-        document.getElementById('docSchedule').value = '';
+        const rand = Math.floor(100 + Math.random() * 900);
+        document.getElementById('docEmpId').value = 'D' + rand;
         document.getElementById('docDept').value = 'med';
         document.getElementById('docSpecialty').value = '';
         document.getElementById('docStatus').value = 'ว่างวันนี้';
         document.getElementById('docImage').value = 'https://cdn-icons-png.flaticon.com/512/3774/3774299.png';
+
+        // Refresh grid for new doctor (default: all day)
+        renderTimeGrid();
       }
     }
 
@@ -726,11 +840,14 @@
       openDoctorModal(id);
       document.getElementById('docName').value = name;
       document.getElementById('docEmpId').value = empId || '';
-      document.getElementById('docSchedule').value = schedule || '';
+      // document.getElementById('docSchedule').value = schedule || ''; // removed
       document.getElementById('docDept').value = dept;
       document.getElementById('docSpecialty').value = specialty;
       document.getElementById('docStatus').value = status;
       document.getElementById('docImage').value = image;
+
+      // Refresh grid based on loaded status of the doctor
+      renderTimeGrid();
     }
 
     async function saveDoctor() {
@@ -741,15 +858,13 @@
       if (statusVal.includes('เต็ม')) {
         color = 'text-red-600';
       } else if (statusVal.includes('บ่าย') || statusVal.includes('เช้า')) {
-        // If it's partial availability but not full, maybe yellow? 
-        // For now let's keep it simple: if full -> red, else -> green/yellow.
         if (statusVal !== 'ว่างวันนี้' && !statusVal.includes('เต็ม')) color = 'text-yellow-600';
       }
 
       const data = {
         name: document.getElementById('docName').value,
         doctor_id: document.getElementById('docEmpId').value,
-        schedule: document.getElementById('docSchedule').value,
+        // schedule: document.getElementById('docSchedule').value, // removed
         department: document.getElementById('docDept').value,
         specialist: document.getElementById('docSpecialty').value,
         status: statusVal,
@@ -790,6 +905,269 @@
         alert('Error deleting doctor');
       }
     }
+
+    // ==========================================
+    // SLOT MANAGEMENT LOGIC
+    // ==========================================
+
+    // Standard Time Slots (30 min intervals, matching Page/datetime.html)
+    const STANDARD_SLOTS = [
+      { start: "09:00", end: "09:30" },
+      { start: "09:30", end: "10:00" },
+      { start: "10:00", end: "10:30" },
+      { start: "10:30", end: "11:00" },
+      { start: "13:00", end: "13:30" },
+      { start: "13:30", end: "14:00" },
+      { start: "14:00", end: "14:30" },
+      { start: "14:30", end: "15:00" },
+      { start: "15:00", end: "15:30" },
+      { start: "15:30", end: "16:00" },
+      { start: "16:00", end: "16:30" },
+      { start: "16:30", end: "17:00" }
+    ];
+
+    // Global variable to store fetched slots for filtering
+    let currentSlots = [];
+    window.selectedBatchSlots = new Set(); // Store selected indices (Global)
+
+    function renderTimeGrid() {
+      const container = document.getElementById('slotTimeGrid');
+      container.innerHTML = '';
+
+      const status = document.getElementById('docStatus').value;
+
+      // Filter logic based on status
+      let allowedStart = "00:00";
+      let allowedEnd = "23:59";
+      let isDisabled = false;
+
+      if (status === 'ว่างช่วงเช้า') {
+        allowedEnd = "12:00"; // Available until 12:00
+      } else if (status === 'ว่างช่วงบ่าย') {
+        allowedStart = "12:01"; // Available after 12:00
+      } else if (status === 'คิวเต็มวันนี้') {
+        isDisabled = true;
+      }
+
+      STANDARD_SLOTS.forEach((slot, index) => {
+        // Check if slot is within allowed range
+        if (isDisabled || slot.start < allowedStart || slot.start >= allowedEnd) {
+          return; // Skip rendering or render disabled? User said "have options to choose", implied hiding or disabling.
+          // Let's render but disabled/dimmed to show "unavailable"
+        }
+
+        const label = `${slot.start}-${slot.end}`;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = label;
+        btn.className = "py-2 px-1 text-xs border rounded transition font-medium bg-white text-gray-700 border-gray-200 hover:border-blue-500 hover:text-blue-600";
+        btn.dataset.index = index;
+
+        btn.onclick = () => toggleSlotSelection(index, btn);
+
+        container.appendChild(btn);
+      });
+
+      if (isDisabled) {
+        container.innerHTML = '<p class="col-span-4 text-center text-gray-400 text-sm py-4">ไม่สามารถเพิ่มเวลาตรวจได้เนื่องจากคิวเต็ม</p>';
+      } else if (container.children.length === 0) {
+        container.innerHTML = '<p class="col-span-4 text-center text-gray-400 text-sm py-4">ไม่มีรอบเวลาสำหรับช่วงเวลานี้</p>';
+      }
+    }
+
+    function toggleSlotSelection(index, btn) {
+      if (btn.disabled) return;
+
+      if (window.selectedBatchSlots.has(index)) {
+        window.selectedBatchSlots.delete(index);
+        // Revert style
+        btn.className = "py-2 px-1 text-xs border rounded transition font-medium bg-white text-gray-700 border-gray-200 hover:border-blue-500 hover:text-blue-600";
+      } else {
+        window.selectedBatchSlots.add(index);
+        // Selected Style (Blue)
+        btn.className = "py-2 px-1 text-xs border rounded transition font-medium bg-blue-600 text-white shadow-md ring-2 ring-blue-300 border-transparent";
+      }
+      console.log('Selected Slots:', Array.from(window.selectedBatchSlots));
+    }
+
+    async function fetchSlots(doctorId) {
+      if (!doctorId) return;
+
+      const tbody = document.getElementById('slotTableBody');
+      tbody.innerHTML = '<tr><td colspan="4" class="text-center p-2 text-gray-500">กำลังโหลด...</td></tr>';
+
+      try {
+        const res = await fetch(`/api/doctors/${doctorId}/slots`);
+        currentSlots = await res.json();
+
+        // Filter by selected date if any, else show all or today
+        filterAndRenderSlots();
+
+      } catch (e) {
+        console.error(e);
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center p-2 text-red-500">โหลดข้อมูลไม่สำเร็จ</td></tr>';
+      }
+    }
+
+    // Add event listener to date input to trigger filter and update checkboxes
+    document.getElementById('slotDate').addEventListener('change', filterAndRenderSlots);
+
+    function filterAndRenderSlots() {
+      const selectedDate = document.getElementById('slotDate').value;
+      const status = document.getElementById('docStatus').value;
+      const tbody = document.getElementById('slotTableBody');
+      tbody.innerHTML = '';
+
+      // Reset Grid State
+      window.selectedBatchSlots.clear();
+      const buttons = document.querySelectorAll('#slotTimeGrid button');
+      buttons.forEach(btn => {
+        btn.disabled = !selectedDate;
+        btn.className = "py-2 px-1 text-xs border rounded transition font-medium bg-white text-gray-700 border-gray-200 hover:border-blue-500 hover:text-blue-600";
+        if (!selectedDate) btn.classList.add('opacity-50', 'cursor-not-allowed');
+        else btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      });
+
+      if (!selectedDate) return;
+
+      let displaySlots = currentSlots.filter(s => s.slot_date === selectedDate);
+
+      // Filter by Status Time Range
+      if (status === 'ว่างช่วงเช้า') {
+        displaySlots = displaySlots.filter(s => s.start_time < "12:00");
+      } else if (status === 'ว่างช่วงบ่าย') {
+        displaySlots = displaySlots.filter(s => s.start_time >= "12:00");
+      } else if (status === 'คิวเต็มวันนี้') {
+        displaySlots = []; // Show nothing? or just disabled? User implies availability.
+      }
+
+      // Mark existing slots in Grid
+      displaySlots.forEach(s => {
+        const idx = STANDARD_SLOTS.findIndex(std => std.start === s.start_time);
+        if (idx !== -1) {
+          const btn = buttons[idx];
+          if (btn) {
+            btn.disabled = true;
+            // Existing slot style (Gray/Disabled)
+            btn.className = "py-2 px-1 text-xs border rounded transition font-medium bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed";
+            btn.title = "มีรอบเวลานี้แล้ว";
+          }
+        }
+      });
+
+      if (displaySlots.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center p-2 text-gray-400">ยังไม่มีรอบเวลาในวันที่เลือก (หรือไม่อยู่ในช่วงเวลาที่ระบุ)</td></tr>';
+        return;
+      }
+
+      // Sort by time
+      displaySlots.sort((a, b) => a.start_time.localeCompare(b.start_time));
+
+      displaySlots.forEach(slot => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b hover:bg-gray-50";
+        tr.innerHTML = `
+           <td class="p-2">${slot.slot_date}</td>
+           <td class="p-2">${slot.start_time} - ${slot.end_time}</td>
+           <td class="p-2 text-center">
+             <span class="${slot.current_booking >= slot.max_capacity ? 'text-red-500 font-bold' : 'text-green-600'}">
+               ${slot.current_booking} / ${slot.max_capacity}
+             </span>
+           </td>
+           <td class="p-2 text-center">
+              <button onclick="deleteSlot(${slot.slot_id}, ${slot.current_booking})" 
+                class="${slot.current_booking > 0 ? 'bg-red-50 text-red-400 hover:bg-red-100' : 'bg-red-100 text-red-500 hover:bg-red-200'} p-1 rounded px-2 font-bold text-xs transition-colors">
+                ลบ
+              </button>
+           </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function saveBatchSlots() {
+      const doctorId = document.getElementById('doctorId').value;
+      const date = document.getElementById('slotDate').value;
+      const capacity = document.getElementById('slotCapacity').value;
+
+      if (!doctorId) return alert('ไม่พบรหัสแพทย์');
+      if (!date) return alert('กรุณาเลือกวันที่');
+      if (!capacity) return alert('กรุณาระบุจำนวนรับ');
+
+      if (window.selectedBatchSlots.size === 0) return alert('กรุณาเลือกช่วงเวลา (สามารถเลือกได้มากกว่า 1 ช่วง)');
+
+      const slotsToAdd = Array.from(window.selectedBatchSlots).map(idx => STANDARD_SLOTS[idx]);
+
+      console.log('Saving slots:', slotsToAdd);
+
+      let successCount = 0;
+
+      // Batch create
+      // Using Promise.all for parallel requests
+      const promises = slotsToAdd.map(slot => {
+        return fetch(`/api/doctors/${doctorId}/slots`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            date: date,
+            start_time: slot.start,
+            end_time: slot.end,
+            capacity: parseInt(capacity)
+          })
+        }).then(res => {
+          if (res.ok) successCount++;
+        });
+      });
+
+      try {
+        await Promise.all(promises);
+        if (successCount > 0) {
+          // alert(`เพิ่มสำเร็จ ${successCount} รอบ`);
+          fetchSlots(doctorId); // reload ui
+          window.selectedBatchSlots.clear();
+          filterAndRenderSlots(); // Re-render grid to update disabled states
+        } else {
+          alert('เพิ่มข้อมูลไม่สำเร็จ');
+        }
+      } catch (e) {
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+      }
+    }
+
+    async function deleteSlot(slotId, currentBooking = 0) {
+      if (currentBooking > 0) {
+        if (!confirm(`รอบเวลานี้มีผู้จองแล้ว ${currentBooking} รายการ\nหากลบ ข้อมูลการจองอาจค้างอยู่ในระบบหรือหายไป\n\nยืนยันที่จะลบหรือไม่?`)) return;
+      } else {
+        if (!confirm('ยืนยันลบรอบเวลานี้?')) return;
+      }
+
+      const doctorId = document.getElementById('doctorId').value;
+
+      try {
+        const res = await fetch(`/api/slots/${slotId}`, { method: 'DELETE' });
+        if (res.ok) {
+          fetchSlots(doctorId);
+        } else {
+          alert('ลบไม่สำเร็จ (อาจมีการใช้งานอยู่)');
+        }
+      } catch (e) {
+        alert('Error deleting slot');
+      }
+    }
+
+    // Initialize checkboxes on load
+    // Add listener for status change
+    document.getElementById('docStatus').addEventListener('change', () => {
+      // Clear selection when status changes to avoid invalid states
+      window.selectedBatchSlots.clear();
+      renderTimeGrid();
+
+      // Also re-apply existing slot disabling logic if date is selected
+      filterAndRenderSlots();
+    });
+
+    // Initialize checkboxes on load
+    renderTimeGrid();
   </script>
 </body>
 
