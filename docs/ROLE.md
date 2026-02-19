@@ -7,10 +7,12 @@
 Role: Login, Register 
 **Backend File:** `backend/routes/auth.py`
 Authentication
-- `index.html`: **Login Page** - หน้าเข้าสู่ระบบสำหรับผู้ป่วย
+- `index.html`: **Login Page** - หน้าเข้าสู่ระบบ
     - **API:** `POST /api/login`
 - `register.html`: **Registration Page** - หน้าลงทะเบียนผู้ป่วยใหม่
     - **API:** `POST /api/register`
+- `index.html`: **Login Page** - หน้าเข้าสู่ระบบ
+    - **API:** `POST /api/admin/login`
 
 2. นายจิรัฐิติกาล ลาเลิศ
 Role: Booking(เลือกแผนก/แพทย์), confirm
@@ -19,22 +21,29 @@ Role: Booking(เลือกแผนก/แพทย์), confirm
     - **API:** `GET /api/doctors`, `GET /api/departments`
 - `confirm.html`: **Confirm Booking** - หน้าตรวจสอบและยืนยันข้อมูลการจอง
     - **API:** `POST /api/bookings`
+- `myticket.html`: **Booking Success,Delete** - หน้าแสดงตั๋ว/QR Code 6 เมื่อจองสำเร็จ และยกเลิกการจอง 
+    - **API:** `DELETE /api/bookings/{booking_id}`
+**SYSTEM** ระบบตัดคิวอัตโนมัติ
 
 3. นายธีรัช มิฉะนั้น
 Role: home, datetime
 **Backend File:** `backend/routes/doctors.py`
 - `home.html`: **Main Dashboard** - หน้าหลักแสดงเมนูและข้อมูลเบื้องต้น
     - **API:** `GET /api/doctors`, `GET /api/departments` (For display)
-- `datetime.html`: **Select Schedule** - หน้าเลือกวันและเวลาที่ต้องการจอง
+- `admin.html`: **Unified Admin Dashboard** - หน้าจัดการรวมสำหรับเจ้าหน้าที่:   
+    - **API:** `POST /api/admin/login` (For display)
+- `booking.html`: **Select Schedule** - หน้าเลือกวันและเวลาที่ต้องการจอง
     - **API:** `GET /api/doctors/{id}/slots` (with slots)
 
 4. นายทีปกรณ์ แก่นกุล 
 Role: datetime, details
 **Backend File:** `backend/routes/doctors.py`, `backend/routes/bookings.py`
-- `datetime.html`: **Select Schedule** - หน้าเลือกวันและเวลาที่ต้องการจอง
-    - **API:** `GET /api/doctors/{id}/slots`
+- `booking.html`: **Select Schedule** - หน้าเลือกวันและเวลาที่ต้องการจอง
+    - **API** `GET /api/admin/slots`
 - `details.html`: **Booking Details** - หน้าดูรายละเอียดการจองแต่ละรายการ
     - **API:** `GET /api/bookings/{booking_id}`
+- `reschedule.html`: **Reschedule Details** - เลือกวันและเวลาที่ต้องเลื่อนการจอง
+    - **API:** `PUT /api/bookings/{booking_id}`
 
 5. นายวุฒิภัทร วิริยเสนกุล
 Role: history, notification
@@ -43,17 +52,10 @@ Role: history, notification
     - **API:** `GET /api/bookings`
 - `notification.html`: **Notification Center** - หน้าดูรายการแจ้งเตือนต่างๆ
     - **API:** `GET /api/notifications`
+**SYSTEM** ระบบแจ้งเตือน
 
 6. นายพงศกร กอคูณ
 Role: QR Code scan, canel Booking
-**Backend File:** `backend/routes/bookings.py`
-- `myticket.html`: **Booking Success** - หน้าแสดงตั๋ว/QR Code เมื่อจองสำเร็จ
-    - **API:** `GET /api/bookings/{booking_id}`
-- `details.html`: **Booking Details** - หน้าดูรายละเอียดการจองแต่ละรายการ
-    - **API:** `DELETE /api/bookings/{booking_id}` (Cancel), `PUT /api/bookings/{booking_id}` (Reschedule)
-
-7. นายรัชชานนท์ อรรถพันธ์
-Role: admin(ตรวจสอบรายชื่อ), admin(ดูประวัติการจอง)
 **Backend File:** `backend/routes/bookings.py`
 - `admin.html`: **Unified Admin Dashboard** - หน้าจัดการรวมสำหรับเจ้าหน้าที่:
     - ดูรายการจองทั้งหมด (All Bookings)
@@ -61,45 +63,17 @@ Role: admin(ตรวจสอบรายชื่อ), admin(ดูประ�
     - ตรวจสอบรายชื่อการจอง (Check Booking List)
         - **API:** `PUT /api/bookings/{booking_id}` (Update Status)
 
+
+7. นายรัชชานนท์ อรรถพันธ์
+Role: admin(ตรวจสอบรายชื่อ), admin(ดูประวัติการจอง)
+**Backend File:** `backend/routes/bookings.py`
+- `admin.html`: **Unified Admin Dashboard** - หน้าจัดการรวมสำหรับเจ้าหน้าที่:
+    - จัดการ slots (manage slots)
+        - **API**  `POST /api/admin/slots` ,`PUT /api/admin/slots/{slot_id}` ,`DELETE /api/admin/slots/{slot_id}`
+
 8. นายอภิสิทธิ์ พรหมมา
 Role: admin(home), admin(จัดการรายชื่อแพทย์)
 **Backend File:** `backend/routes/admin.py` (Create/Update/Delete), `backend/routes/doctors.py` (List)
 - `admin.html`: **Unified Admin Dashboard** - หน้าจัดการรวมสำหรับเจ้าหน้าที่:
-    - หน้าหลักadmin (Admin Home)
-        - **API:** `POST /api/admin/login`
     - จัดการรายชื่อแพทย์ (Manage Doctors)
         - **API:** `GET /api/doctors` (List), `POST /api/admin/doctors` (Create), `PUT /api/admin/doctors/{doctor_id}` (Update), `DELETE /api/admin/doctors/{doctor_id}` (Delete)
-
-
-
-## User (Patient) - Frontend Pages
-
-### Authentication
-- `index.html`: **Login Page** - หน้าเข้าสู่ระบบสำหรับผู้ป่วย
-- `register.html`: **Registration Page** - หน้าลงทะเบียนผู้ป่วยใหม่
-
-### Dashboard & Main
-- `home.html`: **Main Dashboard** - หน้าหลักแสดงเมนูและข้อมูลเบื้องต้น
-
-### Booking Process (Flow)
-1. `booking.html`: **Select Logic** - หน้าเลือกแพทย์หรือแผนก
-2. `datetime.html`: **Select Schedule** - หน้าเลือกวันและเวลาที่ต้องการจอง
-3. `confirm.html`: **Confirm Booking** - หน้าตรวจสอบและยืนยันข้อมูลการจอง
-4. `myticket.html`: **Booking Success** - หน้าแสดงตั๋ว/QR Code เมื่อจองสำเร็จ
-
-### History & Management
-- `history.html`: **Booking History** - หน้าดูประวัติการจองทั้งหมด
-- `details.html`: **Booking Details** - หน้าดูรายละเอียดการจองแต่ละรายการ
-
-### Notifications
-- `notification.html`: **Notification Center** - หน้าดูรายการแจ้งเตือนต่างๆ
-
----
-
-## Admin (Staff) - Frontend Pages
-
-### Dashboard & Management
-- `admin.html`: **Unified Admin Dashboard** - หน้าจัดการรวมสำหรับเจ้าหน้าที่:
-    - ดูรายการจองทั้งหมด (All Bookings)
-    - จัดการรายชื่อแพทย์ (Manage Doctors)
-    - จัดการเจ้าหน้าที่ (Manage Staff)
